@@ -31,8 +31,8 @@ app.post('/post',authenticate,(request,response)=>{
 });
 
 app.get('/post',authenticate,(request, response) => {
-    postModel.find({ Creator: 'suhfsnod' }).then((newpost) => {
-        console.log('suhfsnod');
+    postModel.find({ Creator: request.body.UserName }).then((newpost) => {
+        console.log(request.body.UserName);
         console.log('post');
         console.log(newpost);
         response.status(200).send(newpost);
