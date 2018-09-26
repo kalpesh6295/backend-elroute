@@ -23,7 +23,7 @@ var productSchema = new mongoose.Schema({
         // required:true,
         trim:true
     },
-    adder:{
+    Creator:{
         type:mongoose.Schema.Types.ObjectId,
         required:true
     }

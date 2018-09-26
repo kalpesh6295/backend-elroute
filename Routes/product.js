@@ -20,7 +20,7 @@ router.post('/publish',authenticate,(request,response)=>{
             image:body.image,
             industry:body.industry,
             description:body.description,
-            adder:request.user._id,
+            Creator:request.user._id,
         });
     product.save().then((result)=>{
         console.log('_id is :::----> '+request.user._id);
