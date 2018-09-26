@@ -18,7 +18,7 @@ app.post('/products/publish',authenticate,(request,response)=>{
             industry:body.industry,
             image:body.image,
             description:body.description,
-            adder:request.user._id,
+            Creator:request.user._id,
         });
     product.save().then((result)=>{
         console.log('_id is :::----> '+request.user._id);
@@ -41,7 +41,7 @@ app.post('/products/publish',authenticate,(request,response)=>{
 });
 
 app.get('/products',authenticate,(request,response)=>{
-    productModel.find({adder:request.user._id}).then((products)=>{
+    productModel.find({Creator:request.user._id}).then((products)=>{
         console.log(request.user._id);
         console.log('-----------PPPPPPRRRRRRRRRROOOOOOOODDDDDDDDDUUUUUUUTTTTTTSSSSS---------------------------------------');
         console.log(products);
