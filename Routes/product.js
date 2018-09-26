@@ -1,22 +1,24 @@
+const express = require('express');
+const router = express.Router();
 const _ = require('lodash');
 const bodyParser = require('body-parser');
 const {productModel} = require('./../Modals/productModel.js');
 const {userModel} = require('./../Modals/userModel');
-const {app} = require('./../Express/express.js');
+// const {app} = require('./../Express/express.js');
 const {mongoose} = require('./../mongoose/mongoose-connect.js');
 const {authenticate} = require('./../middleware/authenticate.js');
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 //adding product into DB
-app.post('/products/publish',authenticate,(request,response)=>{
+router.post('/publish',authenticate,(request,response)=>{
     console.log('id of user logged in is',request.user._id)
     var body = _.pick(request.body,['name','company','image','industry','description'])
     var product = new productModel({
             name:body.name,
             company:body.company,
-            industry:body.industry,
             image:body.image,
+            industry:body.industry,
             description:body.description,
             adder:request.user._id,
         });
@@ -40,7 +42,8 @@ app.post('/products/publish',authenticate,(request,response)=>{
     });
 });
 
-app.get('/products',authenticate,(request,response)=>{
+router.get('/',authenticate,(request,response)=>{
+    console.log('inside router.get');
     productModel.find({adder:request.user._id}).then((products)=>{
         console.log(request.user._id);
         console.log('-----------PPPPPPRRRRRRRRRROOOOOOOODDDDDDDDDUUUUUUUTTTTTTSSSSS---------------------------------------');
@@ -53,6 +56,8 @@ app.get('/products',authenticate,(request,response)=>{
     });
 });
 
-app.listen(3000,(status)=>{
-    console.log('Server up on the port 3000');
-})
+module.exports = router;
+
+// app.listen(3000,(status)=>{
+//     console.log('Server up on the port 3000');
+// })
