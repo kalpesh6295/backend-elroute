@@ -27,8 +27,9 @@ router.post('/signup',(request,response)=>{
 
 router.post('/login',(request,response)=>{
 var body = _.pick(request.body,['Email','Password']);
-
-    userModel.findByCredentials(body.email,body.password).then((user)=>{
+    console.log(request.body)
+    console.log(body);
+    userModel.findByCredentials(body.Email,body.Password).then((user)=>{
         if(!user){
             return response.status(400).send();
         }
@@ -37,9 +38,11 @@ var body = _.pick(request.body,['Email','Password']);
             response.header('x-auth',token_recieved).send(user);
         });
     }).catch((e)=>{
+        console.log('Error is ',e);
         response.status(400).send();
         console.log(e);
     })
+
 });
 
 module.exports = router;

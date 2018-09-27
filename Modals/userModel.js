@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+
 var userSchema = new mongoose.Schema({
     UserName:{ 
         type:String,
@@ -60,18 +61,24 @@ userSchema.methods.generateAuthToken = function (){
 };
 
 userSchema.statics.findByCredentials = function(email,password){
-    var User = this;
-    
-   return User.findOne({email}).then((user)=>{
+
+    var userModel = this;
+    console.log('inside findByCredentials :----> ', email,password);
+    // console.log(userModel);
+   return userModel.findOne({Email:email}).then((user)=>{
+    console.log(user);
         if(!user){
             return Promise.reject();
         }
         return new Promise((resolve,reject)=>{
-            bcrypt.compare(password,user.password,(error,result)=>{
+            console.log('password:',password);
+            console.log('user.Password:',user.Password);
+            bcrypt.compare(password,user.Password,(error,result)=>{
                 if(result){
                     resolve(user);
                 }else{
-                    reject();
+                    console.log(error);
+                    reject('not found');
                 }
             });
         });
