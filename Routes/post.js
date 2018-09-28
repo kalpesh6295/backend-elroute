@@ -9,7 +9,7 @@ const _ = require('lodash');
 
 // app.use(bodyParser.json());
 
-router.post('/addPost',authenticate,(request,response)=>{
+router.post('/add',authenticate,(request,response)=>{
     
     var post =_.pick(request.body,['Image','Video','Content','Comment','Veiws','Save']);
      var newPost=new postModel({
@@ -42,6 +42,23 @@ router.get('/',authenticate,(request, response) => {
         console.log('cannot get post', error);
     }).catch((e) => {
         console.log('Exception caught', e);
+    });
+});
+
+router.delete('/delete',authenticate,(request, response) => {
+    var id = request.body.id;
+
+    if (!ObjectID.isValid(id)) {
+        return res.status(400).send();
+    }
+
+    newpost.findByIdAndRemove(id).then((newpost) => {
+        if (newpost) {
+            return res.status(400).send();
+        }
+        res.send(newpost);
+    }).catch((e) => {
+        res.status(400).send();
     });
 });
 
