@@ -43,6 +43,23 @@ app.get('/post',authenticate,(request, response) => {
     });
 });
 
+app.delete('/post/delete',authenticate,(request, response) => {
+    var id = request.body.id;
+
+    if (!ObjectID.isValid(id)) {
+        return res.status(400).send();
+    }
+
+    newpost.findByIdAndRemove(id).then((newpost) => {
+        if (newpost) {
+            return res.status(400).send();
+        }
+        res.send(newpost);
+    }).catch((e) => {
+        res.status(400).send();
+    });
+});
+
 app.listen(3000,(status)=>{
     console.log("server running on 3000");
 });
