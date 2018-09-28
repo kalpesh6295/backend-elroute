@@ -1,17 +1,19 @@
-const { app } = require('./../Express/express.js');
+const express = require('express');
+const router = express.Router();
+// const { app } = require('./../Express/express.js');
 const { mongoose } = require('./../mongoose/mongoose-connect.js');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const { postModel } = require('../Modals/postModel.js');
 const { authenticate } = require('./../middleware/authenticate.js');
 const _ = require('lodash');
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
-app.post('/post',authenticate,(request,response)=>{
+router.post('/addPost',authenticate,(request,response)=>{
     
     var post =_.pick(request.body,['Image','Video','Content','Comment','Veiws','Save']);
-    const newPost=new postModel({
-        UserName:request.body.UserName,
+     var newPost=new postModel({
+        // UserName:request.body.UserName,
         Image:post.Image,
         Video:post.Video,
         Content:post.Content,
@@ -30,7 +32,7 @@ app.post('/post',authenticate,(request,response)=>{
 
 });
 
-app.get('/post',authenticate,(request, response) => {
+router.get('/',authenticate,(request, response) => {
     postModel.find({ Creator: request.body.UserName }).then((newpost) => {
         console.log(request.body.UserName);
         console.log('post');
@@ -43,6 +45,4 @@ app.get('/post',authenticate,(request, response) => {
     });
 });
 
-app.listen(3000,(status)=>{
-    console.log("server running on 3000");
-});
+module.exports = router;
