@@ -60,6 +60,26 @@ app.delete('/post/delete',authenticate,(request, response) => {
     });
 });
 
+app.patch('/post/update',authenticate,(request,response)=>{
+    if(!ObjectID.isvalid(id)){
+        return res.status(400).send();
+    }
+
+     postModel.findByIdAndUpdate(request.user._id, //find this <---
+            {
+                $push: { Post_id: result._id }
+            }).then((user) => {
+                console.log('Data Updated', user);
+                response.status(200).send(result);
+            },(error)=>{
+                console.log('Error saving product');
+                response.status(400).send(error);
+            }).catch((e)=>{
+                console.log('Exception caught');
+                response.status(400).send(e);
+            });
+});
+
 app.listen(3000,(status)=>{
     console.log("server running on 3000");
 });
