@@ -35,6 +35,11 @@ var userSchema = new mongoose.Schema({
     },
     //type:mongoose.Schema.Types.ObjectId,
     Post_id:[{type:mongoose.Schema.Types.ObjectId,auto:true}],
+    bookmarks:{
+        post:[{type:mongoose.Schema.Types.ObjectId}],
+        product:[{type:mongoose.Schema.Types.ObjectId}],
+        company:[{type:mongoose.Schema.Types.ObjectId}]
+    },
     tokens:[{
         access:{
             type:String,

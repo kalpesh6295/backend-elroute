@@ -30,6 +30,16 @@ var postSchema=new mongoose.Schema({
     }
 });
 
+postSchema.methods.sendPostId = function(id){
+    // var post = this;
+    postModel.findById(id).then((post)=>{
+        if(!post){
+            return null;
+        }
+        return post._id
+    })
+}
+
 var postModel = mongoose.model('post', postSchema);
 
 module.exports={postModel};
