@@ -7,7 +7,7 @@ const _ = require('lodash');
 
 app.use(bodyParser.json());
 
-app.post('/post',authenticate,(request,response)=>{
+app.post('/posts',authenticate,(request,response)=>{
     
     var post =_.pick(request.body,['Image','Video','Content','Comment','Veiws','Save']);
     const newPost=new postModel({
@@ -30,7 +30,7 @@ app.post('/post',authenticate,(request,response)=>{
 
 });
 
-app.get('/post',authenticate,(request, response) => {
+app.get('/posts',authenticate,(request, response) => {
     postModel.find({ Creator: request.body.UserName }).then((newpost) => {
         console.log(request.body.UserName);
         console.log('post');
@@ -43,7 +43,7 @@ app.get('/post',authenticate,(request, response) => {
     });
 });
 
-app.delete('/post/delete',authenticate,(request, response) => {
+app.delete('/posts/delete',authenticate,(request, response) => {
     var id = request.body.id;
 
     if (!ObjectID.isValid(id)) {
@@ -60,7 +60,7 @@ app.delete('/post/delete',authenticate,(request, response) => {
     });
 });
 
-app.patch('/post/update',authenticate,(request,response)=>{
+app.patch('/posts/update',authenticate,(request,response)=>{
     if(!ObjectID.isvalid(id)){
         return res.status(400).send();
     }
