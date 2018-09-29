@@ -11,11 +11,15 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "crypto": "^1.0.1",
     "express": "^4.16.3",
     "jade": "^1.11.0",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.11",
     "mongoose": "^5.2.8",
+    "nodemailer": "^4.6.8",
+    "rand-token": "^0.4.0",
+    "random-token": "0.0.8",
     "yargs": "^12.0.2"
   }
 }

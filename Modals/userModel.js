@@ -20,6 +20,10 @@ var userSchema = new mongoose.Schema({
         unique:true,
         trim:true
     },
+    isVerified: 
+    {   type: Boolean, 
+        default: false 
+    },
     Mobile:{
         type:Number,
         trim:true
