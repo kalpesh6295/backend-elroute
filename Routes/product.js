@@ -12,8 +12,10 @@ const {authenticate} = require('./../middleware/authenticate.js');
 
 //adding product into DB
 router.post('/publish',authenticate,(request,response)=>{
-    console.log('id of user logged in is',request.user._id)
-    var body = _.pick(request.body,['name','company','image','industry','description'])
+    console.log('id of user logged in is',request.user._id);
+    console.log(request.body.company);
+    var body = _.pick(request.body,['name','company','image','industry','description']);
+    console.log(body)
     var product = new productModel({
             name:body.name,
             company:body.company,

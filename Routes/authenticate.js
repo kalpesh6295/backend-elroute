@@ -36,8 +36,8 @@ var body = _.pick(request.body,['Email','Password']);
             return response.status(400).send();
         }
         console.log(`User found is ---> ${user}`);
-        user.generateAuthToken().then((token_recieved)=>{
-            response.header('x-auth',token_recieved).send(user);
+        user.generateAuthToken().then((token)=>{
+            response.header('x-auth',token).send(user);
         });
     }).catch((e)=>{
         console.log('Error is ',e);

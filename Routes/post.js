@@ -1,17 +1,20 @@
-const { app } = require('./../Express/express.js');
+const express = require('express');
+const router = express.Router();
+// const { app } = require('./../Express/express.js');
 const { mongoose } = require('./../mongoose/mongoose-connect.js');
 const bodyParser = require('body-parser');
 const { postModel } = require('../Modals/postModel.js');
 const { authenticate } = require('./../middleware/authenticate.js');
 const _ = require('lodash');
-
+const app = express();
 app.use(bodyParser.json());
 
 app.post('/posts',authenticate,(request,response)=>{
-    
+    console.log('start post');
+    console.log(request,undefined,3);
     var post =_.pick(request.body,['Image','Video','Content','Comment','Veiws','Save']);
-    const newPost=new postModel({
-        UserName:request.body.UserName,
+     var newPost=new postModel({
+        // UserName:request.body.UserName,
         Image:post.Image,
         Video:post.Video,
         Content:post.Content,
@@ -20,6 +23,7 @@ app.post('/posts',authenticate,(request,response)=>{
         Save:post.Save
     });
 
+    console.log('mid post');
     console.log(post);
     newPost.save().then(() => {
         return newPost;
@@ -27,7 +31,7 @@ app.post('/posts',authenticate,(request,response)=>{
         console.log('Error Registering User', e);
         response.status(400).send();
     })
-
+    console.log('end post');
 });
 
 app.get('/posts',authenticate,(request, response) => {
@@ -43,20 +47,20 @@ app.get('/posts',authenticate,(request, response) => {
     });
 });
 
-app.delete('/posts/delete',authenticate,(request, response) => {
-    var id = request.body.id;
+app.delete('/posts/delete/:id',authenticate,(request, response) => {
+    var id = request.params.id;
 
-    if (!ObjectID.isValid(id)) {
-        return res.status(400).send();
-    }
+    // if (!ObjectId.isValid(id)) {
+    //     return res.status(400).send();
+    // }
 
-    newpost.findByIdAndRemove(id).then((newpost) => {
+    postModel.findByIdAndRemove(id).then((newpost) => {
         if (newpost) {
-            return res.status(400).send();
+            return response.status(200).send();
         }
-        res.send(newpost);
+        response.send(newpost);
     }).catch((e) => {
-        res.status(400).send();
+        response.status(400).send();
     });
 });
 
