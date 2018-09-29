@@ -23,6 +23,8 @@ router.post('/signup',(request,response)=>{
         console.log('Error Registering User',e);
         response.status(400).send();
     })
+
+
 });
 
 router.post('/login',(request,response)=>{
