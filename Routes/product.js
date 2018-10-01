@@ -30,7 +30,7 @@ router.post('/publish',authenticate,(request,response)=>{
         return userModel.findOneAndUpdate(
             {_id:request.user._id}, //find this <---
             {
-                $push:{Post_id:result._id}
+                $push:{Product_id:result._id}
             }).then((user)=>{
                 console.log('Data Updated',user);
                 response.status(200).send(result);
@@ -46,7 +46,7 @@ router.post('/publish',authenticate,(request,response)=>{
 
 router.get('/',authenticate,(request,response)=>{
     console.log('inside router.get');
-    productModel.find({adder:request.user._id}).then((products)=>{
+    productModel.find({Creator:request.user._id}).then((products)=>{
         console.log(request.user._id);
         console.log('-----------PPPPPPRRRRRRRRRROOOOOOOODDDDDDDDDUUUUUUUTTTTTTSSSSS---------------------------------------');
         console.log(products);

@@ -84,6 +84,4 @@ app.patch('/posts/update',authenticate,(request,response)=>{
             });
 });
 
-app.listen(3000,(status)=>{
-    console.log("server running on 3000");
-});
+module.exports = router;
