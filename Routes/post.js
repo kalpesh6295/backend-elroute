@@ -7,9 +7,9 @@ const { postModel } = require('../Modals/postModel.js');
 const { authenticate } = require('./../middleware/authenticate.js');
 const _ = require('lodash');
 const app = express();
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
-app.post('/posts',authenticate,(request,response)=>{
+router.post('/add',authenticate,(request,response)=>{
     console.log('start post');
     console.log(request,undefined,3);
     var post =_.pick(request.body,['Image','Video','Content','Comment','Veiws','Save']);
@@ -34,7 +34,7 @@ app.post('/posts',authenticate,(request,response)=>{
     console.log('end post');
 });
 
-app.get('/posts',authenticate,(request, response) => {
+router.get('/',authenticate,(request, response) => {
     postModel.find({ Creator: request.body.UserName }).then((newpost) => {
         console.log(request.body.UserName);
         console.log('post');
@@ -47,7 +47,7 @@ app.get('/posts',authenticate,(request, response) => {
     });
 });
 
-app.delete('/posts/delete/:id',authenticate,(request, response) => {
+router.delete('/delete/:id',authenticate,(request, response) => {
     var id = request.params.id;
 
     // if (!ObjectId.isValid(id)) {
@@ -64,7 +64,7 @@ app.delete('/posts/delete/:id',authenticate,(request, response) => {
     });
 });
 
-app.patch('/posts/update',authenticate,(request,response)=>{
+router.patch('/posts/update',authenticate,(request,response)=>{
     if(!ObjectID.isvalid(id)){
         return res.status(400).send();
     }
