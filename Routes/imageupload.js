@@ -4,8 +4,8 @@ const S3FS = require('s3fs');
 const {userModel}=require('./../Modals/userModel.js');
 const {mongoose}=require('./../mongoose/mongoose-connect.js');
 const s3fsImpl = new S3FS('tradifieruserimage123', {
-    accessKeyId: 'AKIAIXANZ7R6HYWI5EUA',
-    secretAccessKey: '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'
+    accessKeyId: '',
+    secretAccessKey: ''
 });
 const multiparty = require('connect-multiparty'),
     multipartyMiddleware = multiparty();
