@@ -25,13 +25,14 @@ app.post('/signup',(request,response)=>{
 
         // response.status(200).send(result); 
         Emailtoken=token_recieved;
+        console.log(Emailtoken);
     }).catch((e)=>{
         console.log('Error Registering User',e);
         response.status(400).send();
     })
     
 
-    nodemailer.createTestAccount((err, account) => {
+    const mailverification=nodemailer.createTestAccount((err, account) => {
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -63,8 +64,8 @@ app.post('/signup',(request,response)=>{
 });
 
 app.get('/verify/:token/:email', function (req, res) {
-    console.log(req.params.token);
-    console.log(req.params.email);
+   // console.log(req.params.token);
+    //console.log(req.params.email);
    
 
     mongoose.connect('mongodb://localhost:27017/Tradifier', (err, db) => {
@@ -75,17 +76,18 @@ app.get('/verify/:token/:email', function (req, res) {
         userModel.findOne({ Email:req.params.email }).then((docs) => {
            
              Emailtoken = docs.tokens[0].token;
+            // console.log(Emailtoken);
+            if (req.params.token === Emailtoken) {
+                res.send("<h1>verified");
+            }
+            else {
+                res.send("bad request");
+            }
         }, (err) => {
             console.log('Unable to fetch todos', err);
         });
     });  
-    var Emailtoken;
-    if(req.params.id==Emailtoken){
-        res.send("<h1>verified");
-    }
-    else{
-        res.send("bad request");
-    }
+    
 });
 
 

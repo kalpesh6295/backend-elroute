@@ -37,6 +37,12 @@ var userSchema = new mongoose.Schema({
         trim:true,
         default:Date.now()
     },
+    Image:{
+        type:String
+    },
+    Following:{
+        company:[{type:mongoose.Schema.Types.ObjectId}]
+    },
     //type:mongoose.Schema.Types.ObjectId,
     Post_id:[{type:mongoose.Schema.Types.ObjectId,auto:true}],
     Product_id:[{type:mongoose.Schema.Types.ObjectId,auto:true}],
