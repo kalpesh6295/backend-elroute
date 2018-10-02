@@ -5,6 +5,7 @@ var productsRouter = require('./../Routes/product.js');
 var authenticationRouter = require('./../Routes/authenticate.js');
 var postRouter = require('./../Routes/post.js');
 var bookmarkRouter = require('./../Routes/bookmark.js');
+var companyRouter = require('./../Routes/company.js');
 
 var app = express();
 // var authRouter = require('./../Routes/signup');
@@ -33,6 +34,7 @@ app.use('/products',productsRouter);
 app.use('/auth',authenticationRouter);
 app.use('/post',postRouter);
 app.use('/bookmark',bookmarkRouter);
+app.use('/company',companyRouter);
 
 app.listen(3000,(status)=>{
     console.log('Server up on the port 3000');
