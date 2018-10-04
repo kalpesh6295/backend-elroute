@@ -41,7 +41,7 @@ router.post('/add',authenticate,(request,response)=>{
 
 router.get('/',authenticate,(request,response)=>{
     companyModel.find({"stageOne.admin":request.user._id}).then((companies)=>{
-        if(!companes){
+        if(!companies){
             return response.status(200).send();
         }
     console.log('Companies are',companies);
@@ -74,13 +74,17 @@ router.delete('/delete/:id',authenticate,(request,response)=>{
 router.patch('/update/:id',authenticate,(request,response)=>{
     var body = _.pick(request.body,['category','companyName','location','website','companyType']);
     var id = request.params.id;
-    console.log(body);
+    console.log('id of user is',id);
+    console.log('body is ->',body);
     companyModel.findByIdAndUpdate(id,{
         $set:{
             stageOne:body
         }
     }).then((updatedCompany)=>{
+        console.log('Updated Company->',updatedCompany);
         response.status(200).send(updatedCompany);
+    },(error)=>{
+        console.log('Error while patching company',error);
     }).catch((e)=>{
         console.log('Exception Occured',e)
         response.status(400).send(e);

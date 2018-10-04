@@ -44,8 +44,6 @@ var userSchema = new mongoose.Schema({
         company:[{type:mongoose.Schema.Types.ObjectId}]
     },
     //type:mongoose.Schema.Types.ObjectId,
-    Post_id:[{type:mongoose.Schema.Types.ObjectId,auto:true}],
-    Product_id:[{type:mongoose.Schema.Types.ObjectId,auto:true}],
     Company_id:[{type:mongoose.Schema.Types.ObjectId,auto:true}],
     bookmarks:{
         post:[{type:mongoose.Schema.Types.ObjectId}],

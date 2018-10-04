@@ -7,6 +7,8 @@ const { postModel } = require('../Modals/postModel.js');
 const { authenticate } = require('./../middleware/authenticate.js');
 const _ = require('lodash');
 const app = express();
+const fs = require('fs');
+const {imageupload} = require('./../middleware/imageupload.js');
 // app.use(bodyParser.json());
 
 router.post('/add',authenticate,(request,response)=>{
@@ -54,34 +56,69 @@ router.delete('/delete/:id',authenticate,(request, response) => {
     //     return res.status(400).send();
     // }
 
-    postModel.findByIdAndRemove(id).then((newpost) => {
-        if (newpost) {
-            return response.status(200).send();
+    postModel.findByIdAndRemove(id).then((deletedPost) => {
+        if (!deletedPost) {
+            response.status(404).send('No such company exist, enter avaliable id');
         }
-        response.send(newpost);
+        response.status(200).send(`Deleted Company is -> ${deletedpost}`);
+    }, (error) => {
+        console.log('Error while deleting', error);
+        response.status(400).send();
     }).catch((e) => {
         response.status(400).send();
     });
 });
 
-router.patch('/posts/update',authenticate,(request,response)=>{
-    if(!ObjectID.isvalid(id)){
-        return res.status(400).send();
-    }
+router.patch('/update/:id', authenticate, (request, response) => {
+    var body = _.pick(request.body, ['Image', 'Video', 'Content','Comment', 'Veiws', 'Save']);
+    var id = request.params.id;
+    console.log(body);
+    postModel.findByIdAndUpdate(id, {
+        $set: {
+            Image:body.Image,
+            Video:body.Video,
+            Content:body.Content,
+            Comment:body.Comment,
+            Veiws:body.Veiws,
+            Save:body.Save    
+        }
+    }).then((updatedPost) => {
+        response.status(200).send(updatedPost);
+    }).catch((e) => {
+        console.log('Exception Occured', e)
+        response.status(400).send(e);
+    })
+});
 
-     postModel.findByIdAndUpdate(request.user._id, //find this <---
-            {
-                $push: { Post_id: result._id }
-            }).then((user) => {
-                console.log('Data Updated', user);
-                response.status(200).send(result);
-            },(error)=>{
-                console.log('Error saving product');
-                response.status(400).send(error);
-            }).catch((e)=>{
-                console.log('Exception caught');
-                response.status(400).send(e);
-            });
+router.post('/test', (request, response) => {
+    var fileName = request.files.Image.name;
+    console.log('Image ka naam hai ------- >',request.files.Image.name);
+    console.log('start post');
+    var orignalUrl = request.imageurl + fileName;
+    // console.log(request, undefined, 3);
+    var post = _.pick(request.body, ['Image', 'Video', 'Content', 'Comment', 'Veiws', 'Save']);
+    var newPost = new postModel({
+        // UserName:request.body.UserName,
+        Image: orignalUrl,
+        Video: post.Video,
+        Content: post.Content,
+        Comment: post.Comment,
+        Veiws: post.Veiws,
+        Save: post.Save
+    });
+
+    console.log('mid post');
+    console.log(post);
+
+    newPost.save().then((postSaved) => {
+        response.status(200).send(postSaved);
+        console.log('saved post is--------->',postSaved);
+        return postSaved.sendFile(request.files.Image);
+    }).catch((e) => {
+        console.log('Error Registering User', e);
+        response.status(400).send();
+    })
+    console.log('end post');
 });
 
 module.exports = router;
