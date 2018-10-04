@@ -6,17 +6,25 @@ var authenticationRouter = require('./../Routes/authenticate.js');
 var postRouter = require('./../Routes/post.js');
 var bookmarkRouter = require('./../Routes/bookmark.js');
 var companyRouter = require('./../Routes/company.js');
-// var userRouter = require('./../Routes/user.js');
-
+var imageuploadRouter=require('./../Routes/imageupload.js');
+//var signupRouter=require('./../Routes/signup.js');
+var emailverifyrouter=require('./../Routes/emailverify.js');
+var userpageRouter=require('./../Routes/user.js')
 var app = express();
+const multiparty = require('connect-multiparty'),
+    multipartyMiddleware = multiparty();
 // var authRouter = require('./../Routes/signup');
 
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine','jade');
 // app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: false }));
 
+
+app.use(bodyParser.json());
+
+
+app.use(express.urlencoded({ extended: false }));
+app.use(multipartyMiddleware);
 app.use((req, res, next) => {
     // Website you wish to allow to connect
      res.setHeader('Access-Control-Allow-Origin', '*');
@@ -30,14 +38,15 @@ app.use((req, res, next) => {
      // Pass to next layer of middleware
      next();
   });
-
+//app.use('/signup',signupRouter);
+app.use('/user',userpageRouter);
 app.use('/products',productsRouter);
 app.use('/auth',authenticationRouter);
 app.use('/post',postRouter);
 app.use('/bookmark',bookmarkRouter);
 app.use('/company',companyRouter);
-// app.use('/user',userRouter);
-
+app.use('/userimageupload',imageuploadRouter);
+app.use('/verify',emailverifyrouter);
 app.listen(3000,(status)=>{
     console.log('Server up on the port 3000');
 })

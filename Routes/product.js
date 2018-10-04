@@ -27,14 +27,7 @@ router.post('/publish',authenticate,(request,response)=>{
     product.save().then((result)=>{
         console.log('_id is :::----> '+request.user._id);
         console.log(result);
-        return userModel.findOneAndUpdate(
-            {_id:request.user._id}, //find this <---
-            {
-                $push:{Product_id:result._id}
-            }).then((user)=>{
-                console.log('Data Updated',user);
-                response.status(200).send(result);
-        });
+        return result;
     },(error)=>{
         console.log('Error Saving product',error);
         response.status(400).send(error);
@@ -58,8 +51,45 @@ router.get('/',authenticate,(request,response)=>{
     });
 });
 
+
+router.patch('/update/:id', authenticate, (request, response) => {
+    var body = _.pick(request.body, ['name', 'company', 'image', 'industry', 'description']);
+    var id = request.params.id;
+    console.log(body);
+    productModel.findByIdAndUpdate(id, {
+        $set: {
+            name: body.name,
+            company:body.company,
+            image:body.image,
+            industry:body.industry,
+            description:body.description
+        }
+    },{returnOriginal:false}).then((updatedProducts) => {
+        response.status(200).send(updatedProducts);
+    }).catch((e) => {
+        console.log('Exception Occured', e)
+        response.status(400).send(e);
+    })
+});
+
+
+router.delete('/delete/:id', authenticate, (request, response) => {
+    var id = request.params.id;
+    // if(!ObjectID.isvalid(id)){
+    //     return res.status(400).send();
+    // }
+    productModel.findByIdAndRemove(id).then((productCompany) => {
+        if (!productCompany) {
+            response.status(404).send('No such company exist, enter avaliable id');
+        }
+        response.status(200).send(`Deleted Company is -> ${productCompany}`);
+    }, (error) => {
+        console.log('Error while deleting', error);
+        response.status(400).send();
+    }).catch((e) => {
+        response.status(400).send();
+    });
+});
+
 module.exports = router;
 
-// app.listen(3000,(status)=>{
-//     console.log('Server up on the port 3000');
-// })
