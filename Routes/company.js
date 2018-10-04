@@ -6,6 +6,8 @@ const {userModel} = require('./../Modals/userModel.js');
 const _ = require('lodash');
 const ObjectID = require('mongodb').ObjectID;
 
+var following;
+
 router.post('/add',authenticate,(request,response)=>{
     var body = _.pick(request.body,['category','companyName','location','website','comapanyType']);
     console.log(body);
@@ -41,7 +43,7 @@ router.post('/add',authenticate,(request,response)=>{
 
 router.get('/',authenticate,(request,response)=>{
     companyModel.find({"stageOne.admin":request.user._id}).then((companies)=>{
-        if(!companes){
+        if(!companies){
             return response.status(200).send();
         }
     console.log('Companies are',companies);
@@ -85,6 +87,27 @@ router.patch('/update/:id',authenticate,(request,response)=>{
         console.log('Exception Occured',e)
         response.status(400).send(e);
     })
+});
+
+router.patch('/follow',authenticate,(request,response)=>{
+    var userId = request.user._id;
+    companyModel.findOne({"stageOne.admin":request.user._id}).then((company)=>{
+        if(!company){
+            return response.status(400).send();
+        }
+        console.log('Companies are',company);
+        // response.status(200).send({companies});  
+        return userModel.findByIdAndUpdate(userId,{
+            $push:{
+                "Following.company":company._id
+            }
+        });
+    }).then((updatedUser)=>{
+        // console.log('updatedUser is ---->',updatedUser);
+        response.status(200).send(updatedUser.Following)
+    }).catch((e)=>{
+        console.log('Exception caught',e);
+    });
 });
 
 module.exports = router;

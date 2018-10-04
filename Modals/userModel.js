@@ -77,6 +77,17 @@ userSchema.methods.generateAuthToken = function (){
     // return token;
 };
 
+userSchema.methods.removeToken = function(token) {
+    var user = this;
+    console.log(token);
+    if(!token){
+        return Promise.reject(`Token is ${token}`);
+    }
+    return user.update({
+        $pull:{tokens:{token}}
+    });
+}
+
 userSchema.statics.findByCredentials = function(email,password){
 
     var userModel = this;
