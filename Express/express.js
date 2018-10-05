@@ -52,5 +52,5 @@ app.use('/verify',emailverifyrouter);
 
 const port = process.env.PORT ||3000;
 app.listen(port,(status)=>{
-    console.log('Server up on the port 3000');
+    console.log('Server up on the port '+port);
 })
