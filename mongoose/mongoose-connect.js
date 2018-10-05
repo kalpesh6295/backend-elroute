@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const env=require('./../config/env.js');
-console.log(env.MONGODB_URI);
-mongoose.connect(env.MONGODB_URI);
+// const env=require('./../config/env.js');
+
+mongoose.connect('mongodb://kalpesh6295@gmail.com:kp6295.iitb@ds223763.mlab.com:23763/tradifier');
 
 module.exports = {mongoose};
