@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/Tradifier');
+mongoose.connect(env.MONGODB_URI);
 
 module.exports = {mongoose};

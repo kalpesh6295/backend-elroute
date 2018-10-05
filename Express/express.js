@@ -49,8 +49,8 @@ app.use('/bookmark',bookmarkRouter);
 app.use('/company',companyRouter);
 app.use('/userimageupload',imageuploadRouter);
 app.use('/verify',emailverifyrouter);
-app.listen(3000,(status)=>{
+
+const port = process.env.PORT ||3000;
+app.listen(port,(status)=>{
     console.log('Server up on the port 3000');
 })
-
-module.exports = {app};
