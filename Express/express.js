@@ -51,6 +51,6 @@ app.use('/userimageupload',imageuploadRouter);
 app.use('/verify',emailverifyrouter);
 
 const port = process.env.PORT ||3000;
-app.listen(port,(status)=>{
+app.listen(3000,(status)=>{
     console.log('Server up on the port '+port);
 })
