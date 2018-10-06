@@ -8,6 +8,7 @@ const {userModel} = require('../Modals/userModel.js');
 const {imageupload}=require('./../Routes/imageupload.js');
 const nodemailer = require('nodemailer');
 const host = 'localhost:3000';
+const {authenticate} = require('./../middleware/authenticate.js');
 var Emailtoken;
 
 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {userModel} = require('./../Modals/userModel.js');
 
 var companySchema = new mongoose.Schema({
 stageOne:{
@@ -55,6 +56,30 @@ stageTwo:{
     }
     //type:mongoose.Schema.Types.ObjectId,
 }});
+
+companySchema.statics.followUnfollow = function(decision,userId){
+    return companyModel.findOne({"stageOne.admin":userId}).then((company)=>{
+        if(!company){
+            return Promise.reject();
+        }
+        console.log('Companies are',company);
+        if(decision==="follow"){
+            return userModel.findByIdAndUpdate(userId,{
+                $push:{
+                    "Following.company":company._id
+                }
+            });
+        }else if(decision==="unfollow"){
+            return userModel.findByIdAndUpdate(userId,{
+                $pull:{
+                    "Following.company":company._id
+                }
+            });
+        }
+    }).catch((e)=>{
+        console.log('Exception caught',e);
+    });
+}
 
 var companyModel = mongoose.model('company',companySchema);
 

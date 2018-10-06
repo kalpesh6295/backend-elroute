@@ -63,6 +63,7 @@ var userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = function (){
+    //methods is for single particular selected document
     var user = this;
     var access = 'auth';
     var token = jwt.sign({_id:user._id.toHexString(),access},'abc123').toString();
@@ -87,7 +88,7 @@ userSchema.methods.removeToken = function(token) {
 }
 
 userSchema.statics.findByCredentials = function(email,password){
-
+    //statics is for all the document inside a collection
     var userModel = this;
     console.log('inside findByCredentials :----> ', email,password);
     // console.log(userModel);

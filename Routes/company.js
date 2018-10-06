@@ -94,24 +94,20 @@ router.patch('/update/:id',authenticate,(request,response)=>{
 });
 
 router.patch('/follow',authenticate,(request,response)=>{
-    var userId = request.user._id;
-    companyModel.findOne({"stageOne.admin":request.user._id}).then((company)=>{
-        if(!company){
-            return response.status(400).send();
-        }
-        console.log('Companies are',company);
-        // response.status(200).send({companies});  
-        return userModel.findByIdAndUpdate(userId,{
-            $push:{
-                "Following.company":company._id
-            }
-        });
-    }).then((updatedUser)=>{
-        // console.log('updatedUser is ---->',updatedUser);
-        response.status(200).send(updatedUser.Following)
+    companyModel.followUnfollow("follow",request.user._id).then((updatedUser)=>{
+            response.status(200).send(updatedUser.Following);
     }).catch((e)=>{
-        console.log('Exception caught',e);
+        response.status(404).send();
     });
 });
+
+router.patch('/unfollow',authenticate,(request,response)=>{
+    companyModel.followUnfollow("unfollow",request.user._id).then((updatedUser)=>{
+            response.status(200).send(updatedUser.Following);
+    }).catch((e)=>{
+        response.status(404).send();
+    });
+});
+
 
 module.exports = router;
