@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
+//Product Model to add new product into the schema
 var productSchema = new mongoose.Schema({
+    Image: {
+        type: String
+    },
     name:{
         type:String,
         required:true,
@@ -15,12 +19,8 @@ var productSchema = new mongoose.Schema({
         type:String,
         trim:true
     },
-    image:{
-        type:String
-    },
     description:{
         type:String,
-        // required:true,
         trim:true
     },
     Creator:{

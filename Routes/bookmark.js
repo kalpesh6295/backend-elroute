@@ -8,6 +8,7 @@ const {productModel} = require('./../Modals/productModel.js');
 
 var postId;
 
+//Router used to update the user post bookmark Model every time click on the bookmark
 router.patch('/post/:id',authenticate,(request,response)=>{
     postId = request.params.id;
     postModel.findById(postId).then((post)=>{
@@ -20,14 +21,13 @@ router.patch('/post/:id',authenticate,(request,response)=>{
             'bookmarks.post':postId
         }
     }).then((user)=>{
-        console.log('Updated User bookmark array',user);
         response.status(200).send(user);
     }).catch((e)=>{
         response.status(400).send(e);
-        console.log('Exception Caught bookmarking-->',e);
     })
 });
 
+//Router used to update the user product bookmark Model every time click on the bookmark
 router.patch('/product/:id',authenticate,(request,response)=>{
     productId = request.params.id;
     productModel.findById(productId).then((product)=>{
@@ -40,12 +40,11 @@ router.patch('/product/:id',authenticate,(request,response)=>{
             'bookmarks.product':productId
         }
     }).then((user)=>{
-        console.log('Updated User bookmark array',user);
         response.status(200).send(user);
     }).catch((e)=>{
         response.status(400).send(e);
-        console.log('Exception Caught bookmarking-->',e);
     })
 });
+
 
 module.exports = router;

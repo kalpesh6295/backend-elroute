@@ -1,39 +1,41 @@
 const fs = require('fs');
 const express = require('express');
-const router = express.Router();
-const env = require('./../config/env.js');
+const env = require('../config/env.js');
 const multiparty = require('connect-multiparty'),
     multipartyMiddleware = multiparty();
 const S3FS = require('s3fs');
-const { userModel } = require('./../Modals/userModel');
-const { mongoose } = require('./../mongoose/mongoose-connect.js');
-const s3fsImpl = new S3FS('tradifieruserimage1', {
-    accessKeyId: env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: env.AWS_SECRET_ACCESS_KEY
-});
 const app = express();
 app.use(multipartyMiddleware);
 
+
+//Code for the image upload for every new post
 var imageupload=(request,response,next)=>{
-    console.log(request.files.file);
-    var myfile = request.files.file;
-    //var key=req.files.file.name;
-    const awsurl = "https://s3.amazonaws.com/tradifieruserimage/";
-    console.log(awsurl);
+    var s=request.baseUrl;                                          //Base of the link from where the request of image insert is coming
+    var sub= s.substr(1);
+    const BUCKET_NAME='tradifier'+sub+'image1';                      //Creating bucket name
+    const s3fsImpl = new S3FS(BUCKET_NAME, {
+        accessKeyId: env.AWS_ACCESS_KEY_ID,                           //AWS Access key  
+        secretAccessKey: env.AWS_SECRET_ACCESS_KEY                     //AWS Screat access key
+    });
+    var myfile = request.files.Image;
+    filename=request.files.Image.name;
+    var filename=filename.replace(/\s/g,'');
+    myfile.originalFilename = Date.now() + filename;
+    const awsurl = "https://s3.amazonaws.com/"+BUCKET_NAME+'/';
     var stream = fs.createReadStream(myfile.path);
-    return s3fsImpl.writeFile(myfile.originalFilename, stream).then(() => {
+    s3fsImpl.writeFile(myfile.originalFilename, stream).then(() => {
         fs.unlink(myfile.path, (err) => {
             if (err) {
-                console.error(err);
+                console.log(err);
             }
             else {
-                console.log('upload successfully');
-                request.imageurl = awsurl;
-                //console.log(req.files.upload);
+                console.log("upload successfully");
+                request.imageurl = awsurl + myfile.originalFilename;
+                next();
             }
         });
     });
-    // const imageurl=awsurl+request.files.file.name;
 };
+
 
 module.exports={imageupload};

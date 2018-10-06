@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-
+//User model to add the new user into the schema
 var userSchema = new mongoose.Schema({
     UserName:{ 
         type:String,
@@ -43,7 +43,6 @@ var userSchema = new mongoose.Schema({
     Following:{
         company:[{type:mongoose.Schema.Types.ObjectId}]
     },
-    //type:mongoose.Schema.Types.ObjectId,
     Company_id:[{type:mongoose.Schema.Types.ObjectId,auto:true}],
     bookmarks:{
         post:[{type:mongoose.Schema.Types.ObjectId}],
@@ -62,22 +61,21 @@ var userSchema = new mongoose.Schema({
     }]
 });
 
+
+//function call to generate a token every time a new user register into the database
 userSchema.methods.generateAuthToken = function (){
     var user = this;
     var access = 'auth';
     var token = jwt.sign({_id:user._id.toHexString(),access},'abc123').toString();
     user.tokens.push({access,token});
-
     return user.save().then(()=>{
-        // console.log(token);
         return token;
     });
-    // return token;
 };
 
+//Function to remove a token every time a user logout 
 userSchema.methods.removeToken = function(token) {
     var user = this;
-    console.log(token);
     if(!token){
         return Promise.reject(`Token is ${token}`);
     }
@@ -86,19 +84,15 @@ userSchema.methods.removeToken = function(token) {
     });
 }
 
+//Function to findout the user is present into the database 
 userSchema.statics.findByCredentials = function(email,password){
 
     var userModel = this;
-    console.log('inside findByCredentials :----> ', email,password);
-    // console.log(userModel);
    return userModel.findOne({Email:email}).then((user)=>{
-    console.log(user);
         if(!user){
             return Promise.reject();
         }
         return new Promise((resolve,reject)=>{
-            console.log('password:',password);
-            console.log('user.Password:',user.Password);
             bcrypt.compare(password,user.Password,(error,result)=>{
                 if(result){
                     resolve(user);
@@ -111,22 +105,18 @@ userSchema.statics.findByCredentials = function(email,password){
     });
 };
 
+
+//Function to find out token is matched into the database with any user 
 userSchema.statics.findByToken = function(token){
     var userModel = this;
     var decoded;
-
     try{
         decoded = jwt.verify(token,'abc123');
-        console.log('decoded----->',decoded);
     }
     catch(e){
-        // return new Promise((resolve,reject)=>{
-        //     return reject();
-        // });
         console.log('Error Occured!');
         return Promise.reject();
     }
-
     return userModel.findOne({
         _id:decoded._id,
         'tokens.token': token,
@@ -134,24 +124,20 @@ userSchema.statics.findByToken = function(token){
     });
 };
 
+//Method to Hash the password every time a new user is added 
 userSchema.pre('save',function(next){
-    console.log('Starting of Pre.........');
     var user = this;
-    console.log
     if(user.isModified('Password')){
         var password = user.Password;
-        console.log(password)
         bcrypt.genSalt(10,(error,salt)=>{
             bcrypt.hash(password,salt,(error,hash)=>{
                 user.Password = hash; 
-                console.log(user.password)
                 next();
             })
         })
     }else{
         next();
     }
-    console.log('Ending of Pre...........');
 });
 
 

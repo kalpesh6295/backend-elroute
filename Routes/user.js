@@ -1,31 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const { authenticate } = require('./../middleware/authenticate.js');
 const { userModel } = require('./../Modals/userModel.js');
 const _ = require('lodash');
 
-
+//Router used to get the user from the databse using id as an parameter
 router.get('/:id',(request,response)=>{
     var id=request.params.id;
-    
     userModel.findById(id).then((userdata)=>{
        response.status(200).send(userdata);
-        console.log(userdata);
-    },(error)=>{
-        response.status(400).send();
-        console.log(error);
     }).catch((e)=>{
-        console.log('excepted occured');
         response.status(400).send(e);
     });
 
 });
 
-
+//Router used to update the data of an user which is already present into the database using id as ana parameter
 router.patch('/update/:id',(request,response)=>{
     var body = _.pick(request.body, ['UserName', 'Password', 'Email', 'Mobile', 'Address']);
     var id =request.params.id;
-
     userModel.findOneAndUpdate(id,{
         $set:{
             UserName:body.UserName,
@@ -35,12 +27,11 @@ router.patch('/update/:id',(request,response)=>{
             Address:body.Address
         }
     }).then((updateddata)=>{
-        console.log('updated data->',updateddata);
         response.status(200).send(updateddata);
-    },(error)=>{
-
-    })
-})
+    }).catch((e)=>{
+        res.status(400).send(e);
+    });
+});
 
 
 module.exports=router;

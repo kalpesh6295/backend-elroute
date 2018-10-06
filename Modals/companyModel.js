@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+//Company model schema for the user 
 var companySchema = new mongoose.Schema({
 stageOne:{
     category:{ 
@@ -23,9 +24,10 @@ stageOne:{
     //one who creates the company
     admin:{
         type:mongoose.Schema.Types.ObjectId,
-        // required:true
     }
 },
+
+//Second part of the company
 stageTwo:{
     shortIntro:{
         type:String,
@@ -53,7 +55,6 @@ stageTwo:{
     keywords:{
         type:String
     }
-    //type:mongoose.Schema.Types.ObjectId,
 }});
 
 var companyModel = mongoose.model('company',companySchema);
