@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+var helmet = require('helmet')
 
 var productsRouter = require('./../Routes/product.js');
 var authenticationRouter = require('./../Routes/authenticate.js');
@@ -10,6 +11,7 @@ var imageuploadRouter=require('./../Routes/imageupload.js');
 //var signupRouter=require('./../Routes/signup.js');
 var emailverifyrouter=require('./../Routes/emailverify.js');
 var userpageRouter=require('./../Routes/user.js')
+
 var app = express();
 const multiparty = require('connect-multiparty'),
     multipartyMiddleware = multiparty();
@@ -19,7 +21,7 @@ const multiparty = require('connect-multiparty'),
 // app.set('view engine','jade');
 // app.use(express.static(path.join(__dirname, 'public')));
 
-
+app.use(helmet());
 app.use(bodyParser.json());
 
 
@@ -47,8 +49,8 @@ app.use('/bookmark',bookmarkRouter);
 app.use('/company',companyRouter);
 app.use('/userimageupload',imageuploadRouter);
 app.use('/verify',emailverifyrouter);
-app.listen(3000,(status)=>{
-    console.log('Server up on the port 3000');
-})
 
-module.exports = {app};
+const port = process.env.PORT ||3000;
+app.listen(port,(status)=>{
+    console.log('Server up on the port '+port);
+})
