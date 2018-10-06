@@ -1,10 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-<<<<<<< HEAD
-=======
 var helmet = require('helmet')
 
->>>>>>> 58485c5c9d1904679433f27f9176102fe83ac6a8
 var productsRouter = require('./../Routes/product.js');
 var authenticationRouter = require('./../Routes/authenticate.js');
 var postRouter = require('./../Routes/post.js');
