@@ -64,6 +64,7 @@ var userSchema = new mongoose.Schema({
 
 //function call to generate a token every time a new user register into the database
 userSchema.methods.generateAuthToken = function (){
+    //methods is for single particular selected document
     var user = this;
     var access = 'auth';
     var token = jwt.sign({_id:user._id.toHexString(),access},'abc123').toString();
@@ -86,7 +87,7 @@ userSchema.methods.removeToken = function(token) {
 
 //Function to findout the user is present into the database 
 userSchema.statics.findByCredentials = function(email,password){
-
+    //statics is for all the document inside a collection
     var userModel = this;
    return userModel.findOne({Email:email}).then((user)=>{
         if(!user){
