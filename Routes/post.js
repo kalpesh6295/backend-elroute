@@ -8,7 +8,7 @@ const {imageupload} = require('./../middleware/imageupload.js');
 
 //Router to add an new post into the database
 router.post('/',authenticate,imageupload,(request,response)=>{
-    var post =_.pick(request.body,['Content','Comment','Veiws','Save']);
+    var post =_.pick(request.body,['Content','Comment','Veiws','Save']);         //Picking the data for the new post
      var newPost=new postModel({
         // UserName:request.body.UserName,
         Image: request.imageurl,

@@ -8,7 +8,7 @@ const { imageupload } = require('./../middleware/imageupload.js');
 
 //Router used to add new product into the database
 router.post('/',authenticate,imageupload,(request,response)=>{
-    var body = _.pick(request.body,['name','company','industry','description']);
+    var body = _.pick(request.body,['name','company','industry','description']);        //pick up the data for the new product
     var product = new productModel({
             Image: request.imageurl,    
             name:body.name,

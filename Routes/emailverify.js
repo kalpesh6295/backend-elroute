@@ -7,15 +7,15 @@ router.get('/:token/:email', function (req, res) {
 
             userModel.findOne({Email:req.params.email}).then((docs) => {
                 var id=docs._id;
-                if(docs.isVerified===true)
+                if(docs.isVerified===true)                          //Checking if user is already verified 
                 {
                     res.send("<h1> already verified");
                 }
                 else{
-                    Emailtoken = docs.tokens[0].token;
+                    Emailtoken = docs.tokens[0].token;                      
                     if (req.params.token === Emailtoken) {
                         res.send("<h1>verified");
-                    userModel.findByIdAndUpdate(id, { $set: { isVerified: true } },{returnOriginal:true}).then((docs)=>{
+                    userModel.findByIdAndUpdate(id, { $set: { isVerified: true } }).then((docs)=>{
                     });
                 }
                 else{

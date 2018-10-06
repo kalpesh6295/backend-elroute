@@ -16,7 +16,7 @@ router.get('/:id',(request,response)=>{
 
 //Router used to update the data of an user which is already present into the database using id as ana parameter
 router.patch('/update/:id',(request,response)=>{
-    var body = _.pick(request.body, ['UserName', 'Password', 'Email', 'Mobile', 'Address']);
+    var body = _.pick(request.body, ['UserName', 'Password', 'Email', 'Mobile', 'Address']);//Getting data to updating user data 
     var id =request.params.id;
     userModel.findOneAndUpdate(id,{
         $set:{

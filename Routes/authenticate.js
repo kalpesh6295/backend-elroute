@@ -4,12 +4,8 @@ const _ = require('lodash');
 'use strict';
 const env = require('./../config/env.js');
 const { authenticate } = require('./../middleware/authenticate.js');
-const {mongoose} = require('./../mongoose/mongoose-connect.js');
-const bodyParser = require('body-parser');
 const {userModel} = require('../Modals/userModel.js');
-const {imageupload}=require('./../Routes/imageupload.js');
 const nodemailer = require('nodemailer');
-const {authenticate} = require('./../middleware/authenticate.js');
 const host = 'localhost:3000';
 var Emailtoken;
 

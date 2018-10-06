@@ -32,17 +32,17 @@ app.use((req, res, next) => {
   });
 
 // Routes 
-app.use('/user',userpageRouter);
-app.use('/products',productsRouter);
-app.use('/auth',authenticationRouter);
-app.use('/post',postRouter);
-app.use('/bookmark',bookmarkRouter);
-app.use('/company',companyRouter);
-app.use('/userimageupload',imageuploadRouter);
-app.use('/verify',emailverifyrouter);
+app.use('/user',userpageRouter);            //new user route
+app.use('/products',productsRouter);        //new product route
+app.use('/auth',authenticationRouter);      //new signup and login route
+app.use('/post',postRouter);                //new post route
+app.use('/bookmark',bookmarkRouter);        //bookmark route for an user to bookmark a company
+app.use('/company',companyRouter);          //new comapany route    
+app.use('/userimageupload',imageuploadRouter);//new route to add user its image
+app.use('/verify',emailverifyrouter);           //email verification route
 
 
-//Server listing at the port 3000
+//Server listing
 app.listen(3000,(status)=>{
     console.log('Server up on the port 3000');
 })
