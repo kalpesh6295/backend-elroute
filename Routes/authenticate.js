@@ -4,31 +4,29 @@ const _ = require('lodash');
 'use strict';
 const env = require('./../config/env.js');
 const { authenticate } = require('./../middleware/authenticate.js');
+const {mongoose} = require('./../mongoose/mongoose-connect');
 const {userModel} = require('../Modals/userModel.js');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 const host = 'localhost:3000';
-var Emailtoken;
 
-//Router to signup an new user into the database and send a verification email to the user email id
+//Router to signup an new  into the database and send a verification email to the user email id
 router.post('/signup',(request,response)=>{
-    var user = _.pick(request.body,['UserName','Password','Email','Mobile','Address']);     //picking up the data of the new user
+    var Etoken = jwt.sign({}, 'abc123456').toString();
+    var user = _.pick(request.body,['UserName','Password','Email','Mobile','Address','Emailtoken']);     //picking up the data of the new user
     var newUser = new userModel({
         UserName:user.UserName,
         Password:user.Password,
         Email:user.Email,
         Mobile:user.Mobile,
         Address:user.Address,
-        Image:request.image
+        Emailtoken:Etoken
     });
     newUser.save().then(()=>{
+        console.log(newUser);
     return newUser.generateAuthToken();                                                  //calling function to generate an user token 
     }).then((token_recieved)=>{                                                          //token received from function called into the userModel
         response.header('x-auth',token_recieved).send(newUser); 
-        Emailtoken = token_recieved; 
-    }).catch((e)=>{
-        response.status(400).send(e);
-        })
-        //nodemailer is used to send verification mail to the user
         nodemailer.createTestAccount((err, account) => {
             // create reusable transporter object using the default SMTP transport
             let transporter = nodemailer.createTransport({
@@ -44,16 +42,21 @@ router.post('/signup',(request,response)=>{
                 from: '"Tradifier.com" <vikibenz776@gmail.com>',                          // sender address
                 to: user.Email,                                                           // list of receivers
                 subject: 'Verification mail',                                             // Subject line
-                text: "http://" + host + "/verify/" + Emailtoken + "/" + user.Email
+                text: "http://" + host + "/verify/" + Etoken + "/" + user.Email
             };
             // send mail with defined transport object
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    res.status(400).send(error);
+                    response.status(400).send(error);
                 }
-                res.status(200).send("Vaerifiation mail has been sent");
+                response.status(200).send("Verification mail is sended");
             });
         });
+    }).catch((e)=>{
+        response.status(400).send(e);
+        })
+        //nodemailer is used to send verification mail to the user
+       
 });
 
 //ROuter to login an user which is already present into the database

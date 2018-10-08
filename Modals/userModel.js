@@ -40,6 +40,9 @@ var userSchema = new mongoose.Schema({
     Image:{
         type:String
     },
+    Emailtoken:{
+        type:String
+    },
     Following:{
         company:[{type:mongoose.Schema.Types.ObjectId}]
     },
