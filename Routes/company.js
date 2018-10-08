@@ -4,13 +4,11 @@ const {authenticate} = require('./../middleware/authenticate.js');
 const {companyModel} = require('./../Modals/companyModel.js');
 const {userModel} = require('./../Modals/userModel.js');
 const _ = require('lodash');
-const ObjectID = require('mongodb').ObjectID;
 
-var following;
 
-router.post('/add',authenticate,(request,response)=>{
-    var body = _.pick(request.body,['category','companyName','location','website','comapanyType']);
-    console.log(body);
+//Router to add a new company into the database
+router.post('/',authenticate,(request,response)=>{
+    var body = _.pick(request.body,['category','companyName','location','website','comapanyType']); //picking the values for the company by user in satgeOne
     var newCompany = new companyModel({
         stageOne:{
             category:body.category,
@@ -21,91 +19,78 @@ router.post('/add',authenticate,(request,response)=>{
             admin:request.user._id
         }
     });
-    console.log('Our new company is ->',newCompany);
     newCompany.save().then((result)=>{
-        console.log('Company Registered',result);
         return userModel.findOneAndUpdate(
-            {_id:request.user._id}, //find this <---
+            {_id:request.user._id},                         //if User is present in the database add that company 
             {
-                $push:{Company_id:result._id}
+                $push:{Company_id:result._id}               //push company data to the user company coloumn 
             }).then((user)=>{
-                console.log('Data Updated',user);
                 response.status(200).send(result);
         });
-    },(error)=>{
-        console.log('Error is ',error);
-        response.status(400).send();
     }).catch((e)=>{
-        response.status(400).send();
-        console.log('Exception Caught is',e);
+        response.status(400).send(e);
     });
 });
 
+//Router to show user the company value saved into the database
 router.get('/',authenticate,(request,response)=>{
     companyModel.find({"stageOne.admin":request.user._id}).then((companies)=>{
         if(!companies){
             return response.status(200).send();
         }
-    console.log('Companies are',companies);
     response.status(200).send({companies});
-    },(error)=>{
-        console.log('Cannot get all companies',error);
     }).catch((e)=>{
-        console.log('Exception caught',e);
+        response.status(400).send(e);
     });
 });
 
+//Router to delete an user company from the database 
 router.delete('/delete/:id',authenticate,(request,response)=>{
     var id = request.params.id;
-    // if(!ObjectID.isvalid(id)){
-    //     return res.status(400).send();
-    // }
+
     companyModel.findByIdAndRemove(id).then((deletedCompany)=>{
-        if(!deletedCompany){
+        if(!deletedCompany){                                                            //Checking if the comppany is present in the database
             response.status(404).send('No such company exist, enter avaliable id');
         }
         response.status(200).send(`Deleted Company is -> ${deletedCompany}`);
     },(error)=>{
-        console.log('Error while deleting',error);
-        response.status(400).send();
+        response.status(400).send('Erroe while deleting');
     }).catch((e)=>{
-        response.status(400).send();
+        response.status(400).send(e);
     });
 });
 
+//Router to update company values which is present into the database of StageOne
 router.patch('/update/:id',authenticate,(request,response)=>{
-    var body = _.pick(request.body,['category','companyName','location','website','companyType']);
+    var body = _.pick(request.body,['category','companyName','location','website','companyType']); //Getting parameter 
     var id = request.params.id;
-    console.log('id of user is',id);
-    console.log('body is ->',body);
     companyModel.findByIdAndUpdate(id,{
         $set:{
-            stageOne:body
+            stageOne:body                                   //updating value into the database into te stageOne of the company
         }
     }).then((updatedCompany)=>{
-        console.log('Updated Company->',updatedCompany);
         response.status(200).send(updatedCompany);
-    },(error)=>{
-        console.log('Error while patching company',error);
     }).catch((e)=>{
-        console.log('Exception Occured',e)
         response.status(400).send(e);
     })
 });
 
+//Router to follow a company and update into user database in following company section
 router.patch('/follow',authenticate,(request,response)=>{
-    companyModel.followUnfollow("follow",request.user._id).then((updatedUser)=>{
-            response.status(200).send(updatedUser.Following);
+    var userId = request.user._id;
+    companyModel.findOne({"stageOne.admin":request.user._id}).then((company)=>{
+        if(!company){                                                                  
+            return response.status(400).send();
+        }
+        return userModel.findByIdAndUpdate(userId,{
+            $push:{
+                "Following.company":company._id                     //if user follows a company user following is added with the company 
+            }
+        });
+    }).then((updatedUser)=>{
+        response.status(200).send(updatedUser.Following)
     }).catch((e)=>{
-        response.status(404).send();
-    });
-});
-
-router.patch('/unfollow',authenticate,(request,response)=>{
-    companyModel.followUnfollow("unfollow",request.user._id).then((updatedUser)=>{
-            response.status(200).send(updatedUser.Following);
-    }).catch((e)=>{
-        response.status(404).send();
+        response.status(400).send('Exception caught',e);
     });
 });
 

@@ -2,115 +2,96 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 'use strict';
-const {mongoose} = require('./../mongoose/mongoose-connect.js');
-const bodyParser = require('body-parser');
+const env = require('./../config/env.js');
+const { authenticate } = require('./../middleware/authenticate.js');
+const {mongoose} = require('./../mongoose/mongoose-connect');
 const {userModel} = require('../Modals/userModel.js');
-const {imageupload}=require('./../Routes/imageupload.js');
 const nodemailer = require('nodemailer');
-const {authenticate} = require('./../middleware/authenticate.js');
+const jwt = require('jsonwebtoken');
 const host = 'localhost:3000';
-var Emailtoken;
 
-
-
+//Router to signup an new  into the database and send a verification email to the user email id
 router.post('/signup',(request,response)=>{
-    
-    var user = _.pick(request.body,['UserName','Password','Email','Mobile','Address']);
-    
+    var Etoken = jwt.sign({}, 'abc123456').toString();
+    var user = _.pick(request.body,['UserName','Password','Email','Mobile','Address','Emailtoken']);     //picking up the data of the new user
     var newUser = new userModel({
         UserName:user.UserName,
         Password:user.Password,
         Email:user.Email,
         Mobile:user.Mobile,
         Address:user.Address,
-        Image:request.image
+        Emailtoken:Etoken
     });
-    console.log(user);
     newUser.save().then(()=>{
-
-    return newUser.generateAuthToken();
-
-    }).then((token_recieved)=>{
-        response.header('x-auth',token_recieved).send(newUser);
-        
-        Emailtoken = token_recieved; 
-        console.log('token is',token_recieved);
-    }).catch((e)=>{
-        console.log('Error Registering User',e);
-        response.status(400).send();
-        })
-        const mailverification = nodemailer.createTestAccount((err, account) => {
+        console.log(newUser);
+    return newUser.generateAuthToken();                                                  //calling function to generate an user token 
+    }).then((token_recieved)=>{                                                          //token received from function called into the userModel
+        response.header('x-auth',token_recieved).send(newUser); 
+        nodemailer.createTestAccount((err, account) => {
             // create reusable transporter object using the default SMTP transport
             let transporter = nodemailer.createTransport({
                 service: 'gmail',
-                secure: false, // true for 465, false for other ports
+                secure: false,                                                           // true for 465, false for other ports
                 auth: {
-                    user: "vikibenz776@gmail.com", // generated ethereal user
-                    pass: "8298695800" // generated ethereal password
+                    user: env.SENDER_EMAIL,                                              // generated ethereal user
+                    pass: env.SENDER_PASSWORD                                            // generated ethereal password
                 }
             });
-            console.log(Emailtoken);
             // setup email data with unicode symbols
             let mailOptions = {
-                from: '"Tradifier.com" <vikibenz776@gmail.com>', // sender address
-                to: user.Email, // list of receivers
-                subject: 'Verification mail', // Subject line
-                text: "http://" + host + "/verify/" + Emailtoken + "/" + user.Email
+                from: '"Tradifier.com" <vikibenz776@gmail.com>',                          // sender address
+                to: user.Email,                                                           // list of receivers
+                subject: 'Verification mail',                                             // Subject line
+                text: "http://" + host + "/verify/" + Etoken + "/" + user.Email
             };
             // send mail with defined transport object
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    return console.log(error);
+                    response.status(400).send(error);
                 }
-                console.log('Message sent: %s', info.messageId);
-                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                response.status(200).send("Verification mail is sended");
             });
         });
+    }).catch((e)=>{
+        response.status(400).send(e);
+        })
+        //nodemailer is used to send verification mail to the user
+       
 });
 
-
-router.post('/login',(request,response)=>{
-    if(!loggedIn){
-        var body = _.pick(request.body,['Email','Password']);
-            console.log(request.body)
-            console.log(body);
-            userModel.findByCredentials(body.Email,body.Password).then((user)=>{
-                if(!user){
-                    return response.status(400).send();
-                }
-                console.log(`User found is ---> ${user}`);
-                user.generateAuthToken().then((token)=>{
-                    loggedIn = true;
-                    response.header('x-auth',token).send(user);
-                });
-            }).catch((e)=>{
-                console.log('Error is ',e);
-                response.status(400).send();
-                console.log(e);
-            })
+//ROuter to login an user which is already present into the database
+router.post('/login', (request, response) => {
+    if (!loggedIn) {
+        var body = _.pick(request.body, ['Email', 'Password']);                             //get the user Email,Password for login
+        userModel.findByCredentials(body.Email, body.Password).then((user) => {
+            if (!user) {                                                                    //if user present in the database
+                return response.status(400).send();
+            }
+            user.generateAuthToken().then((token) => {                                      //if user is present in the database then generate a token 
+                loggedIn = true;
+                response.header('x-auth', token).send(user);
+            });
+        }).catch((e) => {
+            response.status(400).send(e);
+        })
     }
-    else{
-        console.log('You Are Already Logged In, LogOut First');
+    else {
         response.status(409).send('You Are Already Logged In, LogOut First');
     }
 
 });
 
-router.delete('/logout',authenticate,(request,response)=>{
-    var user = request.user;
+//Router delete an token whenever a user logout 
+router.delete('/logout', authenticate, (request, response) => {
+    var user = request.user;                                                                
     var token = request.token;
-    console.log('token is ',token);
-    user.removeToken(token).then((result)=>{
+    user.removeToken(token).then((result) => {                                             //if user wants to logout then token is removed 
         loggedIn = false;
-        console.log(result);
         response.status(200).send('You have been logged out succesfully!');
-    }).catch((e)=>{
+    }).catch((e) => {
         response.status(400).send(e);
     })
 });
 
-module.exports = router;
 
-// app.listen(3000,(status)=>{
-//     console.log('Server Up on port 3000');
-// });
+module.exports = router;

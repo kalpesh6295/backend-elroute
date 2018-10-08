@@ -1,51 +1,43 @@
 const fs = require('fs');
 const express = require('express');
 const router=express.Router();
-const env=require('./../config/env.js');
-const multiparty = require('connect-multiparty'),
-    multipartyMiddleware = multiparty();
+const env=require('./../config/env.js');                                
 const S3FS = require('s3fs');
 const {userModel}=require('./../Modals/userModel.js');
-const {mongoose}=require('./../mongoose/mongoose-connect.js');
-const s3fsImpl = new S3FS('tradifieruserimage1', {
-    accessKeyId: env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: env.AWS_SECRET_ACCESS_KEY
+const s3fsImpl = new S3FS('tradifieruserimage1', {                      //AWS Bucket name 
+    accessKeyId: env.AWS_ACCESS_KEY_ID,                                 //AWS access key               
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY                          //AWS secret key 
 });
-router.use(multipartyMiddleware);
 
- router.post('/:id', (req, res) => {
-console.log(req.files.file);
-var myfile = req.files.file;
-//var key=req.files.file.name;
-const awsurl = "https://s3.amazonaws.com/tradifieruserimage1/";
-console.log(awsurl);
-var stream = fs.createReadStream(myfile.path);
-return s3fsImpl.writeFile(myfile.originalFilename, stream).then(() => {
-    fs.unlink(myfile.path, (err) => {
-        if (err) {
-            console.error(err);
-        }
-        else {
-            //console.log(req.files.upload);
-            console.log('upload successfully');
-        }
-    });
-        const image = awsurl + req.files.file.name;
-        console.log(image);
 
-        userModel.findByIdAndUpdate(req.params.id, {
-            $set: { Image: image }
-        }).then((user) => {
-            console.log('Data Updated', user);
-            res.status(200).send(result);
-        }, (error) => {
-            console.log('Error saving product');
-            res.status(400).send(error);
-        }).catch((e) => {
-            console.log('Exception caught');
-            res.status(400).send(e);
+//Router used to upload image to every new user 
+router.post('/:id', (req, res) => {
+     var myfile = req.files.Image;                                      //File which is given by user
+        var fname=req.files.Image.name;                                 //Filename            
+            var filename = fname.replace(/\s/g,'');                     //replacing gaps from the user filename  
+            myfile.originalFilename = Date.now() + filename;            //Date is added in front of the filename to remove conflict                           
+        const awsurl = "https://s3.amazonaws.com/tradifieruserimage1/";  //predefined aws url is given by the AWS with bucket name
+        var stream = fs.createReadStream(myfile.path);
+        return s3fsImpl.writeFile(myfile.originalFilename, stream).then(() => {   
+            fs.unlink(myfile.path, (err) => {
+                if (err) {
+                    res.status(400).send(err);
+                }
+                else {
+                    res.status(200).send('Upload succesfully');
+                }
+            });
+                const image = awsurl + filename;
+                userModel.findByIdAndUpdate(req.params.id, {
+                    $set: { Image: image }                                 //Image is added into the user database
+                }).then((user) => {
+                    res.status(200).send(user);
+                }).catch((e) => {
+                    res.status(400).send(e);
+                });
+            });        
         });
-    });        
- });
+
+        
 module.exports=router;
 
