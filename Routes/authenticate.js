@@ -23,38 +23,23 @@ router.post('/signup',(request,response)=>{
         Emailtoken:Etoken
     });
     newUser.save().then(()=>{
-        console.log(newUser);
     return newUser.generateAuthToken();                                                  //calling function to generate an user token 
-    }).then((token_recieved)=>{                                                          //token received from function called into the userModel
-        response.header('x-auth',token_recieved).send(newUser); 
-        nodemailer.createTestAccount((err, account) => {
-            // create reusable transporter object using the default SMTP transport
-            let transporter = nodemailer.createTransport({
-                service: 'gmail',
-                secure: false,                                                           // true for 465, false for other ports
-                auth: {
-                    user: env.SENDER_EMAIL,                                              // generated ethereal user
-                    pass: env.SENDER_PASSWORD                                            // generated ethereal password
-                }
-            });
-            // setup email data with unicode symbols
-            let mailOptions = {
-                from: '"Tradifier.com" <vikibenz776@gmail.com>',                          // sender address
-                to: user.Email,                                                           // list of receivers
-                subject: 'Verification mail',                                             // Subject line
-                text: "http://" + host + "/verify/" + Etoken + "/" + user.Email
-            };
-            // send mail with defined transport object
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    response.status(400).send(error);
-                }
-                response.status(200).send("Verification mail is sended");
-            });
-        });
+    }).then((token_recieved)=>{
+
+        //token received from function called into the userModel
+        response.setHeader('x-auth',token_recieved); 
+        var userEmailToVerify = user.Email;
+        return newUser.sendVerification(userEmailToVerify,Etoken);
+
+    }).then((responseCode)=>{
+        
+        console.log('Response Code is --->',responseCode);
+        response.status(responseCode).send(newUser);
+        
     }).catch((e)=>{
-        response.status(400).send(e);
-        })
+        console.log(e);
+        response.status(e).send();
+    });
         //nodemailer is used to send verification mail to the user
        
 });

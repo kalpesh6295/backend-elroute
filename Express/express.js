@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 
 // Routes 
 app.use('/user',userpageRouter);            //new user route
-app.use('/products',productsRouter);        //new product route
+app.use('/product',productsRouter);        //new product route
 app.use('/auth',authenticationRouter);      //new signup and login route
 app.use('/post',postRouter);                //new post route
 app.use('/bookmark',bookmarkRouter);        //bookmark route for an user to bookmark a company

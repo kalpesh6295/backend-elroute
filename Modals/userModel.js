@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const env = require('./../config/env.js');
+const nodemailer = require('nodemailer');
+const host = 'localhost:3000';
 
 //User model to add the new user into the schema
 var userSchema = new mongoose.Schema({
@@ -87,6 +90,37 @@ userSchema.methods.removeToken = function(token) {
         $pull:{tokens:{token}}
     });
 }
+
+userSchema.methods.sendVerification = (email,etoken)=>{
+    return new Promise((resolve,reject)=>{
+        nodemailer.createTestAccount((err, account) => {
+            // create reusable transporter object using the default SMTP transport
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                secure: false,                                                           // true for 465, false for other ports
+                auth: {
+                    user: env.SENDER_EMAIL,                                              // generated ethereal user
+                    pass: env.SENDER_PASSWORD                                            // generated ethereal password
+                }
+            });
+            // setup email data with unicode symbols
+            let mailOptions = {
+                from: '"Tradifier.com" <vikibenz776@gmail.com>',                          // sender address
+                to: email,                                                           // list of receivers
+                subject: 'Verification mail',                                             // Subject line
+                text: "http://" + host + "/verify/" + etoken + "/" + email
+            };
+            // send mail with defined transport object
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    reject(400);
+                }
+                resolve(200);
+                // response.status(200).send("Verification mail is sended");
+            });
+        });
+    });
+};
 
 //Function to findout the user is present into the database 
 userSchema.statics.findByCredentials = function(email,password){
