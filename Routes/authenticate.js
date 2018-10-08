@@ -61,24 +61,17 @@ router.post('/signup',(request,response)=>{
 
 //ROuter to login an user which is already present into the database
 router.post('/login', (request, response) => {
-    if (!loggedIn) {
         var body = _.pick(request.body, ['Email', 'Password']);                             //get the user Email,Password for login
         userModel.findByCredentials(body.Email, body.Password).then((user) => {
             if (!user) {                                                                    //if user present in the database
                 return response.status(400).send();
             }
             user.generateAuthToken().then((token) => {                                      //if user is present in the database then generate a token 
-                loggedIn = true;
                 response.header('x-auth', token).send(user);
             });
         }).catch((e) => {
             response.status(400).send(e);
         })
-    }
-    else {
-        response.status(409).send('You Are Already Logged In, LogOut First');
-    }
-
 });
 
 //Router delete an token whenever a user logout 
@@ -86,7 +79,6 @@ router.delete('/logout', authenticate, (request, response) => {
     var user = request.user;                                                                
     var token = request.token;
     user.removeToken(token).then((result) => {                                             //if user wants to logout then token is removed 
-        loggedIn = false;
         response.status(200).send('You have been logged out succesfully!');
     }).catch((e) => {
         response.status(400).send(e);
