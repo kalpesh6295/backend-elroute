@@ -51,7 +51,8 @@ var userSchema = new mongoose.Schema({
     },
     Company_id:[{type:mongoose.Schema.Types.ObjectId,auto:true}],
     bookmarks:{
-        post:[{type:mongoose.Schema.Types.ObjectId}],
+        // post:[{type:mongoose.Schema.Types.ObjectId}],
+        post:[],
         product:[{type:mongoose.Schema.Types.ObjectId}],
         company:[{type:mongoose.Schema.Types.ObjectId}]
     },
@@ -116,7 +117,6 @@ userSchema.methods.sendVerification = (email,etoken)=>{
                     reject(400);
                 }
                 resolve(200);
-                // response.status(200).send("Verification mail is sended");
             });
         });
     });
