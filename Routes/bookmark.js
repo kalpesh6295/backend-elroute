@@ -1,50 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const {authenticate} = require('./../middleware/authenticate.js');
-const _ = require('lodash');
-const {userModel} = require('../Modals/userModel.js');
-const {postModel} = require('./../Modals/postModel.js');
-const {productModel} = require('./../Modals/productModel.js');
+const {bookmarkMe} = require('../Util/utility.js') 
 
-var postId;
 
 //Router used to update the user post bookmark Model every time click on the bookmark
-router.patch('/post/:id',authenticate,(request,response)=>{
-    postId = request.params.id;
-    postModel.findById(postId).then((post)=>{
-        if(!post){
-            return response.status(404).send();
+router.patch('/:type(post|product|company)/:id',authenticate,(request,response)=>{
+//if multiple routes doing same function we can use :type
+// it will match the urls seprated by | (Or) mentioned here with request url
+    bookmarkMe(request.url,request.params.id,request.user._id).then((updatedUser)=>{
+        if(!updatedUser){
+            response.status(400).send();
         }
-    })
-    userModel.findByIdAndUpdate(request.user._id,{
-        $push:{
-            'bookmarks.post':postId
-        }
-    }).then((user)=>{
-        response.status(200).send(user);
-    }).catch((e)=>{
-        response.status(400).send(e);
-    })
+        console.log(updatedUser);
+        response.status(200).send(updatedUser);
+    });
 });
-
-//Router used to update the user product bookmark Model every time click on the bookmark
-router.patch('/product/:id',authenticate,(request,response)=>{
-    productId = request.params.id;
-    productModel.findById(productId).then((product)=>{
-        if(!product){
-            return response.status(404).send();
-        }
-    })
-    userModel.findByIdAndUpdate(request.user._id,{
-        $push:{
-            'bookmarks.product':productId
-        }
-    }).then((user)=>{
-        response.status(200).send(user);
-    }).catch((e)=>{
-        response.status(400).send(e);
-    })
-});
-
 
 module.exports = router;
