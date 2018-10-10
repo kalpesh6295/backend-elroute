@@ -1,7 +1,7 @@
-const {userModel} = require('./userModel.js');
-const {postModel} = require('./postModel.js');
-const {productModel} = require('./productModel.js');
-const {companyModel} = require('./companyModel.js');
+const {userModel} = require('../Modals/userModel.js');
+const {postModel} = require('../Modals/postModel.js');
+const {productModel} = require('../Modals/productModel.js');
+const {companyModel} = require('../Modals/companyModel.js');
 
 var bookmarkMe = (url,objId,userId)=>{
     var model;
@@ -27,7 +27,7 @@ var bookmarkMe = (url,objId,userId)=>{
             $push:{
                 [pushInto]:objId
                 //here [] is used for dynamic variable --> coz pushInto value 
-                //keeps changing depending upon what's here bookmark
+                //keeps changing depending upon what's gonna get bookmarked
             }
         }).then((result)=>{
             console.log(pushInto);
