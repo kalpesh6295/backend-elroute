@@ -12,6 +12,7 @@ const host = 'localhost:3000';
 
 //Router to signup an new  into the database and send a verification email to the user email id
 router.post('/signup',(request,response)=>{
+   
     var Etoken = jwt.sign({}, 'abc123456').toString();
     var user = _.pick(request.body,['UserName','Password','Email','Mobile','Address','Emailtoken']);     //picking up the data of the new user
     var newUser = new userModel({

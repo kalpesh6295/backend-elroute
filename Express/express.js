@@ -46,3 +46,5 @@ app.use('/verify',emailverifyrouter);           //email verification route
 app.listen(3000,(status)=>{
     console.log('Server up on the port 3000');
 })
+
+module.exports={app};
