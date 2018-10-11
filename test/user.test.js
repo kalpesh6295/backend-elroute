@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 describe('GET /user/',()=>{
     it('should get the user',(done)=>{
-        var user ='5bbb28ed44c753337cafe46c';
+        var user ='5bbdd584087b742738deebec';
         chai.request(app)
         .get('/user/'+user)
         .end((err,res)=>{
@@ -38,22 +38,3 @@ describe('UPDATE /user',()=>{
         })
     })
 });
-
-
-// describe('POST /auth/signup', () => {
-//     it('should get the user', (done) => {
-//         var text={
-//             UserName:"vivek rja ",
-//             Email:"adnhfuiefbdcikvds",
-//             Password:'afuhnskv'
-//         }
-//         chai.request(app)
-//             .post('/auth/signup')
-//             .send(text)
-//             .end((err, res) => {
-//                 res.should.have.status(200);
-//                 console.log(res.body.should.have.property('UserName'));
-//                 done();
-//             })
-//     })
-// });
