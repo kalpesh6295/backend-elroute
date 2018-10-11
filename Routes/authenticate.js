@@ -34,11 +34,9 @@ router.post('/signup',(request,response)=>{
 
     }).then((responseCode)=>{
         
-        console.log('Response Code is --->',responseCode);
-        response.status(responseCode).send(newUser);
+        response.status(200).send(newUser);
         
     }).catch((e)=>{
-        console.log(e);
         response.status(e).send();
     });
         //nodemailer is used to send verification mail to the user
@@ -54,6 +52,7 @@ router.post('/login', (request, response) => {
             }
             user.generateAuthToken().then((token) => {                                      //if user is present in the database then generate a token 
                 response.header('x-auth', token).send(user);
+                response.status(200).send();
             });
         }).catch((e) => {
             response.status(400).send(e);

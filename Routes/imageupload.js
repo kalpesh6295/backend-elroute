@@ -11,9 +11,10 @@ const s3fsImpl = new S3FS('tradifieruserimage1', {                      //AWS Bu
 
 
 //Router used to upload image to every new user 
-router.post('/:id', (req, res) => {
-     var myfile = req.files.Image;                                      //File which is given by user
-        var fname=req.files.Image.name;                                 //Filename            
+router.post('/:id', (request, response) => {
+    console.log("i am here ===>")
+     var myfile = request.files.Image;                                      //File which is given by user
+        var fname=request.files.Image.name;                                 //Filename            
             var filename = fname.replace(/\s/g,'');                     //replacing gaps from the user filename  
             myfile.originalFilename = Date.now() + filename;            //Date is added in front of the filename to remove conflict                           
         const awsurl = "https://s3.amazonaws.com/tradifieruserimage1/";  //predefined aws url is given by the AWS with bucket name
@@ -21,19 +22,19 @@ router.post('/:id', (req, res) => {
         return s3fsImpl.writeFile(myfile.originalFilename, stream).then(() => {   
             fs.unlink(myfile.path, (err) => {
                 if (err) {
-                    res.status(400).send(err);
+                    console.log(err);
                 }
                 else {
-                    res.status(200).send('Upload succesfully');
+                    response.status(200).send('Upload succesfully');
                 }
             });
                 const image = awsurl + filename;
-                userModel.findByIdAndUpdate(req.params.id, {
+                userModel.findByIdAndUpdate(request.params.id, {
                     $set: { Image: image }                                 //Image is added into the user database
                 }).then((user) => {
-                    res.status(200).send(user);
+                    console.log(user);
                 }).catch((e) => {
-                    res.status(400).send(e);
+                    response.status(400).send(e);
                 });
             });        
         });
