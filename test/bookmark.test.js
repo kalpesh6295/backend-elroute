@@ -7,10 +7,10 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-
+//Update testing route to check wheather the datai updated in user database
 describe('/PATCH bookmark/post?product?company',()=>{
     it('should bookmark the data',(done)=>{
-        var id ='5bbef75a3aa2991f807237c9';
+        var id ='5bbef75a3aa2991f807237c9';                    //user id
         chai.request(app)
         .patch('/bookmark/'+'post/'+id)
         .set('x-auth', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmJkZTg3NGZhZGY5ODJkODA3MWIyOTIiLCJhY2Nlc3MiOiJhdXRoIiwiaWF0IjoxNTM5MTcyNDY5fQ.n8VF3bJh66Z7LWG0mnEw42ljZwTQSkmsW_Ji81z_UG0')

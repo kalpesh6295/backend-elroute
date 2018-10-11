@@ -6,7 +6,7 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 
 chai.use(chaiHttp);
-
+//POST route to check wheter company added route is working or not
 describe('POST /company/companypostroute', () => {
     it('should input the company', (done) => {
         chai.request(app)
@@ -25,7 +25,7 @@ describe('POST /company/companypostroute', () => {
     })
 });
 
-
+//GET testing  route of company
 describe('GET /company/companyroute', () => {
     it('should output the company', (done) => {
         chai.request(app)
@@ -39,7 +39,7 @@ describe('GET /company/companyroute', () => {
     })
 });
 
-
+//Update testing route for the company
 describe('Update  /post/postupdateroute', () => {
     it('should update the data', (done) => {
         var id = '5bb86db98f5c571868993c2d';
@@ -57,6 +57,7 @@ describe('Update  /post/postupdateroute', () => {
      })
 });
 
+//Delete testing route for the company
 describe('DELETE /company/companydeleteroute', () => {
     it('should delete the data', (done) => {
         var id ='5bbf5f2dab18162ca8de7288';

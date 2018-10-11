@@ -7,7 +7,7 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-
+//GET teasting route for the email verfiy with additional information as token and email
 describe('GET /emailverfiy/:token/:email',()=>{
     it('should verify email address',(done)=>{
         var token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI4NmJjYThmNWM1NzE4Njg5OTNjMmEiLCJhY2Nlc3MiOiJhdXRoIiwiaWF0IjoxNTM4ODEyODc0fQ.QJNO3Yf3KyLV7cgTLG3ftevQZfoG8Sfsxvh9Xz6_5fY';

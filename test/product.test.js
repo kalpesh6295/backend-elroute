@@ -7,6 +7,7 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
+//POST route to check whether the product route is working
 describe('POST /post/productroute', () => {
     it('should input the data', (done) => {
         chai.request(app)
@@ -24,7 +25,7 @@ describe('POST /post/productroute', () => {
     })
 });
 
-
+//GET route to check whether the product get route is working
 describe('GET /product/productroute', () => {
     it('should output the post', (done) => {
         chai.request(app)
@@ -39,9 +40,7 @@ describe('GET /product/productroute', () => {
     })
 });
 
-
-
-
+//UPDATE route to check whether the product update route is working
 describe('PATCH  /product/pupdateroute', () => {
     it('should delete the data', (done) => {
         var id = '5bbf0c2e884ac8155cfc310a';
@@ -59,6 +58,7 @@ describe('PATCH  /product/pupdateroute', () => {
     })
 });
 
+//DELETE route to check whether the product delete route is working
 describe('DELETE /product/productdeleteroute', () => {
     it('should delete the data', (done) => {
         var id = '5bbf5f34ab18162ca8de728a';

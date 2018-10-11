@@ -7,6 +7,7 @@ const should=chai.should();
 
 chai.use(chaiHttp);
 
+//GET route to check whether the user get route is working
 describe('GET /user/',()=>{
     it('should get the user',(done)=>{
         var user ='5bbdd584087b742738deebec';
@@ -20,6 +21,7 @@ describe('GET /user/',()=>{
     })
 });
 
+//UPDATE route to check whether the user update with given values route is working
 describe('UPDATE /user',()=>{
     it("should update the value",(done)=>{
         var user = '5bbdd584087b742738deebec';
