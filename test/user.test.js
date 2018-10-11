@@ -1,7 +1,6 @@
 const expect =require('expect');
 const request= require('supertest');
 const {app}=require('../Express/express.js');
-const {userModel}=require('../Modals/postModel.js');
 const chai = require('chai');
 const  chaiHttp= require('chai-http');
 const should=chai.should();
@@ -13,9 +12,9 @@ describe('GET /user/',()=>{
         var user ='5bbdd584087b742738deebec';
         chai.request(app)
         .get('/user/'+user)
-        .end((err,res)=>{
-            res.should.have.status(200);
-            console.log(res.body.should.have.property('UserName'));
+        .end((error,response)=>{
+            response.should.have.status(200);
+            console.log(response.body.should.have.property('UserName'));
             done();
         })
     })
@@ -32,8 +31,8 @@ describe('UPDATE /user',()=>{
         chai.request(app)
         .patch('/user/update/'+user)
         .send(text)
-        .end((err,res)=>{
-            res.should.have.status(200);
+        .end((error,response)=>{
+            response.should.have.status(200);
             done();
         })
     })

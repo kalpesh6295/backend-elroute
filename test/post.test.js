@@ -1,7 +1,6 @@
 const expect = require('expect');
 const request = require('supertest');
 const { app } = require('../Express/express.js');
-const { userModel } = require('../Modals/postModel.js');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
@@ -16,9 +15,9 @@ describe('POST /post/postroute', () => {
             .field('Content-Type', 'multipart/form-data')
             .attach('Image','C:/Users/vivek/Pictures/Capture.PNG')
             .field('Content','sdbvsdhv')
-            .end((err, res) => {
+            .end((error, response) => {
                 console.log("i am here==:>");
-                res.should.have.status(200);
+                response.should.have.status(200);
                 done();
             })
     })
@@ -30,10 +29,10 @@ describe('GET /post/postroute', () => {
         chai.request(app)
             .get('/post/')
             .set('x-auth', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmJkZTg3NGZhZGY5ODJkODA3MWIyOTIiLCJhY2Nlc3MiOiJhdXRoIiwiaWF0IjoxNTM5MTcyNDY5fQ.n8VF3bJh66Z7LWG0mnEw42ljZwTQSkmsW_Ji81z_UG0')
-            .end((err, res) => {
+            .end((error, response) => {
                 console.log("i am here==:>");
-                res.should.have.status(200);
-                console.log(res.body[0].should.have.property('Content'));
+                response.should.have.status(200);
+                console.log(response.body[0].should.have.property('Content'));
                 done();
             })
     })
@@ -41,13 +40,13 @@ describe('GET /post/postroute', () => {
 
 describe('DELETE /post/postdeleteroute', () => {
     it('should delete the data', (done) => {
-        var id ='5bbef79147918f0b405f963c';
+        var id ='5bbf5f31ab18162ca8de7289';
         chai.request(app)
             .delete('/post/delete/'+id)
             .set('x-auth', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmJkZTg3NGZhZGY5ODJkODA3MWIyOTIiLCJhY2Nlc3MiOiJhdXRoIiwiaWF0IjoxNTM5MTcyNDY5fQ.n8VF3bJh66Z7LWG0mnEw42ljZwTQSkmsW_Ji81z_UG0')
-            .end((err, res) => {
+            .end((error, response) => {
                 console.log("i am here==:>");
-                res.should.have.status(200);
+                response.should.have.status(200);
                 done();
             })
     })
@@ -62,9 +61,9 @@ describe('Update  /post/postupdateroute', () => {
             .set('x-auth', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmJkZTg3NGZhZGY5ODJkODA3MWIyOTIiLCJhY2Nlc3MiOiJhdXRoIiwiaWF0IjoxNTM5MTcyNDY5fQ.n8VF3bJh66Z7LWG0mnEw42ljZwTQSkmsW_Ji81z_UG0')
             .field('Content-Type', 'multipart/form-data')
             .attach('Image','C:/Users/vivek/Pictures/Capture.PNG')
-            .end((err, res) => {
+            .end((error, response) => {
                 console.log("i am here==:>");
-                res.should.have.status(200);
+                response.should.have.status(200);
                 done();
             })
     })
