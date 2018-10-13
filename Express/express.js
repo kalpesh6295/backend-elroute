@@ -16,6 +16,8 @@ var app = express();
 //multiparty is used for aws connectivity
 const multiparty = require('connect-multiparty'),
     multipartyMiddleware = multiparty();
+
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(multipartyMiddleware);
