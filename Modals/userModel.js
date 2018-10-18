@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const env = require('./../config/env.js');
 const nodemailer = require('nodemailer');
 const host = 'localhost:3000';
-
+var request = require("request");
 //User model to add the new user into the schema
 var userSchema = new mongoose.Schema({
     UserName:{ 
@@ -94,31 +94,33 @@ userSchema.methods.removeToken = function(token) {
 
 userSchema.methods.sendVerification = (email,etoken)=>{
     return new Promise((resolve,reject)=>{
-        nodemailer.createTestAccount((err, account) => {
-            // create reusable transporter object using the default SMTP transport
-            let transporter = nodemailer.createTransport({
-                service: 'gmail',
-                secure: false,                                                           // true for 465, false for other ports
-                auth: {
-                    user: env.SENDER_EMAIL,                                              // generated ethereal user
-                    pass: env.SENDER_PASSWORD                                            // generated ethereal password
-                }
-            });
-            // setup email data with unicode symbols
-            let mailOptions = {
-                from: '"Tradifier.com" <vikibenz776@gmail.com>',                          // sender address
-                to: email,                                                           // list of receivers
-                subject: 'Verification mail',                                             // Subject line
-                text: "http://" + host + "/verify/" + etoken + "/" + email
-            };
-            // send mail with defined transport object
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    reject(400);
-                }
-                resolve(200);
-            });
+
+        var options = {
+            method: 'POST',
+            url: 'https://us19.api.mailchimp.com/3.0/lists/4ce0ec5f1b/members',
+            headers:
+            {
+                'postman-token': '0a611e0e-2917-56aa-1721-430b6721fc73',
+                'cache-control': 'no-cache',
+                'content-type': 'application/json',
+                authorization: 'Basic YW55c3RyaW5nOmI2MGVkNWVmYzM0YWNiNzAxMjc2OWQ2ZjI2YzZhZmVkLXVzMTk='
+            },
+            body:
+            {
+                email_address: email,
+                status: 'subscribed',
+                merge_fields:{TOKEN:etoken}
+            },
+            json: true
+        };
+
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+
+            console.log(body);
         });
+
+
     });
 };
 

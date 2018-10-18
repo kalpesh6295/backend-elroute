@@ -6,6 +6,7 @@ const router = express.Router();
 router.get('/:token/:email', function (request, response) {
 
             userModel.findOne({Email:request.params.email}).then((docs) => {
+               
                 var id=docs._id;
                 if(docs.isVerified===true)                          //Checking if user is already verified 
                 {
@@ -15,7 +16,7 @@ router.get('/:token/:email', function (request, response) {
                 else{
                     Emailtoken = docs.Emailtoken;                      
                     if (request.params.token === Emailtoken) {
-                        request.send("<h1>verified");
+                        response.send("<h1>verified");
                     userModel.findByIdAndUpdate(id, { $set: { isVerified: true } }).then((docs)=>{
                     response.status(200).send();
                     });
