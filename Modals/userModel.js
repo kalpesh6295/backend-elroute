@@ -99,34 +99,13 @@ userSchema.methods.removeToken = function(token) {
     });
 }
 
-userSchema.methods.sendVerification = (email,etoken)=>{
-    // return new Promise((resolve,reject)=>{
-
-        var options = {
-            method: 'POST',
-            url: 'https://us19.api.mailchimp.com/3.0/lists/4ce0ec5f1b/members',
-            headers:
-            {
-                'postman-token': '0a611e0e-2917-56aa-1721-430b6721fc73',
-                'cache-control': 'no-cache',
-                'content-type': 'application/json',
-                authorization: 'Basic YW55c3RyaW5nOmI2MGVkNWVmYzM0YWNiNzAxMjc2OWQ2ZjI2YzZhZmVkLXVzMTk='
-            },
-            body:
-            {
-                email_address: email,
-                status: 'subscribed',
-                merge_fields:{TOKEN:etoken}
-            },
-            json: true
-        };
-
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-
-        });
+userSchema.methods.sendVerification = (email,etoken,fname)=>{
+    return new Promise((resolve,reject)=>{
+     
+    Verification(email,etoken,fname)
 
 
+    });
 };
 
 //Function to findout the user is present into the database 
@@ -174,6 +153,33 @@ userSchema.statics.findByToken = function(token){
 //     var userModel = this;
 //     return userModel.find({Service:service});
 // };
+
+const Verification=(email,etoken,fname)=>{
+    var options = {
+        method: 'POST',
+        url: `https://us19.api.mailchimp.com/3.0/lists/${fname}/members`,
+        headers:
+        {
+            'postman-token': 'ce747207-7591-dba2-4720-6a162a84c944',
+            'cache-control': 'no-cache',
+            authorization: 'Basic YW55c3RyaW5nOjU1ODQ4NzFjOThmNTgzMjA5MWY4NDRkMjJhMTAzYTcxLXVzMTk=',
+            'content-type': 'application/json'
+        },
+        body:
+        {
+            email_address: email,
+            status: 'subscribed',
+            merge_fields:{TOKEN:etoken}
+        },
+        json: true
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+    })
+};
 
 //Method to Hash the password every time a new user is added 
 userSchema.pre('save',function(next){
