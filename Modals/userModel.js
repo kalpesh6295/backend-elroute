@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const env = require('./../config/env.js');
-const nodemailer = require('nodemailer');
 const host = 'localhost:3000';
 var request = require("request");
 //User model to add the new user into the schema
