@@ -2,6 +2,8 @@ const {userModel} = require('../Modals/userModel.js');
 const {postModel} = require('../Modals/postModel.js');
 const {productModel} = require('../Modals/productModel.js');
 const {companyModel} = require('../Modals/companyModel.js');
+const Nexmo = require('nexmo');
+const otpGenerator = require('otp-generator');
 
 var bookmarkMe = (url,objId,userId)=>{
     var model;
@@ -50,4 +52,20 @@ var findUsersViaService = (url)=>{
     //return userModel.find({Service:service});
 };
 
-module.exports = {bookmarkMe,findUsersViaService};
+var sendOtp = ()=>{
+    var otp = otpGenerator.generate(5, {alphabets:false, upperCase: false, specialChars: false });
+    nexmo.message.sendSms(
+        '919116053402', '919116053402', otp,
+        (err, responseData) => {
+            if (err) {
+            console.log(err);
+            return Promise.reject('Cannot Send OTP');
+            } else {
+            console.dir(responseData);
+            return Promise.resolve(otp);
+            }
+        }
+    )
+};
+
+module.exports = {bookmarkMe,findUsersViaService,sendOtp};
