@@ -46,6 +46,9 @@ var userSchema = new mongoose.Schema({
     Emailtoken:{
         type:String
     },
+    Forgetpassword:{
+        type:String
+    },
     Following:{
         company:[{type:mongoose.Schema.Types.ObjectId}]
     },
@@ -92,33 +95,10 @@ userSchema.methods.removeToken = function(token) {
     });
 }
 
-userSchema.methods.sendVerification = (email,etoken)=>{
+userSchema.methods.sendVerification = (email,etoken,fname)=>{
     return new Promise((resolve,reject)=>{
-
-        var options = {
-            method: 'POST',
-            url: 'https://us19.api.mailchimp.com/3.0/lists/4ce0ec5f1b/members',
-            headers:
-            {
-                'postman-token': '0a611e0e-2917-56aa-1721-430b6721fc73',
-                'cache-control': 'no-cache',
-                'content-type': 'application/json',
-                authorization: 'Basic YW55c3RyaW5nOmI2MGVkNWVmYzM0YWNiNzAxMjc2OWQ2ZjI2YzZhZmVkLXVzMTk='
-            },
-            body:
-            {
-                email_address: email,
-                status: 'subscribed',
-                merge_fields:{TOKEN:etoken}
-            },
-            json: true
-        };
-
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-
-            console.log(body);
-        });
+     
+    Verification(email,etoken,fname)
 
 
     });
@@ -181,6 +161,36 @@ userSchema.pre('save',function(next){
 });
 
 
+const Verification=(email,etoken,fname)=>{
+    var options = {
+        method: 'POST',
+        url: `https://us19.api.mailchimp.com/3.0/lists/${fname}/members`,
+        headers:
+        {
+            'postman-token': 'ce747207-7591-dba2-4720-6a162a84c944',
+            'cache-control': 'no-cache',
+            authorization: 'Basic YW55c3RyaW5nOjU1ODQ4NzFjOThmNTgzMjA5MWY4NDRkMjJhMTAzYTcxLXVzMTk=',
+            'content-type': 'application/json'
+        },
+        body:
+        {
+            email_address: email,
+            status: 'subscribed',
+            merge_fields:{TOKEN:etoken}
+        },
+        json: true
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+    });
+
+}
+
+
 var userModel = mongoose.model('user',userSchema);
 
-module.exports = {userModel};
+module.exports = {userModel,Verification};
+// module.exports={Verification};

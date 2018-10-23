@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-'use strict';
-const env = require('./../config/env.js');
 const { authenticate } = require('./../middleware/authenticate.js');
 const {mongoose} = require('./../mongoose/mongoose-connect');
 const {userModel} = require('../Modals/userModel.js');
-const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const host = 'localhost:3000';
+const bcrypt = require('bcryptjs');
+const {Verification}=require('./../Modals/userModel.js');
 
 //Router to signup an new  into the database and send a verification email to the user email id
 router.post('/signup',(request,response)=>{
@@ -21,7 +19,7 @@ router.post('/signup',(request,response)=>{
         Email:user.Email,
         Mobile:user.Mobile,
         Address:user.Address,
-        Emailtoken:Etoken
+        Emailtoken:Etoken,
     });
     newUser.save().then(()=>{
     return newUser.generateAuthToken();                                                  //calling function to generate an user token 
@@ -30,7 +28,8 @@ router.post('/signup',(request,response)=>{
         //token received from function called into the userModel
         response.setHeader('x-auth',token_recieved); 
         var userEmailToVerify = user.Email;
-        return newUser.sendVerification(userEmailToVerify,Etoken);
+        var fname = "46fcc47236";
+        return newUser.sendVerification(userEmailToVerify,Etoken,fname);
 
     }).then((responseCode)=>{
         
@@ -39,7 +38,6 @@ router.post('/signup',(request,response)=>{
     }).catch((e)=>{
         response.status(e).send();
     });
-        //nodemailer is used to send verification mail to the user
        
 });
 
@@ -67,6 +65,40 @@ router.delete('/logout', authenticate, (request, response) => {
         response.status(200).send('You have been logged out succesfully!');
     }).catch((e) => {
         response.status(400).send(e);
+    })
+});
+
+router.post('/forgetpassword',(request,response)=>{
+    console.log("i am here==>");
+    var Etoken = jwt.sign({}, 'abc123').toString();
+    var email=request.body.Email;
+    userModel.findOneAndUpdate({Email:request.body.Email},{$set:{Forgetpassword:Etoken}}).then((docs)=>{
+        var fname = "3b744d29a3";
+        Verification(email,Etoken,fname);
+    })
+});
+
+
+router.patch('/:token/:email',(request,response)=>{
+    var password =request.body.Password;
+    bcrypt.genSalt(10, (error, salt) => {
+        bcrypt.hash(password, salt, (error, hash) => {
+            Password = hash;
+        })
+    });
+    userModel.findOne({Email:request.params.email}).then((docs)=>{
+       if(docs.Forgetpassword==request.params.token)
+       {
+           var id = docs._id;
+           userModel.findByIdAndUpdate(id, { $set: { Password: Password},$unset:{Forgetpassword:""} }).then(() => {
+               response.status(200).send("Password succesfully changed");
+           }).catch((e) => {
+               response.status(400).send(e);
+           })
+       }
+       else{
+           response.status(404).send("your email does not found");
+       }
     })
 });
 

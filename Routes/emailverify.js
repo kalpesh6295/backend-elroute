@@ -6,26 +6,31 @@ const router = express.Router();
 router.get('/:token/:email', function (request, response) {
 
             userModel.findOne({Email:request.params.email}).then((docs) => {
-               
-                var id=docs._id;
-                if(docs.isVerified===true)                          //Checking if user is already verified 
-                {
-                    response.send("<h1> already verified");
-                    response.status(200).send();
-                }
-                else{
-                    Emailtoken = docs.Emailtoken;                      
-                    if (request.params.token === Emailtoken) {
-                        response.send("<h1>verified");
-                    userModel.findByIdAndUpdate(id, { $set: { isVerified: true } }).then((docs)=>{
-                    response.status(200).send();
-                    });
-                }
-                else{
-                    response.send("<h1>bad request");
-                    response.send(400).send();
-                }
-            }
+               if(docs.Emailtoken==request.params.token)
+               {
+                   var id = docs._id;
+                   if (docs.isVerified === true)                          //Checking if user is already verified 
+                   {
+                       response.send("<h1> already verified");
+                       response.status(200).send();
+                   }
+                   else {
+                       Emailtoken = docs.Emailtoken;
+                       if (request.params.token === Emailtoken) {
+                           response.send("<h1>verified");
+                           userModel.findByIdAndUpdate(id, { $set: { isVerified: true } }).then((docs) => {
+                               response.status(200).send();
+                           });
+                       }
+                       else {
+                           response.send("<h1>bad request");
+                           response.send(400).send();
+                       }
+                   }
+               }
+               else{
+                   response.status(400).send("not a valid email id");
+               }
             }).catch((e) => {
                 response.status(400).send(e);
             });
