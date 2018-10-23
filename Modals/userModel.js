@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const env = require('./../config/env.js');
 const nodemailer = require('nodemailer');
 const host = 'localhost:3000';
+const _ = require('lodash');
 var request = require("request");
 //User model to add the new user into the schema
 var userSchema = new mongoose.Schema({
@@ -25,7 +26,7 @@ var userSchema = new mongoose.Schema({
     },
     isVerified: 
     {   type: Boolean, 
-        default: false 
+        default: false
     },
     Mobile:{
         type:Number,
@@ -65,7 +66,15 @@ var userSchema = new mongoose.Schema({
             type:String,
             required:true
         }
-    }]
+    }],
+    Service:{
+        type:String,
+        required:true,
+        validate:{
+            validator: (service) => ['inspection','logistics','contentMarketing','bCommunication'].indexOf(service)>-1,
+            message:'Check Service mentioned.'
+        }
+    }
 });
 
 
@@ -93,7 +102,7 @@ userSchema.methods.removeToken = function(token) {
 }
 
 userSchema.methods.sendVerification = (email,etoken)=>{
-    return new Promise((resolve,reject)=>{
+    // return new Promise((resolve,reject)=>{
 
         var options = {
             method: 'POST',
@@ -117,11 +126,9 @@ userSchema.methods.sendVerification = (email,etoken)=>{
         request(options, function (error, response, body) {
             if (error) throw new Error(error);
 
-            console.log(body);
         });
 
 
-    });
 };
 
 //Function to findout the user is present into the database 

@@ -38,4 +38,16 @@ var bookmarkMe = (url,objId,userId)=>{
     
 };
 
-module.exports = {bookmarkMe};
+var findUsersViaService = (url)=>{
+    var urlArray = url.split('/');
+    console.log(urlArray);
+    return userModel.find({Service:urlArray[1]}).then((users)=>{
+        if(!users){
+            return Promise.reject();
+        }
+        return users;
+    })
+    //return userModel.find({Service:service});
+};
+
+module.exports = {bookmarkMe,findUsersViaService};

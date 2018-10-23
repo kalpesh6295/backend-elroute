@@ -10,6 +10,7 @@ var companyRouter = require('./../Routes/company.js');
 var imageuploadRouter=require('./../Routes/imageupload.js');
 var emailverifyrouter=require('./../Routes/emailverify.js');
 var userpageRouter=require('./../Routes/user.js')
+var serviceRouter = require('./../Routes/service.js');
 
 var app = express();
 
@@ -41,7 +42,8 @@ app.use('/post',postRouter);                //new post route
 app.use('/bookmark',bookmarkRouter);        //bookmark route for an user to bookmark a company
 app.use('/company',companyRouter);          //new comapany route    
 app.use('/userimageupload',imageuploadRouter);//new route to add user its image
-app.use('/verify',emailverifyrouter);           //email verification route
+app.use('/verify',emailverifyrouter);          //email verification route
+app.use('/service',serviceRouter);
 
 
 //Server listing

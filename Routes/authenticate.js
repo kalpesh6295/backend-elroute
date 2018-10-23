@@ -14,14 +14,15 @@ const host = 'localhost:3000';
 router.post('/signup',(request,response)=>{
    
     var Etoken = jwt.sign({}, 'abc123456').toString();
-    var user = _.pick(request.body,['UserName','Password','Email','Mobile','Address','Emailtoken']);     //picking up the data of the new user
+    var user = _.pick(request.body,['UserName','Password','Email','Mobile','Address','Emailtoken','Service']);     //picking up the data of the new user
     var newUser = new userModel({
         UserName:user.UserName,
         Password:user.Password,
         Email:user.Email,
         Mobile:user.Mobile,
         Address:user.Address,
-        Emailtoken:Etoken
+        Emailtoken:Etoken,
+        Service:user.Service
     });
     newUser.save().then(()=>{
     return newUser.generateAuthToken();                                                  //calling function to generate an user token 
@@ -30,14 +31,11 @@ router.post('/signup',(request,response)=>{
         //token received from function called into the userModel
         response.setHeader('x-auth',token_recieved); 
         var userEmailToVerify = user.Email;
-        return newUser.sendVerification(userEmailToVerify,Etoken);
-
-    }).then((responseCode)=>{
-        
+        newUser.sendVerification(userEmailToVerify,Etoken);
         response.status(200).send(newUser);
-        
     }).catch((e)=>{
-        response.status(e).send();
+        console.log(e);
+        response.status(400).send();
     });
         //nodemailer is used to send verification mail to the user
        
