@@ -171,6 +171,12 @@ userSchema.statics.findByToken = function(token){
     });
 };
 
+// userSchema.statics.findByService = function(service){
+    
+//     var userModel = this;
+//     return userModel.find({Service:service});
+// };
+
 //Method to Hash the password every time a new user is added 
 userSchema.pre('save',function(next){
     var user = this;
