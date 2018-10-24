@@ -36,7 +36,7 @@ router.post('/signup',(request,response)=>{
         response.status(200).send(newUser);
     }).catch((e)=>{
         console.log(e);
-        response.status(400).send();
+        response.status(400).send('Error Registering User');
     });
        
 });
@@ -46,14 +46,14 @@ router.post('/login', (request, response) => {
         var body = _.pick(request.body, ['Email', 'Password']);                             //get the user Email,Password for login
         userModel.findByCredentials(body.Email, body.Password).then((user) => {
             if (!user) {                                                                    //if user present in the database
-                return response.status(400).send();
+                return response.status(400).send('No Such User Found');
             }
             user.generateAuthToken().then((token) => {                                      //if user is present in the database then generate a token 
                 response.header('x-auth', token).send(user);
-                response.status(200).send();
+                response.status(200).send('You are successfully logged in!');
             });
         }).catch((e) => {
-            response.status(400).send(e);
+            response.status(400).send('Error Logging in!');
         })
 });
 
@@ -64,7 +64,7 @@ router.delete('/logout', authenticate, (request, response) => {
     user.removeToken(token).then((result) => {                                             //if user wants to logout then token is removed 
         response.status(200).send('You have been logged out succesfully!');
     }).catch((e) => {
-        response.status(400).send(e);
+        response.status(400).send('Error Logging Out!');
     })
 });
 
@@ -93,11 +93,11 @@ router.patch('/:token/:email',(request,response)=>{
            userModel.findByIdAndUpdate(id, { $set: { Password: Password},$unset:{Forgetpassword:""} }).then(() => {
                response.status(200).send("Password succesfully changed");
            }).catch((e) => {
-               response.status(400).send(e);
+               response.status(400).send('Error Changing Password!');
            })
        }
        else{
-           response.status(404).send("your email does not found");
+           response.status(404).send("Your email does not exists");
        }
     })
 });

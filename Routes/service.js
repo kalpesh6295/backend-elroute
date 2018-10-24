@@ -11,6 +11,6 @@ router.get('/:type(inspection|logistics|contentMarketing|bCommunication)',authen
         console.log(e);
         response.status(400).send('Cannot get User');
     });
-});
+}); 
 
 module.exports = router;

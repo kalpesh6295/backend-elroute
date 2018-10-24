@@ -2,7 +2,6 @@ const {userModel} = require('../Modals/userModel.js');
 const {postModel} = require('../Modals/postModel.js');
 const {productModel} = require('../Modals/productModel.js');
 const {companyModel} = require('../Modals/companyModel.js');
-const Nexmo = require('nexmo');
 const otpGenerator = require('otp-generator');
 
 var bookmarkMe = (url,objId,userId)=>{
@@ -22,7 +21,7 @@ var bookmarkMe = (url,objId,userId)=>{
     }
     model.findById(objId).then((result)=>{
         if(!result){
-            return Response.status(404).send();
+            return 'Unable to fetch entity (inside bookmarkMe fxn)'; 
         }
     });
     return userModel.findByIdAndUpdate(userId,{
@@ -45,7 +44,7 @@ var findUsersViaService = (url)=>{
     console.log(urlArray);
     return userModel.find({Service:urlArray[1]}).then((users)=>{
         if(!users){
-            return Promise.reject();
+            return Promise.reject('Cannot find users');
         }
         return users;
     })
