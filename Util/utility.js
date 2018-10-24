@@ -5,6 +5,11 @@ const {companyModel} = require('../Modals/companyModel.js');
 const Nexmo = require('nexmo');
 const otpGenerator = require('otp-generator');
 
+const nexmo = new Nexmo({
+    apiKey: 'f7b0e55b',
+    apiSecret: 'JhHY40DOHhQ38rXA'
+});
+
 var bookmarkMe = (url,objId,userId)=>{
     var model;
     var pushInto;
@@ -49,20 +54,20 @@ var findUsersViaService = (url)=>{
         }
         return users;
     })
-    //return userModel.find({Service:service});
 };
 
-var sendOtp = ()=>{
-    var otp = otpGenerator.generate(5, {alphabets:false, upperCase: false, specialChars: false });
+const sendOtp = (email)=>{
+    var otp = otpGenerator.generate(5, { alphabets: false, upperCase: false, specialChars: false });
+    var message ='Your verification code is' + otp;
+    userModel.findOneAndUpdate({Email:email},{$set:{Otp:otp}}).then();
     nexmo.message.sendSms(
-        '919116053402', '919116053402', otp,
+        '919116053402','917062180690', message,
         (err, responseData) => {
             if (err) {
             console.log(err);
             return Promise.reject('Cannot Send OTP');
             } else {
-            console.dir(responseData);
-            return Promise.resolve(otp);
+            return Promise.resolve(message);
             }
         }
     )

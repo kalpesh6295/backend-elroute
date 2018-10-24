@@ -28,7 +28,7 @@ router.post('/',authenticate,(request,response)=>{
                 response.status(200).send(result);
         });
     }).catch((e)=>{
-        response.status(400).send(e);
+        response.status(400).send("Please enter a valid Details");
     });
 });
 
@@ -36,11 +36,11 @@ router.post('/',authenticate,(request,response)=>{
 router.get('/',authenticate,(request,response)=>{
     companyModel.find({"stageOne.admin":request.user._id}).then((companies)=>{
         if(!companies){
-            return response.status(200).send();
+            return response.status(200).send("Company not present in the database");
         }
     response.status(200).send({companies});
     }).catch((e)=>{
-        response.status(400).send(e);
+        response.status(400).send("Entered company is not present");
     });
 });
 
@@ -54,9 +54,9 @@ router.delete('/delete/:id',authenticate,(request,response)=>{
         }
         response.status(200).send(`Deleted Company is -> ${deletedCompany}`);
     },(error)=>{
-        response.status(400).send('Erroe while deleting');
+        response.status(400).send('Error while deleting');
     }).catch((e)=>{
-        response.status(400).send(e);
+        response.status(400).send("Error while deleting");
     });
 });
 
@@ -71,7 +71,7 @@ router.patch('/update/:id',authenticate,(request,response)=>{
     }).then((updatedCompany)=>{
         response.status(200).send(updatedCompany);
     }).catch((e)=>{
-        response.status(400).send(e);
+        response.status(400).send("Error while updating");
     })
 });
 
@@ -80,7 +80,7 @@ router.patch('/follow',authenticate,(request,response)=>{
     var userId = request.user._id;
     companyModel.findOne({"stageOne.admin":request.user._id}).then((company)=>{
         if(!company){                                                                  
-            return response.status(400).send();
+            return response.status(400).send("No such company present");
         }
         return userModel.findByIdAndUpdate(userId,{
             $push:{
@@ -90,7 +90,7 @@ router.patch('/follow',authenticate,(request,response)=>{
     }).then((updatedUser)=>{
         response.status(200).send(updatedUser.Following)
     }).catch((e)=>{
-        response.status(400).send('Exception caught',e);
+        response.status(400).send('Exception caught');
     });
 });
 

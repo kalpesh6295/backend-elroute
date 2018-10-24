@@ -48,6 +48,9 @@ var userSchema = new mongoose.Schema({
     Following:{
         company:[{type:mongoose.Schema.Types.ObjectId}]
     },
+    Otp:{
+        type:Number
+    },
     Company_id:[{type:mongoose.Schema.Types.ObjectId,auto:true}],
     bookmarks:{
         // post:[{type:mongoose.Schema.Types.ObjectId}],
@@ -99,14 +102,6 @@ userSchema.methods.removeToken = function(token) {
     });
 }
 
-userSchema.methods.sendVerification = (email,etoken,fname)=>{
-    return new Promise((resolve,reject)=>{
-     
-    Verification(email,etoken,fname)
-
-
-    });
-};
 
 //Function to findout the user is present into the database 
 userSchema.statics.findByCredentials = function(email,password){
@@ -138,8 +133,7 @@ userSchema.statics.findByToken = function(token){
         decoded = jwt.verify(token,'abc123');
     }
     catch(e){
-        console.log('Error Occured!');
-        return Promise.reject();
+        return Promise.reject("Error Occured");
     }
     return userModel.findOne({
         _id:decoded._id,
@@ -148,13 +142,8 @@ userSchema.statics.findByToken = function(token){
     });
 };
 
-// userSchema.statics.findByService = function(service){
-    
-//     var userModel = this;
-//     return userModel.find({Service:service});
-// };
 
-const Verification=(email,etoken,fname)=>{
+const Verification = (email, etoken, fname) => {
     var options = {
         method: 'POST',
         url: `https://us19.api.mailchimp.com/3.0/lists/${fname}/members`,
@@ -169,18 +158,21 @@ const Verification=(email,etoken,fname)=>{
         {
             email_address: email,
             status: 'subscribed',
-            merge_fields:{TOKEN:etoken}
+            merge_fields: { TOKEN: etoken }
         },
         json: true
     };
-
+    
+    return new Promise((resolve,reject)=>{
     request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
+            if (error) {
+                throw new Error(error);
+            }
+           return resolve(body.status);
+        })
+    
     })
 };
-
 //Method to Hash the password every time a new user is added 
 userSchema.pre('save',function(next){
     var user = this;
@@ -200,4 +192,4 @@ userSchema.pre('save',function(next){
 
 var userModel = mongoose.model('user',userSchema);
 
-module.exports = {userModel};
+module.exports = {userModel,Verification};

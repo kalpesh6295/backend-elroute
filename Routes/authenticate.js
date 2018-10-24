@@ -7,6 +7,7 @@ const {userModel} = require('../Modals/userModel.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const {Verification}=require('./../Modals/userModel.js');
+const {sendOtp}=require('./../Util/utility.js');
 
 //Router to signup an new  into the database and send a verification email to the user email id
 router.post('/signup',(request,response)=>{
@@ -20,23 +21,26 @@ router.post('/signup',(request,response)=>{
         Mobile:user.Mobile,
         Address:user.Address,
         Emailtoken:Etoken,
+        Service:user.Service
     });
+    
     newUser.save().then(()=>{
     return newUser.generateAuthToken();                                                  //calling function to generate an user token 
     }).then((token_recieved)=>{
-
         //token received from function called into the userModel
         response.setHeader('x-auth',token_recieved); 
         var userEmailToVerify = user.Email;
         var fname = "46fcc47236";
-        return newUser.sendVerification(userEmailToVerify,Etoken,fname);
-
+        return Verification(userEmailToVerify,Etoken,fname);
     }).then((responseCode)=>{
-        
+        if(responseCode==="subscribed")
+        {
+            sendOtp(user.Email);
+        }
         response.status(200).send(newUser);
     }).catch((e)=>{
         console.log(e);
-        response.status(400).send();
+        response.status(400).send("Please Enter the valid detail");
     });
        
 });
@@ -46,7 +50,7 @@ router.post('/login', (request, response) => {
         var body = _.pick(request.body, ['Email', 'Password']);                             //get the user Email,Password for login
         userModel.findByCredentials(body.Email, body.Password).then((user) => {
             if (!user) {                                                                    //if user present in the database
-                return response.status(400).send();
+                return response.status(400).send("Not a valid user");
             }
             user.generateAuthToken().then((token) => {                                      //if user is present in the database then generate a token 
                 response.header('x-auth', token).send(user);
@@ -102,5 +106,18 @@ router.patch('/:token/:email',(request,response)=>{
     })
 });
 
+router.patch('/verifyotp',(request,response)=>{
+    var otp=request.body.Otp;
+    userModel.findOne({Otp:otp}).then((docs)=>{
+        if(!docs.Otp==otp){
+            response.status(400).send('Check OTP Again!!')
+        }
+            userModel.findOneAndUpdate({Otp:otp},{$unset:{Otp:""}}).then((docs)=>{
+                response.status(200).send("otp successfully verfied");
+            });
+    }).catch((e)=>{
+        response.status(404).send('Check OTP Again!!');
+    })
+})
 
 module.exports = router;

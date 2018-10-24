@@ -22,7 +22,7 @@ router.post('/',authenticate,imageupload,(request,response)=>{
     newPost.save().then(() => {
         response.status(200).send(newPost);
     }).catch((e) => {
-        response.status(400).send(e);
+        response.status(400).send("Error whie uploading post");
     })
 });
 
@@ -65,7 +65,7 @@ router.patch('/update/:id', authenticate,imageupload, (request, response) => {
     }).then((updatedPost) => {
         response.status(200).send(updatedPost);
     }).catch((e) => {
-        response.status(400).send(e);
+        response.status(400).send("Error while uploading data");
     })
 });
 

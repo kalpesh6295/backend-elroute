@@ -32,7 +32,7 @@ router.get('/:token/:email', function (request, response) {
                    response.status(400).send("not a valid email id");
                }
             }).catch((e) => {
-                response.status(400).send(e);
+                response.status(400).send("Error while verifying email address");
             });
 });
 
