@@ -9,6 +9,6 @@ router.get('/:type(inspection|logistics|contentMarketing|bCommunication)',authen
     }).catch((e)=>{
         response.status(400).send('Cannot get User');
     });
-});
+}); 
 
 module.exports = router;

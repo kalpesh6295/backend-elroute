@@ -9,7 +9,7 @@ router.get('/:id',(request,response)=>{
     userModel.findById(id).then((userdata)=>{
        response.status(200).send(userdata);
     }).catch((e)=>{
-        response.status(400).send(e);
+        response.status(400).send('Error Fetching user');
     });
 
 });
@@ -27,10 +27,10 @@ router.patch('/update/:id',(request,response)=>{
             Mobile:body.Mobile,
             Address:body.Address
         }
-    }).then((updateddata)=>{
-        response.status(200).send(updateddata);
+    }).then((updatedData)=>{
+        response.status(200).send(updatedData);
     }).catch((e)=>{
-        response.status(400).send(e);
+        response.status(400).send('Error updating user');
     });
 });
 

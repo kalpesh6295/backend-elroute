@@ -20,7 +20,7 @@ router.post('/',authenticate,imageupload,(request,response)=>{
     product.save().then((result)=>{
         response.status(200).send(result);
     }).catch((e)=>{
-        response.status(400).send("errror is ----->",e);
+        response.status(400).send("Error Adding product");
     });
 });
 
@@ -29,7 +29,7 @@ router.get('/',authenticate,(request,response)=>{
     productModel.find({Creator:request.user._id}).then((products)=>{
         response.status(200).send(products);
     }).catch((e)=>{
-        response.status(400).send(e);
+        response.status(400).send('Error getting products of user');
     });
 });
 
@@ -48,7 +48,7 @@ router.patch('/update/:id', authenticate, (request, response) => {
     },{returnOriginal:false}).then((updatedProducts) => {
         response.status(200).send(updatedProducts);
     }).catch((e) => {
-        response.status(400).send(e);
+        response.status(400).send('Error Updating this order');
     })
 });
 
@@ -61,7 +61,7 @@ router.delete('/delete/:id', authenticate, (request, response) => {
         }
         response.status(200).send(`Deleted Company is -> ${productCompany}`);
     }).catch((e) => {
-        response.status(400).send(e);
+        response.status(400).send('Error deleting product');
     });
 });
 

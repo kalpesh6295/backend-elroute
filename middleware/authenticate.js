@@ -11,7 +11,7 @@ var authenticate = (request,response,next) =>{
         request.token = token;                 //if user is present into the database then send the token of the user
         next();
     }).catch((e)=>{
-        response.status(401).send(e);         
+        response.status(401).send('User may not be registered or check x-auth token');         
     });
 };
 
