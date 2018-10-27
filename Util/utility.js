@@ -3,7 +3,7 @@ const {postModel} = require('../Modals/postModel.js');
 const {productModel} = require('../Modals/productModel.js');
 const {companyModel} = require('../Modals/companyModel.js');
 const otpGenerator = require('otp-generator');
-
+const Nexmo=require("nexmo");
 const nexmo = new Nexmo({
     apiKey: 'f7b0e55b',
     apiSecret: 'JhHY40DOHhQ38rXA'
