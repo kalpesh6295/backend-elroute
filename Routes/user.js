@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { userModel } = require('./../Modals/userModel.js');
 const _ = require('lodash');
+const {authenticate} = require('./../middleware/authenticate.js');
+
 //Router used to get the user from the databse using id as an parameter
 router.get('/:id',(request,response)=>{
     var id=request.params.id;
+    console.log(id);
     console.log("i am here ====>")
     userModel.findById(id).then((userdata)=>{
        response.status(200).send(userdata);
@@ -31,6 +34,24 @@ router.patch('/update/:id',(request,response)=>{
         response.status(200).send(updatedData);
     }).catch((e)=>{
         response.status(400).send('Error updating user');
+    });
+});
+
+//Router to list the followers of a user
+router.get('/followers',authenticate,(request,response)=>{
+    var user = request.user;
+    user.getFollowers().then((followers)=>{
+        response.status(200).send(followers);      
+    }).catch((e)=>{
+        response.status(400).send('Cannot Fetch followers');
+    })
+});
+
+//Router to follow a user
+router.post('/follow',authenticate,(request,respose)=>{
+    var user = request.user;
+    user.setFollower(user._id).then((updatedUser)=>{
+        console.log(updatedUser);
     });
 });
 

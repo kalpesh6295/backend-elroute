@@ -55,6 +55,7 @@ var findUsersViaService = (url)=>{
     })
 };
 
+
 const sendOtp = (email)=>{
     var otp = otpGenerator.generate(5, { alphabets: false, upperCase: false, specialChars: false });
     var message ='Your verification code is' + otp;
