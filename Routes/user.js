@@ -48,10 +48,12 @@ router.get('/followers',authenticate,(request,response)=>{
 });
 
 //Router to follow a user
-router.post('/follow',authenticate,(request,respose)=>{
+router.patch('/follow',authenticate,(request,response)=>{
     var user = request.user;
     user.setFollower(user._id).then((updatedUser)=>{
-        console.log(updatedUser);
+        response.status(200).send(`You just followed ${user.UserName}`);
+    }).catch((e)=>{
+        response.status(400).send('Cannot Follow, Exception');
     });
 });
 

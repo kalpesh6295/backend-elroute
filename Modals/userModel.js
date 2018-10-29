@@ -104,16 +104,16 @@ userSchema.methods.getFollowers = function() {
              reject();
         }
         resolve(user.Followers);
-    })
-}
+    });
+};
 
 userSchema.methods.setFollower = function(id){
     var user = this;
+    console.log(user._id);
     return user.update({
-        $push:{Followers:id}
+        $push:{Followers:{id}}
     });
-    // user.Followers.push({userObjectId:user._id});
-}
+};
 
 //Function to remove a token every time a user logout 
 userSchema.methods.removeToken = function(token) {
