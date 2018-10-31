@@ -35,6 +35,7 @@ router.post('/signup',(request,response)=>{
     }).then((responseCode)=>{
         if(responseCode==="subscribed")
         {
+            
             sendOtp(user.Email);
         }
         response.status(200).send(newUser);

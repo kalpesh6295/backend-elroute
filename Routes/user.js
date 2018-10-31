@@ -8,6 +8,7 @@ const {authenticate} = require('./../middleware/authenticate.js');
 router.patch('/update',authenticate,(request,response)=>{
     var body = _.pick(request.body, ['UserName', 'Password', 'Email', 'Mobile', 'Address']);//Getting data to updating user data 
     var user = request.user;
+    var id = user._id;
     user.update({
         $set:{
             UserName:body.UserName,
@@ -15,10 +16,13 @@ router.patch('/update',authenticate,(request,response)=>{
             Email:body.Email,
             Mobile:body.Mobile,
             Address:body.Address
-        }
+        },
     }).then((updatedData)=>{
-        response.status(200).send(updatedData);
-    }).catch((e)=>{
+        return userModel.findById(id);
+    }).then((updatedUser)=>{
+        response.status(200).send(updatedUser);
+    })
+    .catch((e)=>{
         response.status(400).send('Error updating user');
     });
 });
