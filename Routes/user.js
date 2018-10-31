@@ -4,25 +4,11 @@ const { userModel } = require('./../Modals/userModel.js');
 const _ = require('lodash');
 const {authenticate} = require('./../middleware/authenticate.js');
 
-//Router used to get the user from the databse using id as an parameter
-router.get('/:id',(request,response)=>{
-    var id=request.params.id;
-    console.log(id);
-    console.log("i am here ====>")
-    userModel.findById(id).then((userdata)=>{
-       response.status(200).send(userdata);
-    }).catch((e)=>{
-        response.status(400).send('Error Fetching user');
-    });
-
-});
-
 //Router used to update the data of an user which is already present into the database using id as ana parameter
-router.patch('/update/:id',(request,response)=>{
+router.patch('/update',authenticate,(request,response)=>{
     var body = _.pick(request.body, ['UserName', 'Password', 'Email', 'Mobile', 'Address']);//Getting data to updating user data 
-    var id =request.params.id;
-    console.log(id);
-    userModel.findByIdAndUpdate(request.params.id,{
+    var user = request.user;
+    user.update({
         $set:{
             UserName:body.UserName,
             Password:body.Password,
@@ -55,6 +41,15 @@ router.patch('/follow',authenticate,(request,response)=>{
     }).catch((e)=>{
         response.status(400).send('Cannot Follow, Exception');
     });
+});
+
+//Router used to get the user from the databse using id as an parameter
+router.get('/',authenticate,(request,response)=>{
+    var user = request.user;
+    if(!user){
+        response.status(400).send('Error Fetching user');
+    }
+        response.status(200).send(user);
 });
 
 module.exports=router;
