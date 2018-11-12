@@ -4,9 +4,11 @@ const {productModel} = require('../Modals/productModel.js');
 const {companyModel} = require('../Modals/companyModel.js');
 const otpGenerator = require('otp-generator');
 const Nexmo=require("nexmo");
+const Mockaroo = require('mockaroo');
+const env = require('./../config/env.js');
 const nexmo = new Nexmo({
-    apiKey: 'f7b0e55b',
-    apiSecret: 'JhHY40DOHhQ38rXA'
+    apiKey: env.NEXMO_API_KEY,
+    apiSecret: env.NEXMO_API_SECRET
 });
 
 var bookmarkMe = (url,objId,userId)=>{

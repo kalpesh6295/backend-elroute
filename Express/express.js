@@ -11,6 +11,7 @@ var imageuploadRouter=require('./../Routes/imageupload.js');
 var emailverifyrouter=require('./../Routes/emailverify.js');
 var userpageRouter=require('./../Routes/user.js')
 var serviceRouter = require('./../Routes/service.js');
+var searchRouter = require('./../Routes/search.js');
 
 var app = express();
 
@@ -44,6 +45,7 @@ app.use('/company',companyRouter);          //new comapany route
 app.use('/userimageupload',imageuploadRouter);//new route to add user its image
 app.use('/verify',emailverifyrouter);          //email verification route
 app.use('/service',serviceRouter);
+app.use('/search',searchRouter);
 
 
 //Server listing
