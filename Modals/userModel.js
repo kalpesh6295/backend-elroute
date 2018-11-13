@@ -58,6 +58,11 @@ var userSchema = new mongoose.Schema({
         product:[{type:mongoose.Schema.Types.ObjectId}],
         company:[{type:mongoose.Schema.Types.ObjectId}]
     },
+    Followers:[{
+        userObjectId:{
+        type:String
+    }
+}],
     tokens:[{
         access:{
             type:String,
@@ -91,6 +96,25 @@ userSchema.methods.generateAuthToken = function (){
     });
 };
 
+userSchema.methods.getFollowers = function() {
+    var user = this;
+    console.log('hi'+user.Followers);
+    return new Promise((resolve,reject)=>{
+        if(!user){
+             reject();
+        }
+        resolve(user.Followers);
+    });
+};
+
+userSchema.methods.setFollower = function(id){
+    var user = this;
+    console.log(user._id);
+    return user.update({
+        $push:{Followers:{id}}
+    });
+};
+
 //Function to remove a token every time a user logout 
 userSchema.methods.removeToken = function(token) {
     var user = this;
@@ -100,7 +124,7 @@ userSchema.methods.removeToken = function(token) {
     return user.update({
         $pull:{tokens:{token}}
     });
-}
+};
 
 
 //Function to findout the user is present into the database 

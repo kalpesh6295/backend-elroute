@@ -3,7 +3,6 @@ const {userModel} = require('./../Modals/userModel.js');
 
 //Company model schema for the user 
 var companySchema = new mongoose.Schema({
-stageOne:{
     category:{ 
         type:String,
         required:true,
@@ -25,11 +24,9 @@ stageOne:{
     //one who creates the company
     admin:{
         type:mongoose.Schema.Types.ObjectId,
-    }
-},
+    },
 
-//Second part of the company
-stageTwo:{
+    //Second part of the company
     shortIntro:{
         type:String,
         trim:true
@@ -56,7 +53,7 @@ stageTwo:{
     keywords:{
         type:String
     }
-}});
+});
 
 companySchema.statics.followUnfollow = function(decision,userId){
     return companyModel.findOne({"stageOne.admin":userId}).then((company)=>{
