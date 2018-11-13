@@ -23,7 +23,7 @@ router.post('/signup',(request,response)=>{
         Emailtoken:Etoken,
         Service:user.Service
     });
-    
+
     newUser.save().then(()=>{
     return newUser.generateAuthToken();                                                  //calling function to generate an user token 
     }).then((token_recieved)=>{

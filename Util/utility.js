@@ -55,10 +55,11 @@ var findUsersViaService = (url)=>{
     })
 };
 
-const sendOtp = (email)=>{
+const sendOtp = (email,Mobile)=>{
     var otp = otpGenerator.generate(5, { alphabets: false, upperCase: false, specialChars: false });
     var message ='Your verification code is' + otp;
     userModel.findOneAndUpdate({Email:email},{$set:{Otp:otp}}).then();
+    console.log(email);
     nexmo.message.sendSms(
         '919116053402','917062180690', message,
         (err, responseData) => {

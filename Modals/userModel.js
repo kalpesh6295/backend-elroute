@@ -28,7 +28,7 @@ var userSchema = new mongoose.Schema({
     },
     Mobile:{
         type:Number,
-        trim:true
+        unique:true
     },
     Address:{
         type:String,
@@ -166,6 +166,7 @@ const Verification = (email, etoken, fname) => {
     return new Promise((resolve,reject)=>{
     request(options, function (error, response, body) {
             if (error) {
+                response.status(400).send("please enter a valid Email address");
                 throw new Error(error);
             }
            return resolve(body.status);
@@ -173,6 +174,8 @@ const Verification = (email, etoken, fname) => {
     
     })
 };
+
+
 //Method to Hash the password every time a new user is added 
 userSchema.pre('save',function(next){
     var user = this;
@@ -180,7 +183,7 @@ userSchema.pre('save',function(next){
         var password = user.Password;
         bcrypt.genSalt(10,(error,salt)=>{
             bcrypt.hash(password,salt,(error,hash)=>{
-                user.Password = hash; 
+                user.Password = hash;
                 next();
             })
         })
