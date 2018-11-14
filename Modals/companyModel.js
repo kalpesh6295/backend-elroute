@@ -21,12 +21,9 @@ var companySchema = new mongoose.Schema({
     companyType:{
         type:String,
     },
-    //one who creates the company
     admin:{
         type:mongoose.Schema.Types.ObjectId,
     },
-
-    //Second part of the company
     shortIntro:{
         type:String,
         trim:true
@@ -56,7 +53,7 @@ var companySchema = new mongoose.Schema({
 });
 
 companySchema.statics.followUnfollow = function(decision,userId){
-    return companyModel.findOne({"stageOne.admin":userId}).then((company)=>{
+    return companyModel.findOne({"admin":userId}).then((company)=>{
         if(!company){
             return Promise.reject();
         }

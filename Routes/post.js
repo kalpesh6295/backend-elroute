@@ -16,7 +16,8 @@ router.post('/',authenticate,imageupload,(request,response)=>{
         Content:post.Content,
         Comment:post.Comment,
         Veiws:post.Veiws,
-        Save:post.Save
+        Save:post.Save,
+        admin: request.user._id
     });
 
     newPost.save().then(() => {
