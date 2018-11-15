@@ -8,7 +8,11 @@
 // mongoose.connect('mongodb://localhost:27017/Tradifier');
 
 // var client = new Mockaroo.Client({
+<<<<<<< HEAD
 //     apiKey: '7acec3c0'
+=======
+//     apiKey:'7acec3c0'
+>>>>>>> 6295ec5b3fd0fa17add7dea581f8e025f04e772f
 // });
 
 // client.generate({
