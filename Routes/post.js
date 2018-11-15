@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const { postModel } = require('../Modals/postModel.js');
+const {userModel}=require('./../Modals/userModel.js');
 const { authenticate } = require('./../middleware/authenticate.js');
 const _ = require('lodash');
 const {imageupload} = require('./../middleware/imageupload.js');
-
+const {companyid}=require('./../middleware/companyid.js');
 
 //Router to add an new post into the database
-router.post('/',authenticate,imageupload,(request,response)=>{
-    var post =_.pick(request.body,['Content','Comment','Veiws','Save']);         //Picking the data for the new post
+router.post('/',authenticate,companyid,imageupload,(request,response)=>{
+    var post =_.pick(request.body,['Content','Comment','Veiws','Save','admin']);         //Picking the data for the new post
      var newPost=new postModel({
         // UserName:request.body.UserName,
         Image: request.imageurl,
@@ -17,7 +18,7 @@ router.post('/',authenticate,imageupload,(request,response)=>{
         Comment:post.Comment,
         Veiws:post.Veiws,
         Save:post.Save,
-        admin: request.user._id
+        admin:request.user.Company_id
     });
 
     newPost.save().then(() => {

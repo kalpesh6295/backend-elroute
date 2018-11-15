@@ -36,7 +36,7 @@ var postSchema=new mongoose.Schema({
         default:0
     },
     admin: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String
     }
 });
 
