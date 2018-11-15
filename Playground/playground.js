@@ -1,14 +1,14 @@
-const mongoose = require('mongoose');
-const {userModel} = require('../Modals/userModel.js');
-const {ObjectID} = require('mongodb');
-const Mockaroo = require('mockaroo');
-const {companyModel} = require('../Modals/companyModel.js');
-const env = require('../config/env.js');
+// const mongoose = require('mongoose');
+// const {userModel} = require('../Modals/userModel.js');
+// const {ObjectID} = require('mongodb');
+// const Mockaroo = require('mockaroo');
+// const {companyModel} = require('../Modals/companyModel.js');
+// const env = require('../config/env.js');
 
-mongoose.connect('mongodb://localhost:27017/Tradifier');
+// mongoose.connect('mongodb://localhost:27017/Tradifier');
 
 // var client = new Mockaroo.Client({
-//     apiKey: env.MOCKAROO_API_KEY
+//     apiKey: '7acec3c0'
 // });
 
 // client.generate({
