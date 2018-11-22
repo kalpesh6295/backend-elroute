@@ -1,23 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const {URL} = require('url');
-const {authenticate} = require('./../middleware/authenticate.js');
 const {companyModel} = require('./../Modals/companyModel.js');
-
+const dictionary = require('dictionary-en-us');
+const nspell = require('nspell');
 
 
 router.get('/:id',(request,response)=>{
-    // console.log(request.url);
     var myUrl = new URL(request.protocol + '://' + request.get('host') + request.originalUrl);
-    // var myUrl = new URL(request.url);
-    // console.log(myUrl);
     console.log(myUrl.searchParams.get('product'));
     console.log(myUrl.searchParams.get('service'));
     if(myUrl.searchParams.get('product')){
         console.log('case 1 me');
         companyModel.find(
                 {
-                    category:request.params.id,
+                    category:{$regex:/request.params.id^/},
                     companyType:'product'
                 }).then((results)=>{
                 response.status(200).send(results);
@@ -27,7 +24,7 @@ router.get('/:id',(request,response)=>{
         console.log('case 2 me');
         companyModel.find(
             {
-                category:request.params.id,
+                category: { $regex: /request.params.id^/ },
                 companyType:'service'
             }).then((results)=>{
             response.status(200).send(results);
@@ -37,13 +34,11 @@ router.get('/:id',(request,response)=>{
         console.log('case3 Me');
         companyModel.find(
             {
-                category:request.params.id,
+                category: { $regex: request.params.id },
             }).then((results)=>{
                 var productCompanyCount=0;
                 var serviceCompanyCount=0;
                 var tempResult=[];
-                // var moreResult=[];
-                // var lessResult=[];
                 for(var i =0 ; i<results.length ; i++){
                     if(results[i].companyType=='product'){
                         productCompanyCount++;
@@ -72,10 +67,18 @@ router.get('/:id',(request,response)=>{
                             tempResult.push(results[i]);
                     }
                 }
+                dictionary(ondictionary)
+                async function ondictionary(err, dict) {
+                    var spell = await new nspell(dict);
+                    var suggested = await spell.suggest(request.params.id);
+                    tempResult.push(suggested);
                 response.status(200).send(tempResult);
+                }
         });
     }
     // console.log(request.params.id);
 });
+
+
 
 module.exports = router;
