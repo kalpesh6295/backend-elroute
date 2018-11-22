@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const {postModel}=require('./../Modals/postModel.js');
-
 const dictionary = require('dictionary-en-us');
 const nspell = require('nspell');
 
 
 router.get('/:word',(request,response)=>{
 
-    var term = request.params.word;
-   
+    var words = (request.params.word);
+   var term=words.toLowerCase();
     var tempresult=[];
     postModel.find({
-        $text: {$search: term },
+        $text: {$search: term},
     })
         .then(result =>{
             tempresult.push(result);
@@ -23,8 +22,17 @@ router.get('/:word',(request,response)=>{
                  suggested= await spell.suggest(term);
                 postModel.find({ Content: { $regex: term } }).then((unmatchedterm) => {
                 tempresult.push(unmatchedterm);
-                tempresult.push(suggested);
-                response.status(200).send(tempresult);
+                console.log(suggested.length);
+                if(suggested.length!=0)
+                {
+                postModel.find({Content:suggested[0]}).then((result)=>{
+                    response.status(200).send(result);
+                });
+                }else
+                {
+                    tempresult.push(suggested);
+                    response.status(200).send(tempresult);
+                }
                 })  
             }
           
