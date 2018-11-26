@@ -37,6 +37,9 @@ var postSchema=new mongoose.Schema({
     },
     admin: {
         type: String
+    },
+    tagId:{
+        type:String
     }
 });
 

@@ -6,11 +6,12 @@ const { authenticate } = require('./../middleware/authenticate.js');
 const _ = require('lodash');
 const {imageupload} = require('./../middleware/imageupload.js');
 const {companyid}=require('./../middleware/companyid.js');
+const {productModel}=require('./../Modals/productModel.js');
 
 //Router to add an new post into the database
 router.post('/',authenticate,companyid,imageupload,async (request,response)=>{
    try{
-       const post = await _.pick(request.body, ['Content', 'Comment', 'Veiws', 'Save', 'admin']);         //Picking the data for the new post
+       const post = await _.pick(request.body, ['Content', 'Comment', 'Veiws', 'Save', 'admin','tagId']);         //Picking the data for the new post
        const newPost = await new postModel({
            // UserName:request.body.UserName,
            Image: request.imageurl,
@@ -19,10 +20,14 @@ router.post('/',authenticate,companyid,imageupload,async (request,response)=>{
            Comment: post.Comment,
            Veiws: post.Veiws,
            Save: post.Save,
-           admin: request.user.Company_id
+           admin:request.user.Company_id,
+           tagId:post.tagId
        });
-       newPost.save().then(() => {
-           response.status(200).send(newPost);
+       newPost.save().then((post) => {
+           console.log(post._id);
+           productModel.findByIdAndUpdate({_id:post.tagId},{$set:{postId:post._id}}).then((docs)=>{
+           })
+           response.status(200).send(post);
        });
    } catch(e)
    {
