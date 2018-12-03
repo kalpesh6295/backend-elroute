@@ -13,6 +13,9 @@ var userpageRouter=require('./../Routes/user.js')
 var serviceRouter = require('./../Routes/service.js');
 var searchRouter = require('./../Routes/search.js');
 var feedRouter=require('./../Routes/feed.js');
+var searchfeedRouter=require('./../Routes/searchfeed.js');
+var tagRouter=require('./../Routes/tag.js');
+var hscodeRouter=require('./../Routes/hscode.js');
 var app = express();
 
 //multiparty is used for aws connectivity
@@ -47,6 +50,9 @@ app.use('/verify',emailverifyrouter);          //email verification route
 app.use('/service',serviceRouter);
 app.use('/search',searchRouter);
 app.use('/feed',feedRouter);
+app.use('/searchfeed',searchfeedRouter);
+app.use('/tag',tagRouter);
+app.use('/hscode',hscodeRouter);
 //Server listing
 app.listen(3000,(status)=>{
     console.log('Server up on the port 3000');

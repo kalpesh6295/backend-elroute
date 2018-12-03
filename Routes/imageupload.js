@@ -14,10 +14,10 @@ const s3fsImpl = new S3FS('tradifieruserimage1', {                      //AWS Bu
 router.post('/:id', (request, response) => {
     console.log("i am here ===>")
     var myfile = request.files.Image;                                      //File which is given by user
-    var fname = request.files.Image.name;                                 //Filename            
-    var filename = fname.replace(/\s/g, '');                     //replacing gaps from the user filename  
-    myfile.originalFilename = Date.now() + filename;            //Date is added in front of the filename to remove conflict                           
-    const awsurl = "https://s3.amazonaws.com/tradifieruserimage1/";  //predefined aws url is given by the AWS with bucket name
+    var fname = request.files.Image.name;                                  //Filename            
+    var filename = fname.replace(/\s/g, '');                               //replacing gaps from the user filename  
+    myfile.originalFilename = Date.now() + filename;                       //Date is added in front of the filename to remove conflict                           
+    const awsurl = "https://s3.amazonaws.com/tradifieruserimage1/";        //predefined aws url is given by the AWS with bucket name
     var stream = fs.createReadStream(myfile.path);
     return s3fsImpl.writeFile(myfile.originalFilename, stream).then(() => {
         fs.unlink(myfile.path, (err) => {
@@ -29,8 +29,8 @@ router.post('/:id', (request, response) => {
             }
         });
         const image = awsurl + filename;
-        userModel.findByIdAndUpdate(request.params.id, {
-            $set: { Image: image }                                 //Image is added into the user database
+        userModel.findByIdAndUpdate(request.params.id, { 
+            $set: { Image: image }                                           //Image is added into the user database
         }).then((user) => {
             console.log(user);
         }).catch((e) => {

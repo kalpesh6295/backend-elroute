@@ -26,6 +26,9 @@ var productSchema = new mongoose.Schema({
     Creator:{
         type:mongoose.Schema.Types.ObjectId,
         required:true
+    },
+    postId:{
+        type:String
     }
 });
 

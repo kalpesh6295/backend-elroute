@@ -1,31 +1,32 @@
-// const mongoose = require('mongoose');
-// const {userModel} = require('../Modals/userModel.js');
-// const {ObjectID} = require('mongodb');
-// const Mockaroo = require('mockaroo');
-// const {companyModel} = require('../Modals/companyModel.js');
-// const env = require('../config/env.js');
+const mongoose = require('mongoose');
+const {userModel} = require('../Modals/userModel.js');
+const {ObjectID} = require('mongodb');
+const Mockaroo = require('mockaroo');
+const {companyModel} = require('../Modals/companyModel.js');
+const {postModel}=require('./../Modals/postModel.js');
+const env = require('../config/env.js');
 
-// mongoose.connect('mongodb://localhost:27017/Tradifier');
+mongoose.connect('mongodb://localhost:27017/Tradifier');
 
-// var client = new Mockaroo.Client({
-//     apiKey:'7acec3c0'
-// });
+var client = new Mockaroo.Client({
+    apiKey:'7acec3c0'
+});
 
-// client.generate({
-//     count: 237,
-//     schema: 'companies'
-// }).then((records)=>{
-//     // console.log(records);
-//     for(var i=0;i<records.length;i++){
-//         var company = new companyModel(records[i]);
-//         // console.log(company);
-//         company.save().then((result)=>{
-//             console.log('Result after saving is',result);
-//         })
-//     }
-// }).catch((e)=>{
-//     console.log('Error is',e);
-// });
+client.generate({
+    count: 237,
+    schema: 'companies'
+}).then((records)=>{
+    // console.log(records);
+    for(var i=0;i<records.length;i++){
+        var company = new companyModel(records[i]);
+        // console.log(company);
+        company.save().then((result)=>{
+            console.log('Result after saving is',result);
+        })
+    }
+}).catch((e)=>{
+    console.log('Error is',e);
+});
 
 // var user = new userModel({
 //     UserName:'abhiraj  ',
