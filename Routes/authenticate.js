@@ -51,14 +51,13 @@ router.post('/signup',async (request,response)=>{
 //ROuter to login an user which is already present into the database
 router.post('/login', async (request, response) => {
     try{
-        const body = await _.pick(request.body, ['Email', 'Password']);                             //get the user Email,Password for login
+        const body = await _.pick(request.body, ['Email', 'Password']);                     //get the user Email,Password for login
         var user = await userModel.findByCredentials(body.Email, body.Password);
-        if (!user) {                                                                    //if user present in the database
+        if (!user) {                                                                       //if user not present in the database
             return response.status(400).send('No Such User Found');
         }
-        user.generateAuthToken().then((token) => {                                      //if user is present in the database then generate a token 
-            response.setHeader('x-auth', token).send(`you are succesfully logged in${user}`);
-        });
+            var token=user.generateAuthToken();
+                response.header('x-auth', token).send(`you are succesfully logged in${user}`);
     } catch(e){
         response.status(400).send('Error Logging in!');
     }

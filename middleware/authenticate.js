@@ -9,7 +9,8 @@ var authenticate = (request,response,next) =>{
         if(!user){
             return Promise.reject();           //if token is not matched into the user database return the error
         }
-        request.user = user;                   //if user is present into the database return send username
+        request.user = user;    
+        console.log(user);               //if user is present into the database return send username
         next();
     }).catch((e)=>{
         response.status(401).send('User may not be registered or check x-auth token');         
