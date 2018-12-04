@@ -8,17 +8,17 @@ var request = require("request");
 var userSchema = new mongoose.Schema({
     UserName:{ 
         type:String,
-        required:true,
+       // required:true,
         unique:true,
         trim:true
     },
     Password:{
         type:String,
-        required:true
+       // required:true
     },
     Email:{
         type:String,
-        required:true,
+       // required:true,
         unique:true,
         trim:true
     },
@@ -65,7 +65,7 @@ var userSchema = new mongoose.Schema({
 }],
     Service:{
         type:String,
-        required:true,
+      //  required:true,
         validate:{
             validator: (service) => ['inspection','logistics','contentMarketing','bCommunication'].indexOf(service)>-1,
             message:'Check Service mentioned.'

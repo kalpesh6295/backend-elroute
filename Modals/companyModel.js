@@ -5,15 +5,15 @@ const {userModel} = require('./../Modals/userModel.js');
 var companySchema = new mongoose.Schema({
     category:{ 
         type:String,
-        required:true,
+       // required:true,
     },
     companyName:{
         type:String,
-        required:true
+       // required:true
     },
     location:{
         type:String,
-        required:true,
+       // required:true,
     },
     website: 
     {   type: String, 
