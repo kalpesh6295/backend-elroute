@@ -28,6 +28,7 @@ router.post('/signup',async (request,response)=>{
         newUser.save().then(() => {
             return newUser.generateAuthToken();                                                  //calling function to generate an user token 
         }).then((token_recieved) => {
+            console.log(token_recieved);
             //token received from function called into the userModel
             response.setHeader('x-auth', token_recieved);
             var userEmailToVerify = user.Email;
@@ -56,7 +57,7 @@ router.post('/login', async (request, response) => {
             return response.status(400).send('No Such User Found');
         }
         user.generateAuthToken().then((token) => {                                      //if user is present in the database then generate a token 
-            response.header('x-auth', token).send(`you are succesfully logged in${user}`);
+            response.setHeader('x-auth', token).send(`you are succesfully logged in${user}`);
         });
     } catch(e){
         response.status(400).send('Error Logging in!');
@@ -65,10 +66,7 @@ router.post('/login', async (request, response) => {
 
 //Router delete an token whenever a user logout 
 router.delete('/logout', authenticate, async (request, response) => {
-   try{
-       var user = request.user;
-       var token = request.token;
-       var result = await user.removeToken(token);                                             //if user wants to logout then token is removed 
+   try{                                            //if user wants to logout then token is removed 
        response.status(200).send('You have been logged out succesfully!');
    }catch(e){
        response.status(400).send('Error Logging Out!');

@@ -63,16 +63,6 @@ var userSchema = new mongoose.Schema({
         type:String
     }
 }],
-    tokens:[{
-        access:{
-            type:String,
-            required:true
-        },
-        token:{
-            type:String,
-            required:true
-        }
-    }],
     Service:{
         type:String,
         required:true,
@@ -90,10 +80,7 @@ userSchema.methods.generateAuthToken = function (){
     var user = this;
     var access = 'auth';
     var token = jwt.sign({_id:user._id.toHexString(),access},'abc123').toString();
-    user.tokens.push({access,token});
-    return user.save().then(()=>{
         return token;
-    });
 };
 
 userSchema.methods.getFollowers = function() {
