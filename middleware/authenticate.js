@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 //Authenticate is used to verify the user is valid.if valid then give access to the user
 var authenticate = (request,response,next) =>{
     var token = request.header('x-auth');      //Checking the header if token is present
+    console.log(token);
     var decodedtoken=jwt.decode(token);
     console.log(decodedtoken._id);
     userModel.findById({_id:decodedtoken._id}).then((user)=>{

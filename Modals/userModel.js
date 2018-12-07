@@ -70,7 +70,10 @@ var userSchema = new mongoose.Schema({
             validator: (service) => ['inspection','logistics','contentMarketing','bCommunication'].indexOf(service)>-1,
             message:'Check Service mentioned.'
         }
-    }
+    },
+    HsCode:[{
+        type:String
+    }]
 });
 
 
@@ -103,7 +106,7 @@ userSchema.methods.setFollower = function(id){
 };
 
 //Function to remove a token every time a user logout 
-userSchema.methods.removeToken = function(token) {
+userSchema.methods.removeToken = function(token) { 
     var user = this;
     if(!token){
         return Promise.reject(`Token is ${token}`);
@@ -113,6 +116,29 @@ userSchema.methods.removeToken = function(token) {
     });
 };
 
+userSchema.methods.subscribe = function(code) {
+    var user = this;
+    console.log('inside subscribe function ---- code is',code)
+    if (user.HsCode.indexOf(code) > -1) {
+        return Promise.reject('Already subsribed to this HSCode');
+    } else {
+        return user.updateOne({
+            $push:{HsCode:code}
+        });
+    }
+}
+
+userSchema.methods.unSubscribe = function(code) {
+    var user = this;
+    console.log('inside subscribe function ---- code is',code)
+    if (user.HsCode.indexOf(code) > -1) {
+        return user.update({
+            $pull:{HsCode:code}
+        });
+    } else {
+        return Promise.reject('No such HSCode was subscribed before!');
+    }
+}
 
 //Function to findout the user is present into the database 
 userSchema.statics.findByCredentials = function(email,password){
