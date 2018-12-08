@@ -50,9 +50,9 @@ router.post('/',authenticate,async (request,response)=>{
 //Router to show user the company value saved into the database
 router.get('/',authenticate, async (request,response)=>{
    try{
-        const companies = companyModel.find({ "admin": request.user._id });
+        const companies = await companyModel.find({ "admin": request.user._id });
         if (!companies) {
-            return response.status(200).send("Company not present in the database");
+            return response.status(400).send("Company not present in the database");
         }
         response.status(200).send({ companies });
    }catch(e){

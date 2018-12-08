@@ -40,7 +40,7 @@ router.get('/search/:value/:page', (request, response) => {
    if(suggested.length!=0)
    {
        Product.find({ english_self_explanatory_text: { $regex: new RegExp(`${suggested[0]}`), $options: 'i' } }).then((docs) => {
-           for (var i = 0; i < docs.length; i++) {
+        for (var i = 0; i < docs.length; i++) {
                tempresult.push(docs[i].hscode);
            }
            Product.find({ $text: { $search: suggested[0] } }).then((docs) => {
@@ -63,10 +63,12 @@ router.get('/search/:value/:page', (request, response) => {
        })
    }else{
        Product.find({ english_self_explanatory_text: { $regex: new RegExp(`${item}`), $options: 'i' } }).then((docs) => {
-           for (var i = 0; i < docs.length; i++) {
+        console.log(docs);   
+        for (var i = 0; i < docs.length; i++) {
                tempresult.push(docs[i].hscode);
            }
            Product.find({ $text: { $search: item } }).then((docs) => {
+               console.log(docs)
                for (var i = 0; i < docs.length; i++) {
                    if (tempresult.includes(docs[i].hscode)) {
                        continue;

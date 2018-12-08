@@ -22,7 +22,7 @@ router.get('/:word',(request,response)=>{
                  suggested= await spell.suggest(term);
                 postModel.find({ Content: { $regex: term } }).then((unmatchedterm) => {
                 tempresult.push(unmatchedterm);
-                console.log(suggested.length);
+                console.log(suggested);
                 if(suggested.length!=0)
                 {
                 postModel.find({Content:suggested[0]}).then((result)=>{
