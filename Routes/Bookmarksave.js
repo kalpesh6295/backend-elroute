@@ -4,8 +4,6 @@ const { mongoose } = require('./../mongoose/mongoose-connect.js');
 const { userModel } = require('./../Modals/userModel.js');
 const { authenticate } = require('./../middleware/authenticate.js');
 const { companyModel } = require('./../Modals/companyModel.js');
-var json2csv = require('json2csv').parse;
-var jsonexport=require('jsonexport');
 var fs = require('fs');
 const ObjectsToCsv = require('objects-to-csv');
 

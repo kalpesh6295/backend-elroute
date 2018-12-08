@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const host = 'localhost:3000';
 const _ = require('lodash');
 var request = require("request");
+const env = require('./../config/env.js');
 //User model to add the new user into the schema
 var userSchema = new mongoose.Schema({
     UserName:{ 
@@ -160,9 +161,9 @@ const Verification = (email, etoken, fname) => {
         url: `https://us19.api.mailchimp.com/3.0/lists/${fname}/members`,
         headers:
         {
-            'postman-token': 'ce747207-7591-dba2-4720-6a162a84c944',
+            'postman-token': env.MAILCHIMP_POSTMAN_TOKEN,
             'cache-control': 'no-cache',
-            authorization: 'Basic YW55c3RyaW5nOjU1ODQ4NzFjOThmNTgzMjA5MWY4NDRkMjJhMTAzYTcxLXVzMTk=',
+            authorization: env.MAILCHIMP_SECRET_KEY,
             'content-type': 'application/json'
         },
         body:
