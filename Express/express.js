@@ -16,12 +16,8 @@ var feedRouter=require('./../Routes/feed.js');
 var searchfeedRouter=require('./../Routes/searchfeed.js');
 var tagRouter=require('./../Routes/tag.js');
 var hscodeRouter=require('./../Routes/hscode.js');
-<<<<<<< HEAD
 var subscribeRouter = require('./../Routes/subscribe.js');
 var unSubscribeRouter = require('./../Routes/unsubscribe.js');
-=======
-var bookmarksaveRouter=require('./../Routes/Bookmarksave.js')
->>>>>>> 54b17b6c06f436be320dd0c91324fc973ed4b914
 var app = express();
 
 //multiparty is used for aws connectivity
@@ -59,12 +55,8 @@ app.use('/feed',feedRouter);
 app.use('/searchfeed',searchfeedRouter);
 app.use('/tag',tagRouter);
 app.use('/hscode',hscodeRouter);
-<<<<<<< HEAD
 app.use('/subscribe',subscribeRouter);
 app.use('/unsubscribe',unSubscribeRouter);
-=======
-app.use('/bookmarksave',bookmarksaveRouter);
->>>>>>> 54b17b6c06f436be320dd0c91324fc973ed4b914
 //Server listing
 app.listen(3000,(status)=>{
     console.log('Server up on the port 3000');
