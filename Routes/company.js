@@ -34,6 +34,7 @@ router.post('/',authenticate,async (request,response)=>{
                     $push: { Company_id: result._id }               //push company data to the user company coloumn 
                 }).then((user) => {
                     response.status(200).send(result);
+                    newCompany.calculateScore(body);
                     userModel.find({HsCode:body.hsCode}).then((foundUser)=>{
                         foundUser.forEach(function(items){
                             console.log('Found user is --->',items.UserName);

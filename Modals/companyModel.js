@@ -47,10 +47,13 @@ var companySchema = new mongoose.Schema({
     workingHours:{
         type:Number
     },
-    keywords:{
-        type:String
-    },
+    keywords:[{
+      type:Number  
+    }],
     hsCode:{
+        type:Number
+    },
+    profilescore:{
         type:Number
     }
 });
@@ -78,6 +81,14 @@ companySchema.statics.followUnfollow = function(decision,userId){
         console.log('Exception caught',e);
     });
 }
+
+companySchema.methods.calculateScore=function(body){
+var company=this;
+
+console.log(body.keywords.length);
+
+};
+
 
 var companyModel = mongoose.model('company',companySchema);
 
