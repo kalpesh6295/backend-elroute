@@ -29,7 +29,7 @@ router.post('/',authenticate,async (request,response)=>{
         });
         newCompany.save().then((result) => {
             return userModel.findOneAndUpdate(
-                { _id: request.user._id },                         //if User is present in the database add that company 
+                { _id: request.user._id },                          //if User is present in the database add that company 
                 {
                     $push: { Company_id: result._id }               //push company data to the user company coloumn 
                 }).then((user) => {
