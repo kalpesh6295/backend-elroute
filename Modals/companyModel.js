@@ -49,6 +49,9 @@ var companySchema = new mongoose.Schema({
     },
     keywords:{
         type:String
+    },
+    hsCode:{
+        type:Number
     }
 });
 

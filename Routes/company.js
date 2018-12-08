@@ -9,7 +9,7 @@ const _ = require('lodash');
 //Router to add a new company into the database
 router.post('/',authenticate,async (request,response)=>{
     try{
-        const body = await _.pick(request.body, ['category', 'companyName', 'location', 'website', 'comapanyType', 'shortIntro', 'yearEst', 'address', 'certification', 'employeeSize', 'about', 'workingHours', 'keywords']); //picking the values for the company by user in satgeOne
+        const body = await _.pick(request.body, ['category', 'companyName', 'location', 'website', 'comapanyType', 'shortIntro', 'yearEst', 'address', 'certification', 'employeeSize', 'about', 'workingHours', 'keywords','hsCode']); //picking the values for the company by user in satgeOne
         var newCompany = await new companyModel({
             category: body.category,
             companyName: body.companyName,
@@ -25,6 +25,7 @@ router.post('/',authenticate,async (request,response)=>{
             workingHours: body.workingHours,
             keywords: body.keywords,
             admin: request.user._id,
+            hsCode:body.hsCode
         });
         newCompany.save().then((result) => {
             return userModel.findOneAndUpdate(
@@ -33,10 +34,16 @@ router.post('/',authenticate,async (request,response)=>{
                     $push: { Company_id: result._id }               //push company data to the user company coloumn 
                 }).then((user) => {
                     response.status(200).send(result);
+                    userModel.find({HsCode:body.hsCode}).then((foundUser)=>{
+                        foundUser.forEach(function(items){
+                            console.log('Found user is --->',items.UserName);
+                        })
+                    })
                 });
             });
     }catch(e){
-        response.status(400).send("Please enter a valid Details");
+        console.log(e);
+        response.status(400).send("Please enter valid Details");
     }
 });
 

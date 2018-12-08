@@ -118,7 +118,6 @@ userSchema.methods.removeToken = function(token) {
 
 userSchema.methods.subscribe = function(code) {
     var user = this;
-    console.log('inside subscribe function ---- code is',code)
     if (user.HsCode.indexOf(code) > -1) {
         return Promise.reject('Already subsribed to this HSCode');
     } else {
@@ -130,7 +129,6 @@ userSchema.methods.subscribe = function(code) {
 
 userSchema.methods.unSubscribe = function(code) {
     var user = this;
-    console.log('inside subscribe function ---- code is',code)
     if (user.HsCode.indexOf(code) > -1) {
         return user.update({
             $pull:{HsCode:code}

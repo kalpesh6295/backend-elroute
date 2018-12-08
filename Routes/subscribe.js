@@ -3,8 +3,6 @@ const router = express.Router();
 const {authenticate} = require('./../middleware/authenticate.js');
 const {userModel} = require('./../Modals/userModel.js');
 
-console.log('inside subs route');
-
 router.post('/:code',authenticate,async(request,response)=>{
     try{
         var user = request.user;
