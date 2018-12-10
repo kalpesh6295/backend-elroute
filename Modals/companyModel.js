@@ -50,9 +50,9 @@ var companySchema = new mongoose.Schema({
     keywords:[{
       type:String  
     }],
-    hsCode:{
+    hsCode:[{
         type:Number
-    },
+    }],
     profileScore:{
         type:Number
     },
