@@ -9,13 +9,13 @@ const _ = require('lodash');
 //Router to add a new company into the database
 router.post('/',authenticate,async (request,response)=>{
     try{
-        const body = await _.pick(request.body, ['category', 'companyName', 'location', 'website', 'comapanyType', 'shortIntro', 'yearEst', 'address', 'certification', 'employeeSize', 'about', 'workingHours', 'keywords','hsCode']); //picking the values for the company by user in satgeOne
+        const body = await _.pick(request.body, ['category', 'companyName', 'location', 'website', 'companyType', 'shortIntro', 'yearEst', 'address', 'certification', 'employeeSize', 'about', 'workingHours', 'keywords','hsCode']); //picking the values for the company by user in satgeOne
         var newCompany = await new companyModel({
             category: body.category,
             companyName: body.companyName,
             location: body.location,
             website: body.website,
-            comapanyType: body.comapanyType,
+            companyType: body.companyType,
             shortIntro: body.shortIntro,
             yearEst: body.yearEst,
             address: body.address,
@@ -27,21 +27,32 @@ router.post('/',authenticate,async (request,response)=>{
             admin: request.user._id,
             hsCode:body.hsCode
         });
-        newCompany.save().then((result) => {
-            return userModel.findOneAndUpdate(
-                { _id: request.user._id },                          //if User is present in the database add that company 
+        var result = await newCompany.save();
+        var user = await userModel.findOneAndUpdate(
+            { _id: request.user._id },                          //if User is present in the database add that company 
                 {
                     $push: { Company_id: result._id }               //push company data to the user company coloumn 
-                }).then((user) => {
-                    response.status(200).send(result);
-                    newCompany.calculateScore(body);
-                    userModel.find({HsCode:body.hsCode}).then((foundUser)=>{
-                        foundUser.forEach(function(items){
-                            console.log('Found user is --->',items.UserName);
-                        })
-                    })
-                });
-            });
+                }
+        )
+        response.status(200).send(result);
+        var profileScore = await newCompany.calculateScore(newCompany);
+        await companyModel.findByIdAndUpdate(result._id,{
+                            $set:{
+                                matchScore:profileScore
+                            }
+        });
+        if(body.hsCode!=null){
+            var users = [];
+            for(var i=0; i<body.hsCode.length; i++)
+            {
+                var foundUser = await userModel.find({HsCode:body.hsCode[i]});
+
+                foundUser.forEach(function(items){
+                    console.log('Found Users Are',items.UserName);
+                    users.push(foundUser);
+                })
+            }
+        }
     }catch(e){
         console.log(e);
         response.status(400).send("Please enter valid Details");
@@ -81,6 +92,8 @@ router.patch('/update/:id',authenticate,async (request,response)=>{
   try{
         var body = await _.pick(request.body, ['category', 'companyName', 'location', 'website', 'companyType', 'shortIntro', 'yearEst', 'address', 'certification', 'employeSize', 'about', 'workingHours', 'keywords']); //Getting parameter 
         var id = request.params.id;
+        // console.log('Reuqest Body is ----->',request.body);
+        // console.log('picked body is',body);
         var updatedCompany = await companyModel.findByIdAndUpdate(id, {
             $set: {
                 category: body.category,
@@ -95,10 +108,19 @@ router.patch('/update/:id',authenticate,async (request,response)=>{
                 employeeSize: body.employeeSize,
                 about: body.about,
                 workingHours: body.workingHours,
-                keywords: body.keywords                                  //updating value into the database into the company
+                keywords: body.keywords                                //updating value into the database into the company
             }
+            // new:true
         })
+        // console.log(updatedCompany);
         response.status(200).send(updatedCompany);
+        var profileScore = await updatedCompany.calculateScore(request.body);
+        console.log('profile score is',profileScore);
+        await companyModel.findByIdAndUpdate(id,{
+            $set:{
+                matchScore:profileScore
+            }
+        });
     }catch(e){
       response.status(400).send("Error while updating");
   }

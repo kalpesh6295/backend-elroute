@@ -48,13 +48,20 @@ var companySchema = new mongoose.Schema({
         type:Number
     },
     keywords:[{
-      type:Number  
+      type:String  
     }],
-    hsCode:{
+    hsCode:[{
+        type:Number
+    }],
+    profileScore:{
         type:Number
     },
-    profilescore:{
+    matchScore:{
         type:Number
+    },
+    dateRegistered:{
+        type:Date,
+        default:Date.now()
     }
 });
 
@@ -82,11 +89,47 @@ companySchema.statics.followUnfollow = function(decision,userId){
     });
 }
 
-companySchema.methods.calculateScore=function(body){
-var company=this;
-
-console.log(body.keywords.length);
-
+companySchema.methods.calculateScore=function(company){
+    // var company=this;
+    // console.log(company);
+    // console.log(company.keywords.length);
+    var matchScore = 0;
+    if(company.category != null){
+        matchScore+=10;
+    }
+    if(company.companyName != null){
+        matchScore+=10;
+    }
+    if(company.location != null){
+        matchScore+=10;
+    }
+    if(company.website != null){
+        matchScore+=10;
+    }
+    if(company.companyType != null){
+        matchScore+=10;
+    }
+    if(company.shortIntro != null){
+        matchScore+=10;
+    }
+    if(company.certification != null){
+        matchScore+=10;
+    }
+    if(company.about != null){
+        matchScore+=10;
+    }
+    if(company.keywords != null){
+        // console.log(company.keywords.length);
+        if(company.keywords.length<=10){
+            console.log('Numebr of keywords entered',company.keywords.length);
+            matchScore+=company.keywords.length;
+        }
+    }
+    if(company.hsCode != null){
+        matchScore+=10;
+    }
+    console.log('matchScore is ',matchScore);
+    return Promise.resolve(matchScore);
 };
 
 
