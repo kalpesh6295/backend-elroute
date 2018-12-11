@@ -41,17 +41,9 @@ router.post('/',authenticate,async (request,response)=>{
                                 matchScore:profileScore
                             }
         });
-        if(body.hsCode!=null){
-            var users = [];
-            for(var i=0; i<body.hsCode.length; i++)
-            {
-                var foundUser = await userModel.find({HsCode:body.hsCode[i]});
-
-                foundUser.forEach(function(items){
-                    console.log('Found Users Are',items.UserName);
-                    users.push(foundUser);
-                })
-            }
+        var similiarHsCodeFollowers = await newCompany.getSimiliarSubscribedUsers(body);
+        for(var i = 0;i<similiarHsCodeFollowers.length;i++){
+            console.log(similiarHsCodeFollowers[i]['userName'],":",similiarHsCodeFollowers[i]['hsCode']);
         }
     }catch(e){
         console.log(e);

@@ -70,7 +70,7 @@ companySchema.statics.followUnfollow = function(decision,userId){
         if(!company){
             return Promise.reject();
         }
-        console.log('Companies are',company);
+        // console.log('Companies are',company);
         if(decision==="follow"){
             return userModel.findByIdAndUpdate(userId,{
                 $push:{
@@ -121,17 +121,39 @@ companySchema.methods.calculateScore=function(company){
     if(company.keywords != null){
         // console.log(company.keywords.length);
         if(company.keywords.length<=10){
-            console.log('Numebr of keywords entered',company.keywords.length);
+            // console.log('Numebr of keywords entered',company.keywords.length);
             matchScore+=company.keywords.length;
         }
     }
     if(company.hsCode != null){
         matchScore+=10;
     }
-    console.log('matchScore is ',matchScore);
+    // console.log('matchScore is ',matchScore);
     return Promise.resolve(matchScore);
 };
 
+companySchema.methods.getSimiliarSubscribedUsers = async function(body){
+    if(body.hsCode!=null){
+
+        var users = [];
+        console.log('Company Entered HsCodes are :',body.hsCode);
+        for(var i=0; i<body.hsCode.length; i++)
+        {
+            var foundUser = await userModel.find({HsCode:body.hsCode[i]});
+
+            foundUser.forEach(function(item){
+                users.push(
+                    {
+                        userName:item.UserName,
+                        id:item._id,
+                        hsCode:body.hsCode[i]
+                    }
+                );
+            });
+        }
+    }
+    return Promise.resolve(users);
+};
 
 var companyModel = mongoose.model('company',companySchema);
 
