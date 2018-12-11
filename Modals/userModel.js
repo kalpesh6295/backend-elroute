@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const host = 'localhost:3000';
-const _ = require('lodash');
-var request = require("request");
 const env = require('./../config/env.js');
+const Mailchimp=require('mailchimp-api-v3');
+var mailchimp = new Mailchimp(env.MAILCHIMP_SECRET_KEY);
 //User model to add the new user into the schema
 var userSchema = new mongoose.Schema({
     UserName:{ 
@@ -180,34 +179,14 @@ userSchema.statics.findByToken = function(token){
 
 
 const Verification = (email, etoken, fname) => {
-    var options = {
-        method: 'POST',
-        url: `https://us19.api.mailchimp.com/3.0/lists/${fname}/members`,
-        headers:
-        {
-            'postman-token': env.MAILCHIMP_POSTMAN_TOKEN,
-            'cache-control': 'no-cache',
-            authorization: env.MAILCHIMP_SECRET_KEY,
-            'content-type': 'application/json'
-        },
-        body:
-        {
-            email_address: email,
-            status: 'subscribed',
-            merge_fields: { TOKEN: etoken }
-        },
-        json: true
-    };
-    
-    return new Promise((resolve,reject)=>{
-    request(options, function (error, response, body) {
-            if (error) {
-                response.status(400).send("please enter a valid Email address");
-                throw new Error(error);
-            }
-           return resolve(body.status);
-        })
-    
+    mailchimp.post(`/lists/${fname}/members`, {
+        email_address: email,
+        status: 'subscribed',
+        merge_fields: { TOKEN: etoken }
+            }).then(function (results) {
+                return results.status;
+                }).catch (function (err) {
+                    console.log(err);
     })
 };
 
