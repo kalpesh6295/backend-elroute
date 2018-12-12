@@ -32,7 +32,7 @@ router.post('/signup',async (request,response)=>{
             //token received from function called into the userModel
             response.setHeader('x-auth', token_recieved);
             var userEmailToVerify = user.Email;
-            var fname = "91bf8c28fd";
+            var fname = "7dea7efc72";
             return Verification(userEmailToVerify, Etoken, fname);
         }).then((responseCode) => {
             if (responseCode === "subscribed") {
