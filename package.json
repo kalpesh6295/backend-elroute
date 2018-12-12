@@ -47,6 +47,7 @@
     "sib-api-v3-sdk": "^7.0.4",
     "simple-spellchecker": "^0.9.6",
     "spelling": "^2.0.1",
+    "string-similarity": "^3.0.0",
     "supertest": "^3.3.0",
     "yargs": "^12.0.5"
   }
