@@ -27,7 +27,7 @@ var postSchema=new mongoose.Schema({
     Comment:{
         type:Array,
     },
-    Veiws:{
+    Views:{
         type:Number,
         default:0
     },
@@ -40,6 +40,10 @@ var postSchema=new mongoose.Schema({
     },
     tagId:{
         type:String
+    },
+    Bookmarks:{
+        type:Number,
+        default:0
     }
 });
 
