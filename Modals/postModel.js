@@ -40,6 +40,14 @@ var postSchema=new mongoose.Schema({
     },
     tagId:{
         type:String
+    },
+    Bookmarks:{
+        type:Number,
+        default:0
+    },
+    matchScore:{
+        type:Number,
+        default:0
     }
 });
 

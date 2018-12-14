@@ -13,30 +13,13 @@ var client = new Mockaroo.Client({
 });
 
 //dummy data for companies --> Schema:companies on www.mocakroo.com
-client.generate({
-    count: 237,
-    schema: 'companies'
-}).then((records)=>{
-    // console.log(records);
-    for(var i=0;i<records.length;i++){
-        var company = new companyModel(records[i]);
-        // console.log(company);
-        company.save().then((result)=>{
-            console.log('Result after saving is',result);
-        })
-    }
-}).catch((e)=>{
-    console.log('Error is',e);
-});
-
-//dummy data for posts --> Schema:Post on www.mocakroo.com
 // client.generate({
-//     count: 500,
-//     schema: 'Post'
+//     count: 237,
+//     schema: 'companies'
 // }).then((records)=>{
 //     // console.log(records);
 //     for(var i=0;i<records.length;i++){
-//         var company = new postModel(records[i]);
+//         var company = new companyModel(records[i]);
 //         // console.log(company);
 //         company.save().then((result)=>{
 //             console.log('Result after saving is',result);
@@ -45,6 +28,23 @@ client.generate({
 // }).catch((e)=>{
 //     console.log('Error is',e);
 // });
+
+//dummy data for posts --> Schema:Post on www.mocakroo.com
+client.generate({
+    count: 500,
+    schema: 'Post'
+}).then((records)=>{
+    // console.log(records);
+    for(var i=0;i<records.length;i++){
+        var company = new postModel(records[i]);
+        // console.log(company);
+        company.save().then((result)=>{
+            console.log('Result after saving is',result);
+        })
+    }
+}).catch((e)=>{
+    console.log('Error is',e);
+});
 
 // var user = new userModel({
 //     UserName:'abhiraj  ',

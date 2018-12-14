@@ -12,6 +12,9 @@ router.get('/:word',(request,response)=>{
     var newWord = '';
     var suggested;
     var spaceCheck;
+    var manualScore = 0;
+    // var outputArray = [];
+    // var eliminator;
             dictionary(ondictionary)            
             async function ondictionary(err, dict) {
                 
@@ -35,8 +38,19 @@ router.get('/:word',(request,response)=>{
                     }
                 }
             var results = await postModel.find({ $text: { $search: `"\"${newWord}\""` } });
-            if(results.length>0)
-            tempresult.push(results);                    
+            if(results.length>0){
+                for(var i=0;i<results.length;i++){
+                    for(var j=0;j<splittedInput.length;j++){
+                        if(results[i].Content.toLowerCase().indexOf(splittedInput[j].toLowerCase())>-1){
+                            results[i].matchScore++;
+                        }
+                    }
+                    // console.log('query match score is',results[i].matchScore);
+                    results[i].matchScore = ( results[i].matchScore / splittedInput.length ) * 80 ;
+                    console.log(results[i].matchScore);
+                }
+                tempresult.push(results);               
+            }
             response.status(200).send(tempresult);
             }
         }) 
