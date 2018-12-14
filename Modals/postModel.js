@@ -44,6 +44,10 @@ var postSchema=new mongoose.Schema({
     Bookmarks:{
         type:Number,
         default:0
+    },
+    matchScore:{
+        type:Number,
+        default:0
     }
 });
 

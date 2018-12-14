@@ -34,9 +34,43 @@ router.get('/:word',(request,response)=>{
                         spaceCheck--;
                     }
                 }
-            var results = await postModel.find({ $text: { $search: `"\"${newWord}\""` } });
+                var results = await postModel.find({ $text: { $search: `"\"${newWord}\""` } },{score:{"$meta":"textScore"}});
             if(results.length>0)
-            tempresult.push(results);                    
+            tempresult.push(results); 
+            
+            //    if(totalCount>=splittedInput.length)
+            //    {
+            //        score+=100;
+            //    }else
+            //     {
+            //        score+=50;
+            //     }
+            //     if(tempresult[0][i].Bookmarks>30){
+            //     score+=100;
+            //     }else{
+            //         score+=75;
+            //     }if(tempresult[0][i].Views>60)
+            //     {
+            //         score+=100;
+            //     }else{ 
+            //         score+=75;
+            //     }
+            //     console.log(Math.floor(score/3));
+            //     tempresult[0][i].matchScore = Math.floor(score / 3);
+            // }
+            
+            // for(var i=0;i<tempresult[0].length-1;i++)
+            // {
+            //     for(var j=0;j<tempresult[0].length-i-1;j++)
+            //     {
+            //         if(tempresult[0][j].matchScore<tempresult[0][j+1].matchScore)
+            //             var temp1=tempresult[0][j];
+            //             tempresult[0][j]=tempresult[0][j+1];
+            //             tempresult[0][j+1]=temp1;
+            //     }
+            // }
+            
+
             response.status(200).send(tempresult);
             }
         }) 

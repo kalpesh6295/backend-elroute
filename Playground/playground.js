@@ -15,11 +15,11 @@ var client = new Mockaroo.Client({
 //dummy data for companies --> Schema:companies on www.mocakroo.com
 client.generate({
     count: 237,
-    schema: 'companies'
+    schema: 'Post'
 }).then((records)=>{
     // console.log(records);
     for(var i=0;i<records.length;i++){
-        var company = new companyModel(records[i]);
+        var company = new postModel(records[i]);
         // console.log(company);
         company.save().then((result)=>{
             console.log('Result after saving is',result);
