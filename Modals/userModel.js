@@ -56,7 +56,8 @@ var userSchema = new mongoose.Schema({
         // post:[{type:mongoose.Schema.Types.ObjectId}],
         post:[],
         product:[{type:mongoose.Schema.Types.ObjectId}],
-        company:[{type:mongoose.Schema.Types.ObjectId}]
+        company:[{type:mongoose.Schema.Types.ObjectId}],
+        service:[{type:mongoose.Schema.Types.ObjectId}]
     },
     Followers:[{
         userObjectId:{

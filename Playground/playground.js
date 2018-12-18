@@ -3,6 +3,8 @@ const {userModel} = require('../Modals/userModel.js');
 const {ObjectID} = require('mongodb');
 const Mockaroo = require('mockaroo');
 const {companyModel} = require('../Modals/companyModel.js');
+const {productModel}=require('./../Modals/productModel.js');
+const {serviceModel}=require('./../Modals/serviceModel.js');
 const {postModel}=require('./../Modals/postModel.js');
 const env = require('../config/env.js');
 
@@ -14,12 +16,12 @@ var client = new Mockaroo.Client({
 
 //dummy data for companies --> Schema:companies on www.mocakroo.com
 client.generate({
-    count: 237,
-    schema: 'Post'
+    count: 500,
+    schema: 'product'
 }).then((records)=>{
     // console.log(records);
     for(var i=0;i<records.length;i++){
-        var company = new postModel(records[i]);
+        var company = new serviceModel(records[i]);
         // console.log(company);
         company.save().then((result)=>{
             console.log('Result after saving is',result);

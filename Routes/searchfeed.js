@@ -66,9 +66,7 @@ router.get('/:word',(request,response)=>{
             //         if(tempresult[0][j].matchScore<tempresult[0][j+1].matchScore)
             //             var temp1=tempresult[0][j];
             //             tempresult[0][j]=tempresult[0][j+1];
-            //             tempresult[0][j+1]=temp1;
-            //     }
-            // }
+
             
 
             response.status(200).send(tempresult);
