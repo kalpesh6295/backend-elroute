@@ -45,10 +45,19 @@ var postSchema=new mongoose.Schema({
         type:Number,
         default:0
     },
-    matchScore:{
+    searchMatchScore:{
+        type:Number,
+        default:0
+    },
+    bookmarkScore:{
+        type:Number,
+        default:0
+    },
+    viewScore:{
         type:Number,
         default:0
     }
+
 });
 
 
