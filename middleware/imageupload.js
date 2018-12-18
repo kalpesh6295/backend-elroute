@@ -10,8 +10,10 @@ app.use(multipartyMiddleware);
 
 //Code for the image upload for every new post
 var imageupload=(request,response,next)=>{
-    var s=request.baseUrl;                                          //Base of the link from where the request of image insert is coming
+  
+    var s=request.baseUrl;
     var sub= s.substr(1);
+    console.log(sub);                                          //Base of the link from where the request of image insert is coming
     const BUCKET_NAME='tradifier'+sub+'image1';                      //Creating bucket name
     const s3fsImpl = new S3FS(BUCKET_NAME, {
         accessKeyId: env.AWS_ACCESS_KEY_ID,                           //AWS Access key  

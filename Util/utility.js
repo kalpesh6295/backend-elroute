@@ -2,6 +2,7 @@ const {userModel} = require('../Modals/userModel.js');
 const {postModel} = require('../Modals/postModel.js');
 const {productModel} = require('../Modals/productModel.js');
 const {companyModel} = require('../Modals/companyModel.js');
+const {serviceModel} = require('./../Modals/serviceModel.js');
 const otpGenerator = require('otp-generator');
 const Nexmo=require("nexmo");
 const Mockaroo = require('mockaroo');
@@ -22,6 +23,10 @@ var bookmarkMe = (url,objId,userId)=>{
     }else if(bookmark ==="product"){
         model = productModel;
         pushInto = 'bookmarks.'+bookmark;
+    }
+    else if (bookmark === "service") {
+        model = serviceModel;
+        pushInto = 'bookmarks.' + bookmark;
     }else{
         model = companyModel;
         pushInto = 'bookmarks.'+bookmark;

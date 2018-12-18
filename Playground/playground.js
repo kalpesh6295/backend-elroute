@@ -3,6 +3,8 @@ const {userModel} = require('../Modals/userModel.js');
 const {ObjectID} = require('mongodb');
 const Mockaroo = require('mockaroo');
 const {companyModel} = require('../Modals/companyModel.js');
+const {productModel}=require('./../Modals/productModel.js');
+const {serviceModel}=require('./../Modals/serviceModel.js');
 const {postModel}=require('./../Modals/postModel.js');
 const env = require('../config/env.js');
 
@@ -13,6 +15,26 @@ var client = new Mockaroo.Client({
 });
 
 //dummy data for companies --> Schema:companies on www.mocakroo.com
+<<<<<<< HEAD
+=======
+client.generate({
+    count: 500,
+    schema: 'product'
+}).then((records)=>{
+    // console.log(records);
+    for(var i=0;i<records.length;i++){
+        var company = new serviceModel(records[i]);
+        // console.log(company);
+        company.save().then((result)=>{
+            console.log('Result after saving is',result);
+        })
+    }
+}).catch((e)=>{
+    console.log('Error is',e);
+});
+
+//dummy data for posts --> Schema:Post on www.mocakroo.com
+>>>>>>> 5190a68a5b3cbcf1a176cc1aae7d6ad8d7b462a4
 // client.generate({
 //     count: 237,
 //     schema: 'companies'

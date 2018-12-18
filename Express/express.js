@@ -10,7 +10,7 @@ var companyRouter = require('./../Routes/company.js');
 var imageuploadRouter=require('./../Routes/imageupload.js');
 var emailverifyrouter=require('./../Routes/emailverify.js');
 var userpageRouter=require('./../Routes/user.js')
-var serviceRouter = require('./../Routes/service.js');
+var serviceTypeRouter = require('./../Routes/serviceType.js');
 var searchRouter = require('./../Routes/search.js');
 var feedRouter=require('./../Routes/feed.js');
 var searchfeedRouter=require('./../Routes/searchfeed.js');
@@ -18,6 +18,7 @@ var tagRouter=require('./../Routes/tag.js');
 var hscodeRouter=require('./../Routes/hscode.js');
 var subscribeRouter = require('./../Routes/subscribe.js');
 var unSubscribeRouter = require('./../Routes/unsubscribe.js');
+var serviceRouter=require('./../Routes/service.js');
 var app = express();
 
 //multiparty is used for aws connectivity
@@ -49,7 +50,7 @@ app.use('/bookmark',bookmarkRouter);        //bookmark route for an user to book
 app.use('/company',companyRouter);          //new comapany route    
 app.use('/userimageupload',imageuploadRouter);//new route to add user its image
 app.use('/verify',emailverifyrouter);          //email verification route
-app.use('/service',serviceRouter);
+app.use('/serviceType',serviceTypeRouter);
 app.use('/search',searchRouter);
 app.use('/feed',feedRouter);
 app.use('/searchfeed',searchfeedRouter);
@@ -57,6 +58,7 @@ app.use('/tag',tagRouter);
 app.use('/hscode',hscodeRouter);
 app.use('/subscribe',subscribeRouter);
 app.use('/unsubscribe',unSubscribeRouter);
+app.use('/service',serviceRouter);
 //Server listing
 app.listen(3000,(status)=>{
     console.log('Server up on the port 3000');

@@ -5,7 +5,7 @@ const {bookmarkMe} = require('../Util/utility.js')
 
 
 //Router used to update the user post bookmark Model every time click on the bookmark
-router.patch('/:type(post|product|company)/:id',authenticate,async (request,response)=>{
+router.patch('/:type(post|product|company|service)/:id',authenticate,async (request,response)=>{
 //if multiple routes doing same function we can use :type
 // it will match the urls seprated by | (Or) mentioned here with request url
     try{

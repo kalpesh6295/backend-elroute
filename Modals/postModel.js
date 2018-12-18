@@ -27,7 +27,7 @@ var postSchema=new mongoose.Schema({
     Comment:{
         type:Array,
     },
-    Veiws:{
+    Views:{
         type:Number,
         default:0
     },
