@@ -18,7 +18,7 @@ var postSchema=new mongoose.Schema({
     Time:{
         type:Date,
         trim:true,
-        default:Date.now()
+        default:new Date()
     },
     Content:{
         type:String,
@@ -36,7 +36,7 @@ var postSchema=new mongoose.Schema({
         default:0
     },
     admin: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId
     },
     tagId:{
         type:String
@@ -45,19 +45,10 @@ var postSchema=new mongoose.Schema({
         type:Number,
         default:0
     },
-    searchMatchScore:{
-        type:Number,
-        default:0
-    },
-    bookmarkScore:{
-        type:Number,
-        default:0
-    },
-    viewScore:{
+    matchScore:{
         type:Number,
         default:0
     }
-
 });
 
 

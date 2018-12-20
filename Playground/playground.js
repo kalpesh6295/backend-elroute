@@ -14,27 +14,44 @@ var client = new Mockaroo.Client({
     apiKey:'7acec3c0'
 });
 
-//dummy data for companies --> Schema:companies on www.mocakroo.com
-<<<<<<< HEAD
-=======
-client.generate({
-    count: 500,
-    schema: 'product'
-}).then((records)=>{
-    // console.log(records);
-    for(var i=0;i<records.length;i++){
-        var company = new serviceModel(records[i]);
-        // console.log(company);
-        company.save().then((result)=>{
-            console.log('Result after saving is',result);
-        })
-    }
-}).catch((e)=>{
-    console.log('Error is',e);
-});
+var randomDate = new Date("2017-03-01T08:00:00Z");
+
+var diff = new Date() - randomDate;
+console.log(diff/(1000*60*60*24));
+
+// var difference = function(Date){
+//     $subtract:[new Date(),"$Date"].then((result)=>{
+//         console.log(result);
+//     });   
+// }
+// difference(randomDate);
+
+//calculating difference between dates in days
+// postModel.aggregate([{$project:{dateDifference:{$subtract:[new Date(),"$Time"]}}}]).then((results)=>{
+//     // console.log(NumberLong(results[0].dateDifference).toNumber());
+//     console.log(results[0].dateDifference/(1000*60*60*24))
+// })
+
+//dummy data for products --> Schema:companies on www.mocakroo.com
+// client.generate({
+//     count: 500,
+//     schema: 'product'
+// }).then((records)=>{
+//     // console.log(records);
+//     for(var i=0;i<records.length;i++){
+//         var company = new serviceModel(records[i]);
+//         // console.log(company);
+//         company.save().then((result)=>{
+//             console.log('Result after saving is',result);
+//         })
+//     }
+// }).catch((e)=>{
+//     console.log('Error is',e);
+// });
+
+
 
 //dummy data for posts --> Schema:Post on www.mocakroo.com
->>>>>>> 5190a68a5b3cbcf1a176cc1aae7d6ad8d7b462a4
 // client.generate({
 //     count: 237,
 //     schema: 'companies'
@@ -51,23 +68,27 @@ client.generate({
 //     console.log('Error is',e);
 // });
 
-//dummy data for posts --> Schema:Post on www.mocakroo.com
-client.generate({
-    count: 500,
-    schema: 'Post'
-}).then((records)=>{
-    // console.log(records);
-    for(var i=0;i<records.length;i++){
-        var company = new postModel(records[i]);
-        // console.log(company);
-        company.save().then((result)=>{
-            console.log('Result after saving is',result);
-        })
-    }
-}).catch((e)=>{
-    console.log('Error is',e);
-});
 
+
+//dummy data for posts --> Schema:Post on www.mocakroo.com
+// client.generate({
+//     count: 500,
+//     schema: 'Post'
+// }).then((records)=>{
+//     // console.log(records);
+//     for(var i=0;i<records.length;i++){
+//         var company = new postModel(records[i]);
+//         // console.log(company);
+//         company.save().then((result)=>{
+//             console.log('Result after saving is',result);
+//         })
+//     }
+// }).catch((e)=>{
+//     console.log('Error is',e);
+// });
+
+
+ 
 // var user = new userModel({
 //     UserName:'abhiraj  ',
 //     Password:'1234',

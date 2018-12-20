@@ -25,9 +25,11 @@ router.post('/',authenticate,companyid,imageupload,async (request,response)=>{
        });
        newPost.save().then((post) => {
            console.log(post._id);
-           productModel.findByIdAndUpdate({_id:post.tagId},{$set:{postId:post._id}}).then((docs)=>{
-           })
-           response.status(200).send(post);
+           if(post.tagId){
+               productModel.findByIdAndUpdate({_id:post.tagId},{$set:{postId:post._id}}).then((docs)=>{
+               })
+            }
+            response.status(200).send(post);
        });
    } catch(e)
    {

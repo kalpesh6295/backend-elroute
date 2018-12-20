@@ -5,6 +5,7 @@ var authenticate = (request,response,next) =>{
     var token = request.header('x-auth');      //Checking the header if token is present
     console.log(token);
     var decodedtoken=jwt.decode(token);
+    console.log('Decoded Token-->',decodedtoken);
     userModel.findById({_id:decodedtoken._id}).then((user)=>{
         if(!user){
             return Promise.reject();           //if token is not matched into the user database return the error
