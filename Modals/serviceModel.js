@@ -30,7 +30,7 @@ var serviceSchema = new mongoose.Schema({
     tags:[{
         type:String
     }],
-    veiws:{
+    views:{
         type :Number
     },
     price:{
@@ -38,6 +38,15 @@ var serviceSchema = new mongoose.Schema({
     },
     bookmarks:{
         type:Number
+    },
+    matchScore:{
+        type:Number,
+        default:0
+    },
+    Time: {
+        type: Date,
+        trim: true,
+        default: new Date()
     }
 });
 

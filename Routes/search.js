@@ -1,116 +1,183 @@
 const express = require('express');
 const router = express.Router();
 const {URL} = require('url');
+const {userModel} = require('./../Modals/userModel.js');
+const {companyModel} = require('./../Modals/companyModel.js');
 const {productModel}=require('./../Modals/productModel.js');
 const {serviceModel}=require('./../Modals/serviceModel.js');
 const dictionary = require('dictionary-en-us');
 const nspell = require('nspell');
 
 
-router.get('/:value/:page',async(request,response)=>{
+router.get('/:word/:page',async(request,response)=>{
    
    try{
-       var query = request.params.value;
+       var words = (request.params.word);
        var pageNumber = request.params.page;
-       var tempResult = [];
-       console.log("i am here in all");
+       var term = words.toLowerCase();
+       var tempResult=[];
+       var tempresult = [];
+       var tempresult2=[];
+       var newWord = '';
+       var suggested;
+       var spaceCheck;
+       var score;
        dictionary(ondictionary)
        async function ondictionary(err, dict) {
-
-        //    var splittedInput = term.split(' ');
-        //    spaceCheck = splittedInput.length - 1;
-           var productResult = await productModel.find({ $text: { $search: `"\"${query}\""` } });
+           var splittedInput = term.split(' ');
+           spaceCheck = splittedInput.length - 1;
+           for (var q = 0; q < splittedInput.length; q++) {
+               var spell = await new nspell(dict);
+               suggested = await spell.suggest(splittedInput[q]);
+               console.log(suggested);
+               if (suggested.length > 0) {
+                   if (/\d/.test(splittedInput[q])) {
+                       suggested[0] = splittedInput[q];
+                   }
+                   newWord += suggested[0];
+               } else {
+                   newWord += splittedInput[q];
+               }
+               if (spaceCheck > 0) {
+                   newWord += ' ';
+                   spaceCheck--;
+               }
+           }
+           var productResult = await productModel.find({ $text: { $search: `"\"${newWord}\""` } });
            console.log(productResult.length);
-           var serviceResult = await serviceModel.find({ $text: { $search: `"\"${query}\""` } });
+           var serviceResult = await serviceModel.find({ $text: { $search: `"\"${newWord}\""` } });
            console.log(serviceResult.length);
 
-           if (productResult == 0 && serviceResult == 0) {
+           if (!productResult && !serviceResult) {
                console.log('no result found');
            }
            else {
-               if (productResult.length > serviceResult.length) {
+               if (productResult.length > 0) {
+                   for (var i = 0; i < productResult.length; i++) {
+                       score = 0;
+                       if (productResult[i].description.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
+                           score = 100 * 0.40;
+                       }
+                       else {
+                           for (var j = 0; j < splittedInput.length; j++) {
+                               if (productResult[i].description.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
+                                   score++;
+                               }
+                           }
+                           score = ((score / splittedInput.length) * 80) * 0.40;
+                       }
+
+                       if (productResult[i].bookmarks >= 50) {
+                           score += (100 * 0.17)
+                       } else {
+                           score += ((productResult[i].bookmarks * 2) * 0.17);
+                       }
+                       console.log('matchScore at bookmarkScore is', score);
+
+                       if (productResult[i].views >= 100) {
+                           score += 100 * 0.11;
+                       } else {
+                           score += (productResult[i].views * 0.11);
+                       }
+                       console.log('matchScore at viewScore is', score);
+
+                       var dateDifference = (new Date() - productResult[i].Time) / (1000 * 60 * 60 * 24);
+                       var months = dateDifference / 30;
+                       if ((productResult[i].views / months) > 100) {
+                           score += 100 * 0.06;
+                       } else {
+                           score += (productResult[i].views * 0.06);
+                       }
+                       console.log('matchScore at hits/duration is', score);
+                        console.log('user id is====>',productResult[i].Creator);
+                       var user = await userModel.findById(productResult[i].Creator);
+                       var company=await companyModel.findById(user.Company_id);
+                       if (company) {
+                           var companyScore = company.matchScore;
+                           score += (companyScore * 0.19);
+                           console.log('CompanyScore is', companyScore);
+                       }
+                       console.log('matchScore at companyProfile is', score);
+
+                       productResult[i].matchScore = score;
+                       console.log('---------------------------------------------------------------------------------------');
+                   }
+                   tempresult.push(productResult);
+               }
+
+
+
+//service result start from here ========>
+
+               if (serviceResult.length > 0) {
+                   for (var i = 0; i < serviceResult.length; i++) {
+                       score = 0;
+                       if (serviceResult[i].description.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
+                           score = 100 * 0.40;
+                       }
+                       else {
+                           for (var j = 0; j < splittedInput.length; j++) {
+                               if (serviceResult[i].description.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
+                                   score++;
+                               }
+                           }
+                           score = ((score / splittedInput.length) * 80) * 0.40;
+                       }
+
+                       if (serviceResult[i].bookmarks >= 50) {
+                           score += (100 * 0.17)
+                       } else {
+                           score += ((serviceResult[i].bookmarks * 2) * 0.17);
+                       }
+                       console.log('matchScore at bookmarkScore is', score);
+
+                       if (serviceResult[i].views >= 100) {
+                           score += 100 * 0.11;
+                       } else {
+                           score += (serviceResult[i].views * 0.11);
+                       }
+                       console.log('matchScore at viewScore is', score);
+
+                       var dateDifference = (new Date() - serviceResult[i].Time) / (1000 * 60 * 60 * 24);
+                       var months = dateDifference / 30;
+                       if ((serviceResult[i].views / months) > 100) {
+                           score += 100 * 0.06;
+                       } else {
+                           score += (serviceResult[i].views * 0.06);
+                       }
+                       console.log('matchScore at hits/duration is', score);
+                       console.log('user id is====>', serviceResult[i].Creator);
+                       var user = await userModel.findById(serviceResult[i].Creator);
+                       var company = await companyModel.findById(user.Company_id);
+                       if (company) {
+                           var companyScore = company.matchScore;
+                           score += (companyScore * 0.19);
+                           console.log('CompanyScore is', companyScore);
+                       }
+                       console.log('matchScore at companyProfile is', score);
+
+                       serviceResult[i].matchScore = score;
+                       console.log('---------------------------------------------------------------------------------------');
+                   }
+                   tempresult2.push(serviceResult);
+               }
+
+ //Sending the result to the front end   =======>
+               
                    for (var i = (pageNumber - 1) * 8; i < pageNumber * 8; i++) {
-                       tempResult.push(productResult[i]);
+                       tempResult.push(tempresult[i]);
                    }
                    for (var i = (pageNumber - 1) * 2; i < pageNumber * 2; i++) {
-                       tempResult.push(serviceResult[i]);
+                       tempResult.push(tempresult2[i]);
                    }
                    console.log(tempResult.length);
-                   response.status(200).send(tempResult);
-               }
-           }
+            }
+        
+            response.status(200).send(tempResult);
        }
    }catch(e){
     response.status(400).send(e);
    }
-
-//     if(myUrl.searchParams.get('product')){
-//         console.log('case 1 me');
-//         companyModel.find(
-//                 {
-//                     category:{$regex:/request.params.id^/},
-//                     companyType:'product'
-//                 }).then((results)=>{
-//                 response.status(200).send(results);
-//             });
-//     }
-//     else if(myUrl.searchParams.get('service')){
-//         console.log('case 2 me');
-//         companyModel.find(
-//             {
-//                 category: { $regex: /request.params.id^/ },
-//                 companyType:'service'
-//             }).then((results)=>{
-//             response.status(200).send(results);
-//         });
-//     }
-//     else{
-//         console.log('case3 Me');
-//         companyModel.find(
-//             {
-//                 category: { $regex: request.params.id },
-//             }).then((results)=>{
-//                 var productCompanyCount=0;
-//                 var serviceCompanyCount=0;
-//                 var tempResult=[];
-//                 for(var i =0 ; i<results.length ; i++){
-//                     if(results[i].companyType=='product'){
-//                         productCompanyCount++;
-//                     }
-//                     else if(results[i].companyType=='service'){
-//                         serviceCompanyCount++;
-//                     }
-//                 }
-//                 if(productCompanyCount>serviceCompanyCount){
-//                     for(var i =0 ; i<results.length ; i++){
-//                         if(results[i].companyType=='product')
-//                             tempResult.push(results[i]);
-//                     }
-//                     for(var i =0 ; i<results.length ; i++){
-//                         if(results[i].companyType=='service')
-//                             tempResult.push(results[i]);
-//                     }
-//                 }
-//                 else{
-//                     for(var i =0 ; i<results.length ; i++){
-//                         if(results[i].companyType=='service')
-//                         tempResult.push(results[i]);
-//                     }
-//                     for(var i =0 ; i<results.length ; i++){
-//                         if(results[i].companyType=='product')
-//                             tempResult.push(results[i]);
-//                     }
-//                 }
-//                 dictionary(ondictionary)
-//                 async function ondictionary(err, dict) {
-//                     var spell = await new nspell(dict);
-//                     var suggested = await spell.suggest(request.params.id);
-//                     tempResult.push(suggested);
-//                 response.status(200).send(tempResult);
-//                 }
-//         });
-//     }
-// //     // console.log(request.params.id);
 });
 
 

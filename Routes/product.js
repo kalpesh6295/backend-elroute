@@ -9,7 +9,7 @@ const { imageupload } = require('./../middleware/imageupload.js');
 //Router used to add new product into the database
 router.post('/',authenticate,imageupload,async (request,response)=>{
     try{
-        const body = await _.pick(request.body, ['name', 'company', 'industry', 'description']);        //pick up the data for the new product
+        const body = await _.pick(request.body, ['name', 'company', 'industry', 'description','views']);        //pick up the data for the new product
         var product =await new productModel({
             Image: request.imageurl,
             name: body.name,
@@ -17,6 +17,7 @@ router.post('/',authenticate,imageupload,async (request,response)=>{
             industry: body.industry,
             description: body.description,
             Creator: request.user._id,
+            views: body.views
         });
         var result=await product.save();
             response.status(200).send(result);

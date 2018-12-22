@@ -29,6 +29,21 @@ var productSchema = new mongoose.Schema({
     },
     postId:{
         type:String
+    },
+    matchScore:{
+        type:Number,
+        default:0
+    },
+    views:{
+        type:Number
+    },
+    Time: {
+        type: Date,
+        trim: true,
+        default: new Date()
+    },
+    bookmarks:{
+        type:Number
     }
 });
 
