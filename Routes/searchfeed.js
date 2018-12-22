@@ -6,7 +6,7 @@ const dictionary = require('dictionary-en-us');
 const nspell = require('nspell');
 
 
-router.get('/:word',(request,response)=>{
+router.get('/:word/:page',(request,response)=>{
 
     var postDaysOld = [];
 
@@ -18,6 +18,7 @@ router.get('/:word',(request,response)=>{
     var suggested;
     var spaceCheck;
     var score;
+    var pageNumber = request.params.page;
     // var outputArray = [];
     // var eliminator;
     dictionary(ondictionary)            
@@ -93,8 +94,27 @@ router.get('/:word',(request,response)=>{
                         console.log('---------------------------------------------------------------------------------------');
                     }
                     tempresult.push(results);               
+
+                    var byMatchScore = tempresult.slice(0);
+                    byMatchScore[0].sort(function(a,b){
+                        return b.matchScore - a.matchScore ;
+                    }); 
+                    // console.log(byMatchScore);
+
                 }
-            response.status(200).send(tempresult);
+
+                // console.log
+                console.log(byMatchScore[0][2]);
+
+                var tempResult = [];
+                for(var i = (pageNumber - 1)*10; i < pageNumber * 10 ; i++){
+                    tempResult.push(byMatchScore[0][i]);
+                    console.log(tempResult[i]);
+                }
+                console.log(tempResult.length);
+
+            // response.status(200).send(tempResult);
+            response.status(200).send(byMatchScore);
             }
         }) 
   
