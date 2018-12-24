@@ -13,7 +13,7 @@ var Getpost=async (id)=>{
     return posts;
 }
 
-router.get('/:id',async (request,response)=>{
+router.get('/:id',authenticate,async (request,response)=>{
     await userModel.findById({_id:request.params.id}).then((docs)=>{
         var k=0;
         var companyId=docs.Following.company;

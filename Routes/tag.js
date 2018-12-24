@@ -9,7 +9,7 @@ router.get('/',authenticate,(request,response)=>{
     productModel.find({Creator:userId}).then((docs)=>{
         response.status(200).send(docs);
     }).catch(e=>{
-        response.status(200).send("please login first");
+        response.status(400).send("please login first");
     })
 })
 
