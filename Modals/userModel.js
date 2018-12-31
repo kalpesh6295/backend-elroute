@@ -6,7 +6,8 @@ const Mailchimp=require('mailchimp-api-v3');
 var mailchimp = new Mailchimp(env.MAILCHIMP_SECRET_KEY);
 //User model to add the new user into the schema
 var userSchema = new mongoose.Schema({
-    UserName:{ 
+    UserName:{
+        //It is name of user registering --> NAME in signup Form
         type:String,
        // required:true,
         unique:true,
@@ -26,31 +27,37 @@ var userSchema = new mongoose.Schema({
     {   type: Boolean, 
         default: false
     },
-    Mobile:{
-        type:Number,
-        unique:true
-    },
-    Address:{
-        type:String,
-        trim:true
-    },
-    DateOfBirth:{
-        type:Date,
-        trim:true,
-        default:Date.now()
-    },
-    Image:{
+    Location:{
         type:String
     },
+    Title:{
+        type:String
+    }
+    // Mobile:{
+    //     type:Number
+    //     // unique:true
+    // },
+    // Address:{
+    //     type:String,
+    //     trim:true
+    // },
+    // DateOfBirth:{
+    //     type:Date,
+    //     trim:true,
+    //     default:Date.now()
+    // },
+    // Image:{
+    //     type:String
+    // },
     Emailtoken:{
         type:String
     },
     Following:{
         company:[{type:mongoose.Schema.Types.ObjectId}]
     },
-    Otp:{
-        type:Number
-    },
+    // Otp:{
+    //     type:Number
+    // },
     Company_id:{type:mongoose.Schema.Types.ObjectId,auto:true},
     bookmarks:{
         // post:[{type:mongoose.Schema.Types.ObjectId}],
@@ -64,17 +71,17 @@ var userSchema = new mongoose.Schema({
         type:String
     }
 }],
-    Service:{
-        type:String,
-      //  required:true,
-        validate:{
-            validator: (service) => ['inspection','logistics','contentMarketing','bCommunication'].indexOf(service)>-1,
-            message:'Check Service mentioned.'
-        }
-    },
-    HsCode:[{
-        type:String
-    }]
+    // Service:{
+    //     type:String,
+    //   //  required:true,
+    //     validate:{
+    //         validator: (service) => ['inspection','logistics','contentMarketing','bCommunication'].indexOf(service)>-1,
+    //         message:'Check Service mentioned.'
+    //     }
+    // },
+    // HsCode:[{
+    //     type:String
+    // }]
 });
 
 

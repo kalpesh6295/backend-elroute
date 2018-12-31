@@ -35,10 +35,10 @@ router.post('/',authenticate,async (request,response)=>{
                 }
         )
         response.status(200).send(result);
-        var profileScore = await newCompany.calculateScore(newCompany);
+        var companyProfileScore = await newCompany.calculateScore(newCompany);
         await companyModel.findByIdAndUpdate(result._id,{
                             $set:{
-                                matchScore:profileScore
+                                profileScore:companyProfileScore
                             }
         });
         var similiarHsCodeFollowers = await newCompany.getSimiliarSubscribedUsers(body);

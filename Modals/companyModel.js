@@ -61,7 +61,13 @@ var companySchema = new mongoose.Schema({
     },
     dateRegistered:{
         type:Date,
-        default:Date.now()
+        default:new Date()
+    },
+    bookmarks:{
+        type:Number
+    },
+    views:{
+        type:Number
     }
 });
 
@@ -93,43 +99,43 @@ companySchema.methods.calculateScore=function(company){
     // var company=this;
     // console.log(company);
     // console.log(company.keywords.length);
-    var matchScore = 0;
+    var profileScore = 0;
     if(company.category != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.companyName != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.location != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.website != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.companyType != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.shortIntro != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.certification != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.about != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.keywords != null){
         // console.log(company.keywords.length);
         if(company.keywords.length<=10){
             // console.log('Numebr of keywords entered',company.keywords.length);
-            matchScore+=company.keywords.length;
+            profileScore+=company.keywords.length;
         }
     }
     if(company.hsCode != null){
-        matchScore+=10;
+        profileScore+=10;
     }
-    // console.log('matchScore is ',matchScore);
-    return Promise.resolve(matchScore);
+    // console.log('profileScore is ',profileScore);
+    return Promise.resolve(profileScore);
 };
 
 companySchema.methods.getSimiliarSubscribedUsers = async function(body){
