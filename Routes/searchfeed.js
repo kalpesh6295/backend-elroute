@@ -64,14 +64,14 @@ router.get('/:word/:page',(request,response)=>{
                         }else{
                             score += ((results[i].Bookmarks * 2)*0.15);
                         }
-                        console.log('matchScore at bookmarkScore is',score);
+                        //console.log('matchScore at bookmarkScore is',score);
 
                         if(results[i].Views>=100){
                             score += 100*0.10;
                         }else{
                             score += (results[i].Views*0.10);
                         }
-                        console.log('matchScore at viewScore is',score);
+                        //console.log('matchScore at viewScore is',score);
 
                         var dateDifference = (new Date() - results[i].Time)/(1000*60*60*24);
                         var months = dateDifference/30;
@@ -80,7 +80,7 @@ router.get('/:word/:page',(request,response)=>{
                         }else{
                             score += (results[i].Views*0.26); 
                         }
-                        console.log('matchScore at hits/duration is',score);
+                        //console.log('matchScore at hits/duration is',score);
 
                         var company = await companyModel.findById(results[i].admin);
                         if(company){
@@ -88,33 +88,25 @@ router.get('/:word/:page',(request,response)=>{
                             score += (companyScore*0.10); 
                             console.log('CompanyScore is',companyScore);
                         }
-                        console.log('matchScore at companyProfile is',score);
                         
                         results[i].matchScore = score;
                         console.log('---------------------------------------------------------------------------------------');
                     }
                     tempresult.push(results);               
-
-                    var byMatchScore = tempresult.slice(0);
-                    byMatchScore[0].sort(function(a,b){
-                        return b.matchScore - a.matchScore ;
-                    }); 
-                    // console.log(byMatchScore);
-
                 }
 
-                // console.log
-                console.log(byMatchScore[0][2]);
+            var byMatchScore = tempresult.slice(0);
+            byMatchScore[0].sort(function (a, b) {
+                return b.matchScore - a.matchScore;
+            }); 
 
                 var tempResult = [];
-                for(var i = (pageNumber - 1)*10; i < pageNumber * 10 ; i++){
+                for(var i = (pageNumber - 1)*10; i < (pageNumber) * 10 ; i++){
                     tempResult.push(byMatchScore[0][i]);
-                    console.log(tempResult[i]);
                 }
+    
                 console.log(tempResult.length);
-
-            // response.status(200).send(tempResult);
-            response.status(200).send(byMatchScore);
+            response.status(200).send(tempResult);
             }
         }) 
   

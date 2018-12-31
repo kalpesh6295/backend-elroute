@@ -161,19 +161,29 @@ router.get('/:word/:page',async(request,response)=>{
                    }
                    tempresult2.push(serviceResult);
                }
-
  //Sending the result to the front end   =======>
-               
-                   for (var i = (pageNumber - 1) * 8; i < pageNumber * 8; i++) {
-                       tempResult.push(tempresult[i]);
+               if(tempresult.length!=0){
+                   for (var i = (pageNumber - 1) * 8; i < (pageNumber) * 8; i++) {
+                       console.log(i);
+                       tempResult.push(tempresult[0][i]);
                    }
-                   for (var i = (pageNumber - 1) * 2; i < pageNumber * 2; i++) {
-                       tempResult.push(tempresult2[i]);
-                   }
+               }
+                 if(tempresult2.length!=0)
+                 {
+                     for (var i = (pageNumber - 1) * 2; i < (pageNumber) * 2; i++) {
+                         tempResult.push(tempresult2[0][i]);
+                     }
+                 }  
+                   
                    console.log(tempResult.length);
             }
-        
-            response.status(200).send(tempResult);
+           var byMatchScore = tempResult.slice(0);
+           byMatchScore.sort(function (a, b) {
+               return b.matchScore - a.matchScore;
+           });
+           console.log(byMatchScore);
+           
+            response.status(200).send(byMatchScore);
        }
    }catch(e){
     response.status(400).send(e);
