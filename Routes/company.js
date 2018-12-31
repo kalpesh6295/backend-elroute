@@ -70,7 +70,7 @@ router.get('/',authenticate, async (request,response)=>{
         if (!companies) {
             return response.status(400).send("Company not present in the database");
         }
-        response.status(200).send({ companies });
+        response.status(200).send(companies );
    }catch(e){
        response.status(400).send("Entered company is not present");
    }
