@@ -56,7 +56,7 @@ router.post('/login', async (request, response) => {
             return response.status(400).send('No Such User Found');
         }
             var token=user.generateAuthToken();
-                response.header('x-auth', token).send(`you are succesfully logged in${user}`);
+                response.header('x-auth', token).send(user);
     } catch(e){
         response.status(400).send('Error Logging in!');
     }
