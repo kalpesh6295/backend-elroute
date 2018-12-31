@@ -11,15 +11,49 @@ var companySchema = new mongoose.Schema({
         type:String,
        // required:true
     },
-    location:{
+    country:{
         type:String,
-       // required:true,
+        // required:true
+    },
+    city:{
+        type:String,
+        // required:true
+    },
+    companyEmail:{
+        type:String,
+        // required:true
     },
     website: 
-    {   type: String, 
+    { 
+        type: String, 
     },
     companyType:{
         type:String,
+    },
+    image:{
+        type:String
+    },
+    companySize:{
+        type:Number
+    },
+    yearEstd:{
+        type:Date,
+        // trim:true,
+    },
+    address:{
+        type:String
+    },
+    city:{
+        type:String
+    },
+    zipCode:{
+        type:Number
+    },
+    landLine:{
+        type:Number
+    },
+    mobile:{
+        type:Number
     },
     admin:{
         type:mongoose.Schema.Types.ObjectId,
@@ -28,18 +62,8 @@ var companySchema = new mongoose.Schema({
         type:String,
         trim:true
     },
-    yearEst:{
-        type:Date,
-        trim:true,
-    },
-    address:{
-        type:String
-    },
     certification:{
         type:String
-    },
-    employeeSize:{
-        type:Number
     },
     about:{
         type:String
@@ -68,7 +92,11 @@ var companySchema = new mongoose.Schema({
     },
     views:{
         type:Number
-    }
+    },
+    location:{
+        type:String,
+       // required:true,
+    },
 });
 
 companySchema.statics.followUnfollow = function(decision,userId){

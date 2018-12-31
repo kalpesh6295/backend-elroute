@@ -10,6 +10,7 @@ const _ = require('lodash');
 router.post('/',authenticate,async (request,response)=>{
     try{
         const body = await _.pick(request.body, ['category', 'companyName', 'country', 'city','companyEmail','website', 'companyType','image', 'companySize','yearEstd', 'address','zipCode', 'landline', 'mobile']); //picking the values for the company by user in satgeOne
+        // const body = await _.pick(request.body, ['category', 'companyName', 'country', 'city','companyEmail','website', 'companyType','image', 'companySize','yearEstd', 'address','zipCode', 'landline', 'mobile','admin']);
         var newCompany = await new companyModel({
             category: body.category,
             companyName: body.companyName,
@@ -26,6 +27,7 @@ router.post('/',authenticate,async (request,response)=>{
             zipCode:body.zipCode,
             landline:body.landline,
             mobile:body.mobile,
+            // admin: request.user._id,
 
             // shortIntro: body.shortIntro,
             // yearEst: body.yearEst,
@@ -35,7 +37,6 @@ router.post('/',authenticate,async (request,response)=>{
             // about: body.about,
             // workingHours: body.workingHours,
             // keywords: body.keywords,
-            // admin: request.user._id,
             // hsCode:body.hsCode
         });
         var result = await newCompany.save();
