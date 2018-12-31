@@ -14,15 +14,14 @@ router.post('/signup',async (request,response)=>{
    
     try{
         var Etoken = jwt.sign({}, 'abc123456').toString();
-        const user = await _.pick(request.body, ['UserName', 'Password', 'Email', 'Mobile', 'Address', 'Emailtoken', 'Service']);     //picking up the data of the new user
+        const user = await _.pick(request.body, ['UserName', 'Password', 'Email','Title','Location','Emailtoken']);     //picking up the data of the new user
         var newUser = await new userModel({
             UserName: user.UserName,
             Password: user.Password,
             Email: user.Email,
-            Mobile: user.Mobile,
-            Address: user.Address,
-            Emailtoken: Etoken,
-            Service: user.Service
+            Title: user.Title,
+            Location: user.Location,
+            Emailtoken: Etoken
         });
 
         newUser.save().then(() => {
