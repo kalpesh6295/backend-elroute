@@ -2,28 +2,62 @@ const mongoose = require('mongoose');
 
 //Product Model to add new product into the schema
 var productSchema = new mongoose.Schema({
-    Image: {
+    productName:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    productImage: {
         type: String
     },
-    name:{
+    shortDescription:{
         type:String,
-        required:true,
         trim:true
     },
-    company:{
-        type:String,
-        required:true,
-        trim:true
+    productInfo:[{
+        productSpecification:{
+            type:String
+        },
+        specificationContent:{
+            type:String
+        },
+        fields:[{
+            fieldName:{
+                type:String
+            },
+            fieldDes:{
+                type:String
+            }
+        }]
+    }],
+    price:{
+        type:String
+    },
+    // company:{
+    //     type:String,
+    //     required:true,
+    //     trim:true
+    // },
+    minPrice:{
+        type:Number
+    },
+    maxPrice:{
+        type:Number
+    },
+    moq:{
+        type:Number
     },
     industry:{
         type:String,
         trim:true
     },
-    description:{
-        type:String,
-        trim:true
+    category:{
+        type:String
     },
-    Creator:{
+    tfCode:{
+        type:String
+    },
+    creator:{
         type:mongoose.Schema.Types.ObjectId,
         //required:true
     },

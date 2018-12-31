@@ -40,15 +40,21 @@ router.get('/',authenticate,async (request,response)=>{
 //Router used to update the product data which is already added using id as an parameter
 router.patch('/update/:id', authenticate, async (request, response) => {
     try{
-        const body = _.pick(request.body, ['name', 'company', 'image', 'industry', 'description']);
+        const body = _.pick(request.body, ['productName', 'productImage', 'shortDescription', 'productInfo', 'specificationInfo','productInfo','price','minPrice','maxPrice','moq','industry','category','tfCode']);
         var id = request.params.id;
         const updatedProducts=await productModel.findByIdAndUpdate(id, {
             $set: {
-                name: body.name,
-                company: body.company,
-                image: body.image,
-                industry: body.industry,
-                description: body.description
+                productName: body.productName,
+                productImage: body.productImage,
+                shortDescription: body.shortDescription,
+                productInfo: body.productInfo,
+                price: body.price,
+                minPrice:body.minPrice,
+                maxPrice:body.maxPrice,
+                moq:body.moq,
+                industry:body.industry,
+                category:body.category,
+                tfCode:body.tfCode
             }
         }, { returnOriginal: false });
             response.status(200).send(updatedProducts);
