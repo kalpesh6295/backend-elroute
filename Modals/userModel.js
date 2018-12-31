@@ -58,7 +58,9 @@ var userSchema = new mongoose.Schema({
     // Otp:{
     //     type:Number
     // },
-    Company_id:{type:mongoose.Schema.Types.ObjectId,auto:true},
+    Company_id:{type:mongoose.Schema.Types.ObjectId
+        // ,auto:true
+    },
     bookmarks:{
         // post:[{type:mongoose.Schema.Types.ObjectId}],
         post:[],
