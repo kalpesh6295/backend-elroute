@@ -32,14 +32,14 @@ console.log(diff/(1000*60*60*24));
 //     console.log(results[0].dateDifference/(1000*60*60*24))
 // })
 
-//dummy data for products --> Schema:companies on www.mocakroo.com
+//dummy data for products --> Schema:product on www.mocakroo.com
 // client.generate({
 //     count: 500,
 //     schema: 'product'
 // }).then((records)=>{
 //     // console.log(records);
 //     for(var i=0;i<records.length;i++){
-//         var company = new serviceModel(records[i]);
+//         var company = new productModel(records[i]);
 //         // console.log(company);
 //         company.save().then((result)=>{
 //             console.log('Result after saving is',result);
