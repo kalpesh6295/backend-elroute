@@ -32,16 +32,16 @@ console.log(diff/(1000*60*60*24));
 //     console.log(results[0].dateDifference/(1000*60*60*24))
 // })
 
-//dummy data for products --> Schema:product on www.mocakroo.com
+// dummy data for products --> Schema:product on www.mocakroo.com
 // client.generate({
 //     count: 500,
 //     schema: 'product'
 // }).then((records)=>{
 //     // console.log(records);
 //     for(var i=0;i<records.length;i++){
-//         var company = new productModel(records[i]);
+//         var product = new productModel(records[i]);
 //         // console.log(company);
-//         company.save().then((result)=>{
+//         product.save().then((result)=>{
 //             console.log('Result after saving is',result);
 //         })
 //     }
@@ -49,9 +49,25 @@ console.log(diff/(1000*60*60*24));
 //     console.log('Error is',e);
 // });
 
+// dummy data for services --> Schema:service on www.mocakroo.com
+client.generate({
+    count: 500,
+    schema: 'service'
+}).then((records)=>{
+    // console.log(records);
+    for(var i=0;i<records.length;i++){
+        var service = new serviceModel(records[i]);
+        // console.log(company);
+        service.save().then((result)=>{
+            console.log('Result after saving is',result);
+        })
+    }
+}).catch((e)=>{
+    console.log('Error is',e);
+});
 
 
-//dummy data for posts --> Schema:Post on www.mocakroo.com
+//dummy data for companies --> Schema:Comapny on www.mocakroo.com
 // client.generate({
 //     count: 237,
 //     schema: 'companies'
