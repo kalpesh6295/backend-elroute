@@ -7,7 +7,7 @@
 
 
 
-const env = require('./config/env.js');
+const env = require('./../config/env.js');
 var mongoose = require('mongoose');
 
 var mongoDB = env.mongoDB;
