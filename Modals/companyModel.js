@@ -11,15 +11,49 @@ var companySchema = new mongoose.Schema({
         type:String,
        // required:true
     },
-    location:{
+    country:{
         type:String,
-       // required:true,
+        // required:true
+    },
+    city:{
+        type:String,
+        // required:true
+    },
+    companyEmail:{
+        type:String,
+        // required:true
     },
     website: 
-    {   type: String, 
+    { 
+        type: String, 
     },
     companyType:{
         type:String,
+    },
+    image:{
+        type:String
+    },
+    companySize:{
+        type:Number
+    },
+    yearEstd:{
+        type:Date,
+        // trim:true,
+    },
+    address:{
+        type:String
+    },
+    city:{
+        type:String
+    },
+    zipCode:{
+        type:Number
+    },
+    landLine:{
+        type:Number
+    },
+    mobile:{
+        type:Number
     },
     admin:{
         type:mongoose.Schema.Types.ObjectId,
@@ -28,18 +62,8 @@ var companySchema = new mongoose.Schema({
         type:String,
         trim:true
     },
-    yearEst:{
-        type:Date,
-        trim:true,
-    },
-    address:{
-        type:String
-    },
     certification:{
         type:String
-    },
-    employeeSize:{
-        type:Number
     },
     about:{
         type:String
@@ -61,8 +85,18 @@ var companySchema = new mongoose.Schema({
     },
     dateRegistered:{
         type:Date,
-        default:Date.now()
-    }
+        default:new Date()
+    },
+    bookmarks:{
+        type:Number
+    },
+    views:{
+        type:Number
+    },
+    location:{
+        type:String,
+       // required:true,
+    },
 });
 
 companySchema.statics.followUnfollow = function(decision,userId){
@@ -93,43 +127,43 @@ companySchema.methods.calculateScore=function(company){
     // var company=this;
     // console.log(company);
     // console.log(company.keywords.length);
-    var matchScore = 0;
+    var profileScore = 0;
     if(company.category != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.companyName != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.location != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.website != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.companyType != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.shortIntro != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.certification != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.about != null){
-        matchScore+=10;
+        profileScore+=10;
     }
     if(company.keywords != null){
         // console.log(company.keywords.length);
         if(company.keywords.length<=10){
             // console.log('Numebr of keywords entered',company.keywords.length);
-            matchScore+=company.keywords.length;
+            profileScore+=company.keywords.length;
         }
     }
     if(company.hsCode != null){
-        matchScore+=10;
+        profileScore+=10;
     }
-    // console.log('matchScore is ',matchScore);
-    return Promise.resolve(matchScore);
+    // console.log('profileScore is ',profileScore);
+    return Promise.resolve(profileScore);
 };
 
 companySchema.methods.getSimiliarSubscribedUsers = async function(body){

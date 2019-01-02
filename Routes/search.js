@@ -55,12 +55,12 @@ router.get('/:word/:page',async(request,response)=>{
                if (productResult.length > 0) {
                    for (var i = 0; i < productResult.length; i++) {
                        score = 0;
-                       if (productResult[i].description.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
+                       if (productResult[i].shortDescription.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
                            score = 100 * 0.40;
                        }
                        else {
                            for (var j = 0; j < splittedInput.length; j++) {
-                               if (productResult[i].description.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
+                               if (productResult[i].shortDescription.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
                                    score++;
                                }
                            }
@@ -112,12 +112,12 @@ router.get('/:word/:page',async(request,response)=>{
                if (serviceResult.length > 0) {
                    for (var i = 0; i < serviceResult.length; i++) {
                        score = 0;
-                       if (serviceResult[i].description.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
+                       if (serviceResult[i].shortDescription.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
                            score = 100 * 0.40;
                        }
                        else {
                            for (var j = 0; j < splittedInput.length; j++) {
-                               if (serviceResult[i].description.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
+                               if (serviceResult[i].shortDescription.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
                                    score++;
                                }
                            }
