@@ -28,7 +28,6 @@ var userSchema = new mongoose.Schema({
     },
     Mobile:{
         type:Number,
-        unique:true
     },
     Address:{
         type:String,
