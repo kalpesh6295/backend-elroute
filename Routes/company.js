@@ -94,7 +94,7 @@ router.delete('/delete/:id',authenticate,async (request,response)=>{
 //Router to update company values which is present into the database of company
 router.patch('/update/:id',authenticate,async (request,response)=>{
   try{
-        var body = await _.pick(request.body, ['category', 'companyName', 'location', 'website', 'companyType', 'shortIntro', 'yearEst', 'address', 'certification', 'employeSize', 'about', 'workingHours', 'keywords']); //Getting parameter 
+        const body = await _.pick(request.body, ['category', 'companyName', 'country', 'city','companyEmail','website', 'companyType','image', 'companySize','yearEstd', 'address','zipCode', 'landline', 'mobile']); //Getting parameter 
         var id = request.params.id;
         // console.log('Reuqest Body is ----->',request.body);
         // console.log('picked body is',body);
@@ -102,17 +102,19 @@ router.patch('/update/:id',authenticate,async (request,response)=>{
             $set: {
                 category: body.category,
                 companyName: body.companyName,
-                location: body.location,
+                country:body.country,
+                city: body.city,
+                companyEmail:body.companyEmail,
                 website: body.website,
                 companyType: body.companyType,
-                shortIntro: body.shortIntro,
-                yearEst: body.yearEst,
-                address: body.address,
-                certification: body.certification,
-                employeeSize: body.employeeSize,
-                about: body.about,
-                workingHours: body.workingHours,
-                keywords: body.keywords                                //updating value into the database into the company
+                image:body.image, //we have to add image
+                companySize:body.companySize,
+                yearEstd:body.yearEstd,
+                address:body.address,
+                city:body.city,
+                zipCode:body.zipCode,
+                landline:body.landline,
+                mobile:body.mobile,                                //updating value into the database into the company
             }
             // new:true
         })
