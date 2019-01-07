@@ -6,15 +6,17 @@ const dictionary = require('dictionary-en-us');
 const nspell = require('nspell');
 
 router.get('/:word',(request,response)=>{
+// router.get('/:word/:page',async(request,response)=>{
+    try{
     var words = (request.params.word);
+    var pageNumber = request.params.page;
     var term=words.toLowerCase();
     var tempresult=[];
+    var tempresult2=[];
     var newWord = '';
     var suggested;
     var spaceCheck;
     var score;
-    var pageNumber = request.params.page;
-
     dictionary(ondictionary)            
         async function ondictionary(err, dict) {
             var splittedInput = term.split(' ');
@@ -95,15 +97,31 @@ router.get('/:word',(request,response)=>{
                             }
                             tempresult.push(results);               
         
+                            //uncomment below to use page number search
+                            
+                            // if(tempresult.length!=0){
+                            //     for (var i = (pageNumber - 1) * 10; i < (pageNumber) * 10; i++) {
+                            //         console.log(i);
+                            //         tempResult.push(tempresult[0][i]);
+                            //     }
+                            // }
+                            
+                            
                             var byMatchScore = tempresult.slice(0);
                             byMatchScore[0].sort(function(a,b){
                                 return b.matchScore - a.matchScore ;
                             }); 
-                            // console.log(byMatchScore);
-        
+
+                            console.log(byMatchScore);
+           
+                            response.status(200).send(byMatchScore);
                         }
+                        
                     }
         }
+    }catch(e){
+        response.status(400).send(e);
+    }
 });
 
 module.exports = router;
