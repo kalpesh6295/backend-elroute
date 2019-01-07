@@ -178,13 +178,17 @@ router.get('/:word/:page',async(request,response)=>{
                if(tempresult.length!=0){
                    for (var i = (pageNumber - 1) * 8; i < (pageNumber) * 8; i++) {
                        console.log(i);
-                       tempResult.push(tempresult[0][i]);
+                       if(tempresult!=null){
+                        tempResult.push(tempresult[0][i]);
+                       }
                    }
                }
                  if(tempresult2.length!=0)
                  {
                      for (var i = (pageNumber - 1) * 2; i < (pageNumber) * 2; i++) {
-                         tempResult.push(tempresult2[0][i]);
+                        if(tempresult2!=null){
+                            tempResult.push(tempresult2[0][i]);
+                        } 
                      }
                  }  
                    
