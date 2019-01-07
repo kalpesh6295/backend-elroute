@@ -9,7 +9,7 @@ const _ = require('lodash');
 //Router to add a new company into the database
 router.post('/',authenticate,async (request,response)=>{
     try{
-        const body = await _.pick(request.body, ['category', 'companyName', 'country', 'city','companyEmail','website', 'companyType','image', 'companySize','yearEstd', 'address','zipCode', 'landline', 'mobile']); //picking the values for the company by user in satgeOne
+        const body = await _.pick(request.body, ['category', 'companyName', 'country', 'city','companyEmail','website', 'companyType','image', 'companySize','yearEstd', 'address','zipCode', 'landline', 'mobile','industry']); //picking the values for the company by user in satgeOne
         // const body = await _.pick(request.body, ['category', 'companyName', 'country', 'city','companyEmail','website', 'companyType','image', 'companySize','yearEstd', 'address','zipCode', 'landline', 'mobile','admin']);
         var newCompany = await new companyModel({
             category: body.category,
@@ -27,8 +27,8 @@ router.post('/',authenticate,async (request,response)=>{
             zipCode:body.zipCode,
             landline:body.landline,
             mobile:body.mobile,
-            // admin: request.user._id,
-
+            admin: request.user._id,
+            industry:body.industry
             // shortIntro: body.shortIntro,
             // yearEst: body.yearEst,
             // address: body.address,

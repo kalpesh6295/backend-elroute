@@ -21,7 +21,8 @@ router.post('/',authenticate,imageupload,async (request,response)=>{
                 moq:body.moq,
                 industry:body.industry,
                 category:body.category,
-                tfCode:body.tfCode
+                tfCode:body.tfCode,
+                creator:request.user._id
         });
         var result=await product.save();
             response.status(200).send(result);
