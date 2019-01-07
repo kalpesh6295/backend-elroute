@@ -27,7 +27,7 @@ router.post('/',authenticate,async (request,response)=>{
             zipCode:body.zipCode,
             landline:body.landline,
             mobile:body.mobile,
-            // admin: request.user._id,
+            admin: request.user._id
 
             // shortIntro: body.shortIntro,
             // yearEst: body.yearEst,

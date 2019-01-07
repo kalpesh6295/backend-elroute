@@ -89,11 +89,12 @@ router.get('/:word/:page',async(request,response)=>{
                            score += (productResult[i].views * 0.06);
                        }
                        console.log('matchScore at hits/duration is', score);
-                        console.log('user id is====>',productResult[i].Creator);
-                       var user = await userModel.findById(productResult[i].Creator);
+                       console.log(productResult[0]);
+                        console.log('user id is====>',productResult[i].creator);
+                       var user = await userModel.findById(productResult[i].creator);
                        var company=await companyModel.findById(user.Company_id);
                        if (company) {
-                           var companyScore = company.matchScore;
+                           var companyScore = company.profileScore;
                            score += (companyScore * 0.19);
                            console.log('CompanyScore is', companyScore);
                        }
@@ -146,9 +147,9 @@ router.get('/:word/:page',async(request,response)=>{
                            score += (serviceResult[i].views * 0.06);
                        }
                        console.log('matchScore at hits/duration is', score);
-                       console.log('user id is====>', serviceResult[i].Creator);
-                       var user = await userModel.findById(serviceResult[i].Creator);
-                       var company = await companyModel.findById(user.Company_id);
+                       console.log('user id is====>', serviceResult[i].creator);
+                       var user = await userModel.findById(serviceResult[i].creator);
+                       var company = await companyModel.findById(user.Company_id[0]);
                        if (company) {
                            var companyScore = company.matchScore;
                            score += (companyScore * 0.19);
