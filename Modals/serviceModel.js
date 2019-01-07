@@ -79,6 +79,7 @@ var serviceSchema = new mongoose.Schema({
         type:Number
     },
     servicetype:{
+        type:Number,
         default:2
     }
 });

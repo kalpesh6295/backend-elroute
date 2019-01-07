@@ -78,6 +78,10 @@ var productSchema = new mongoose.Schema({
     },
     bookmarks:{
         type:Number
+    },
+    producttype:{
+        type:Number,
+        default:1
     }
 });
 
