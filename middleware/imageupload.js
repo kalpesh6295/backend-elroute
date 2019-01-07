@@ -12,17 +12,18 @@ app.use(multipartyMiddleware);
 var imageupload=(request,response,next)=>{
   
     var s=request.baseUrl;
-    var sub= s.substr(1);
-    console.log(sub);                                          //Base of the link from where the request of image insert is coming
-    const BUCKET_NAME='tradifier'+sub+'image1';                      //Creating bucket name
+    console.log(request.baseUrl)
+    var sub= s.substr(1);                                         //Base of the link from where the request of image insert is coming
+    const BUCKET_NAME=sub+'image2';                      //Creating bucket name
     const s3fsImpl = new S3FS(BUCKET_NAME, {
         accessKeyId: env.AWS_ACCESS_KEY_ID,                           //AWS Access key  
-        secretAccessKey: env.AWS_SECRET_ACCESS_KEY                     //AWS Screat access key
+        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,                                 //AWS Screat access key
     });
-    if(request.files.Image!=null)
+    if(request.files.productImage!=null)
     {
-        var myfile = request.files.Image;
-        filename = request.files.Image.name;
+        var myfile = request.files.productImage;
+        filename = request.files.productImage.name;
+        console.log(filename,"filename====>");
         var filename = filename.replace(/\s/g, '');                        //replacing white spaces from the user filename
         myfile.originalFilename = Date.now() + filename;
         const awsurl = "https://s3.amazonaws.com/" + BUCKET_NAME + '/';        //AWS url plus the bucket name a user upload an image        
