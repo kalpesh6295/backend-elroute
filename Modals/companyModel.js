@@ -97,6 +97,10 @@ var companySchema = new mongoose.Schema({
         type:String,
        // required:true,
     },
+    industry:{
+        type:String
+    },
+   
 });
 
 companySchema.statics.followUnfollow = function(decision,userId){
