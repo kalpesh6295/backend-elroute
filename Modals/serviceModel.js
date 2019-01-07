@@ -78,7 +78,7 @@ var serviceSchema = new mongoose.Schema({
     bookmarks:{
         type:Number
     },
-    servicetype:{
+    type:{
         type:Number,
         default:2
     }

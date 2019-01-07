@@ -79,7 +79,7 @@ var productSchema = new mongoose.Schema({
     bookmarks:{
         type:Number
     },
-    producttype:{
+    type:{
         type:Number,
         default:1
     }
