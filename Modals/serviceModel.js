@@ -77,6 +77,9 @@ var serviceSchema = new mongoose.Schema({
     },
     bookmarks:{
         type:Number
+    },
+    producttype:{
+        default:2
     }
 });
 

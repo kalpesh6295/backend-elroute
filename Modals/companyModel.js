@@ -99,6 +99,9 @@ var companySchema = new mongoose.Schema({
     },
     industry:{
         type:String
+    },
+    producttype:{
+        default:1
     }
 });
 
