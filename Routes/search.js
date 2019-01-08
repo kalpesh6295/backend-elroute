@@ -93,11 +93,13 @@ router.get('/:word/:page',async(request,response)=>{
                        if(productResult[i].creator){
                         console.log('user id is====>',productResult[i].creator);
                         var user = await userModel.findById(productResult[i].creator);
-                        var company=await companyModel.findById(user.Company_id[0]);
-                        if (company) {
+                        if (user.Company_id){
+                            var company=await companyModel.findById(user.Company_id[0]);
                             var companyScore = company.matchScore;
                             score += (companyScore * 0.19);
                             console.log('CompanyScore is', companyScore);
+                        }else{
+                            score+=0;
                         }
                        }
                        else{
@@ -157,10 +159,13 @@ router.get('/:word/:page',async(request,response)=>{
                         console.log('user id is====>', serviceResult[i].Creator);
                         var user = await userModel.findById(serviceResult[i].Creator);
                         var company = await companyModel.findById(user.Company_id);
-                        if (company) {
+                        if (user.Company_id){
+                            var company=await companyModel.findById(user.Company_id[0]);
                             var companyScore = company.matchScore;
-                            servicescore += (companyScore * 0.19);
+                            score += (companyScore * 0.19);
                             console.log('CompanyScore is', companyScore);
+                        }else{
+                            score+=0;
                         }
                        }
                        else{
