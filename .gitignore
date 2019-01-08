@@ -2,3 +2,7 @@ node_modules
 config
 ./../Routes/follow.js
 ./../Routes/bookmarksave.js
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
