@@ -23,10 +23,7 @@ var imageupload=(request,response,next)=>{
     {
         var myfile = request.files.productImage;
         filename = request.files.productImage.name;
-<<<<<<< HEAD
-=======
         console.log(filename,"filename====>");
->>>>>>> 3fb813c21a4eaccb68fcfd754fd20a6fbac20678
         var filename = filename.replace(/\s/g, '');                        //replacing white spaces from the user filename
         myfile.originalFilename = Date.now() + filename;
         console.log('filename is ',filename);
