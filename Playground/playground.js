@@ -105,21 +105,21 @@ client.generate({
 
 
 //dummy data for posts --> Schema:Post on www.mocakroo.com
-client.generate({
-    count: 500,
-    schema: 'Post'
-}).then((records)=>{
-    // console.log(records);
-    for(var i=0;i<records.length;i++){
-        var company = new postModel(records[i]);
-        // console.log(company);
-        company.save().then((result)=>{
-            console.log('Result after saving is',result);
-        })
-    }
-}).catch((e)=>{
-    console.log('Error is',e);
-});
+// client.generate({
+//     count: 500,
+//     schema: 'Post'
+// }).then((records)=>{
+//     // console.log(records);
+//     for(var i=0;i<records.length;i++){
+//         var company = new postModel(records[i]);
+//         // console.log(company);
+//         company.save().then((result)=>{
+//             console.log('Result after saving is',result);
+//         })
+//     }
+// }).catch((e)=>{
+//     console.log('Error is',e);
+// });
 
 
  
