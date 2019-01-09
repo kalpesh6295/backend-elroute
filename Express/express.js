@@ -20,6 +20,7 @@ var subscribeRouter = require('./../Routes/subscribe.js');
 var unSubscribeRouter = require('./../Routes/unsubscribe.js');
 var serviceRouter=require('./../Routes/service.js');
 var searchCompanyRouter = require('./../Routes/searchCompany.js');
+var bookmarksaveRouter = require('./../Routes/Bookmarksave.js');
 var app = express();
 
 //multiparty is used for aws connectivity
@@ -61,6 +62,7 @@ app.use('/subscribe',subscribeRouter);
 app.use('/unsubscribe',unSubscribeRouter);
 app.use('/service',serviceRouter);
 app.use('/searchCompany',searchCompanyRouter);
+app.use('bookmarksave',bookmarksaveRouter);
 //Server listing
 app.listen(3000,(status)=>{
     console.log('Server up on the port 3000');
