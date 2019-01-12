@@ -100,7 +100,9 @@ var companySchema = new mongoose.Schema({
     industry:{
         type:String
     },
-   
+    Followers:[{
+        type:mongoose.Schema.Types.ObjectId
+    }]
 });
 
 companySchema.statics.followUnfollow = function(decision,userId){
@@ -191,6 +193,25 @@ companySchema.methods.getSimiliarSubscribedUsers = async function(body){
         }
     }
     return Promise.resolve(users);
+};
+
+companySchema.methods.getFollowers = function() {
+    var user = this;
+    console.log('hi'+user.Followers);
+    return new Promise((resolve,reject)=>{
+        if(!user){
+             reject();
+        }
+        resolve(user.Followers);
+    });
+};
+
+companySchema.methods.setFollower = function(id){
+    var user = this;
+    console.log(user._id);
+    return user.update({
+        $push:{Followers:{id}}
+    });
 };
 
 var companyModel = mongoose.model('company',companySchema);

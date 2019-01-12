@@ -52,9 +52,10 @@ var userSchema = new mongoose.Schema({
     Emailtoken:{
         type:String
     },
-    Following:{
-        company:[{type:mongoose.Schema.Types.ObjectId}]
-    },
+    Following:
+        [{
+            type:mongoose.Schema.Types.ObjectId
+        }],
     // Otp:{
     //     type:Number
     // },

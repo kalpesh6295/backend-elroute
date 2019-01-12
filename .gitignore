@@ -1,5 +1,4 @@
 node_modules
 config
-./../Routes/follow.js
 ./../Routes/bookmarksave.js
 ./backend_elroute.pem
