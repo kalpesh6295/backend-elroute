@@ -7,7 +7,7 @@ const {authenticate} = require('./../middleware/authenticate.js');
 //Router used to update the data of an user which is already present into the database using id as ana parameter
 router.patch('/update',authenticate,async (request,response)=>{
    try{
-        var body = await _.pick(request.body, ['UserName', 'Password', 'Email', 'Mobile', 'Address']);//Getting data to updating user data 
+    const body = await _.pick(request.body, ['UserName', 'Password', 'Email','Title','Location','Emailtoken']);//Getting data to updating user data 
         var user = request.user;
         var id = user._id;
         var updatedUser = await user.update({
@@ -15,8 +15,9 @@ router.patch('/update',authenticate,async (request,response)=>{
                 UserName: body.UserName,
                 Password: body.Password,
                 Email: body.Email,
-                Mobile: body.Mobile,
-                Address: body.Address
+                Title: body.Title,
+                Location: body.Location,
+                Emailtoken: Etoken
             },
         }).then((updatedData) => {
             return userModel.findById(id);

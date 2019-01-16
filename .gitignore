@@ -6,3 +6,5 @@ config
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+./../Routes/bookmarksave.js
+./backend_elroute.pem

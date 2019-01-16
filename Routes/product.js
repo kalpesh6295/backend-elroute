@@ -9,15 +9,20 @@ const { imageupload } = require('./../middleware/imageupload.js');
 //Router used to add new product into the database
 router.post('/',authenticate,imageupload,async (request,response)=>{
     try{
-        const body = await _.pick(request.body, ['name', 'company', 'industry', 'description','views']);        //pick up the data for the new product
+        const body = _.pick(request.body, ['productName', 'productImage', 'shortDescription', 'productInfo', 'specificationInfo','productInfo','price','minPrice','maxPrice','moq','industry','category','tfCode']);        //pick up the data for the new product
         var product =await new productModel({
-            Image: request.imageurl,
-            name: body.name,
-            company: body.company,
-            industry: body.industry,
-            description: body.description,
-            Creator: request.user._id,
-            views: body.views
+                productName: body.productName,
+                productImage: body.productImage,
+                shortDescription: body.shortDescription,
+                productInfo: body.productInfo,
+                price: body.price,
+                minPrice:body.minPrice,
+                maxPrice:body.maxPrice,
+                moq:body.moq,
+                industry:body.industry,
+                category:body.category,
+                tfCode:body.tfCode,
+                creator:request.user._id
         });
         var result=await product.save();
             response.status(200).send(result);
@@ -30,7 +35,7 @@ router.post('/',authenticate,imageupload,async (request,response)=>{
 //Router to get the product which is added into the database
 router.get('/',authenticate,async (request,response)=>{
     try{
-        const products = await productModel.find({ Creator: request.user._id });
+        const products = await productModel.find({ creator: request.user._id });
             response.status(200).send(products);
     }catch(e){
         response.status(400).send('Error getting products of user');
@@ -40,15 +45,21 @@ router.get('/',authenticate,async (request,response)=>{
 //Router used to update the product data which is already added using id as an parameter
 router.patch('/update/:id', authenticate, async (request, response) => {
     try{
-        const body = _.pick(request.body, ['name', 'company', 'image', 'industry', 'description']);
+        const body = _.pick(request.body, ['productName', 'productImage', 'shortDescription', 'productInfo', 'specificationInfo','productInfo','price','minPrice','maxPrice','moq','industry','category','tfCode']);
         var id = request.params.id;
         const updatedProducts=await productModel.findByIdAndUpdate(id, {
             $set: {
-                name: body.name,
-                company: body.company,
-                image: body.image,
-                industry: body.industry,
-                description: body.description
+                productName: body.productName,
+                productImage: body.productImage,
+                shortDescription: body.shortDescription,
+                productInfo: body.productInfo,
+                price: body.price,
+                minPrice:body.minPrice,
+                maxPrice:body.maxPrice,
+                moq:body.moq,
+                industry:body.industry,
+                category:body.category,
+                tfCode:body.tfCode
             }
         }, { returnOriginal: false });
             response.status(200).send(updatedProducts);

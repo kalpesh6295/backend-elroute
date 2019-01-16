@@ -1,23 +1,23 @@
 const mongoose = require('mongoose');
-const {userModel} = require('../Modals/userModel.js');
-const {ObjectID} = require('mongodb');
+const { userModel } = require('../Modals/userModel.js');
+const { ObjectID } = require('mongodb');
 const Mockaroo = require('mockaroo');
-const {companyModel} = require('../Modals/companyModel.js');
-const {productModel}=require('./../Modals/productModel.js');
-const {serviceModel}=require('./../Modals/serviceModel.js');
-const {postModel}=require('./../Modals/postModel.js');
+const { companyModel } = require('../Modals/companyModel.js');
+const { productModel } = require('./../Modals/productModel.js');
+const { serviceModel } = require('./../Modals/serviceModel.js');
+const { postModel } = require('./../Modals/postModel.js');
 const env = require('../config/env.js');
 
 mongoose.connect('mongodb://localhost:27017/Tradifier');
 
 var client = new Mockaroo.Client({
-    apiKey:'7acec3c0'
+    apiKey: '7acec3c0'
 });
 
 var randomDate = new Date("2017-03-01T08:00:00Z");
 
 var diff = new Date() - randomDate;
-console.log(diff/(1000*60*60*24));
+console.log(diff / (1000 * 60 * 60 * 24));
 
 // var difference = function(Date){
 //     $subtract:[new Date(),"$Date"].then((result)=>{
@@ -32,16 +32,68 @@ console.log(diff/(1000*60*60*24));
 //     console.log(results[0].dateDifference/(1000*60*60*24))
 // })
 
-//dummy data for products --> Schema:companies on www.mocakroo.com
+// dummy data for products --> Schema:product on www.mocakroo.com
+client.generate({
+    count: 500,
+    schema: 'Post'
+}).then((records)=>{
+    // console.log(records);
+    for(var i=0;i<records.length;i++){
+        var product = new postModel(records[i]);
+        // console.log(company);
+        product.save().then((result)=>{
+            console.log('Result after saving is',result);
+        })
+    }
+}).catch((e)=>{
+    console.log('Error is',e);
+});
+
+// dummy data for services --> Schema:service on www.mocakroo.com
 // client.generate({
 //     count: 500,
 //     schema: 'product'
 // }).then((records)=>{
 //     // console.log(records);
 //     for(var i=0;i<records.length;i++){
-//         var company = new serviceModel(records[i]);
+//         var product = new productModel(records[i]);
 //         // console.log(company);
-//         company.save().then((result)=>{
+//         product.save().then((result)=>{
+//             console.log('Result after saving is',result);
+//         })
+//     }
+// }).catch((e)=>{
+//     console.log('Error is',e);
+// });
+
+// dummy data for services --> Schema:service on www.mocakroo.com
+client.generate({
+    count: 500,
+    schema: 'service'
+}).then((records) => {
+    // console.log(records);
+    for (var i = 0; i < records.length; i++) {
+        var service = new serviceModel(records[i]);
+        // console.log(company);
+        service.save().then((result) => {
+            console.log('Result after saving is', result);
+        })
+    }
+}).catch((e) => {
+    console.log('Error is', e);
+});
+
+
+//dummy data for companies --> Schema:Comapny on www.mocakroo.com
+// client.generate({
+//     count: 500,
+//     schema: 'service'
+// }).then((records)=>{
+//     // console.log(records);
+//     for(var i=0;i<records.length;i++){
+//         var service = new serviceModel(records[i]);
+//         // console.log(company);
+//         service.save().then((result)=>{
 //             console.log('Result after saving is',result);
 //         })
 //     }
@@ -50,8 +102,7 @@ console.log(diff/(1000*60*60*24));
 // });
 
 
-
-//dummy data for posts --> Schema:Post on www.mocakroo.com
+//dummy data for companies --> Schema:Comapny on www.mocakroo.com
 // client.generate({
 //     count: 237,
 //     schema: 'companies'
@@ -88,7 +139,7 @@ console.log(diff/(1000*60*60*24));
 // });
 
 
- 
+
 // var user = new userModel({
 //     UserName:'abhiraj  ',
 //     Password:'1234',

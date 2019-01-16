@@ -9,23 +9,35 @@ const _ = require('lodash');
 //Router to add a new company into the database
 router.post('/',authenticate,async (request,response)=>{
     try{
-        const body = await _.pick(request.body, ['category', 'companyName', 'location', 'website', 'companyType', 'shortIntro', 'yearEst', 'address', 'certification', 'employeeSize', 'about', 'workingHours', 'keywords','hsCode']); //picking the values for the company by user in satgeOne
+        const body = await _.pick(request.body, ['category', 'companyName', 'country', 'city','companyEmail','website', 'companyType','image', 'companySize','yearEstd', 'address','zipCode', 'landline', 'mobile','industry']); //picking the values for the company by user in satgeOne
+        // const body = await _.pick(request.body, ['category', 'companyName', 'country', 'city','companyEmail','website', 'companyType','image', 'companySize','yearEstd', 'address','zipCode', 'landline', 'mobile','admin']);
         var newCompany = await new companyModel({
             category: body.category,
             companyName: body.companyName,
-            location: body.location,
+            country:body.country,
+            city: body.city,
+            companyEmail:body.companyEmail,
             website: body.website,
             companyType: body.companyType,
-            shortIntro: body.shortIntro,
-            yearEst: body.yearEst,
-            address: body.address,
-            certification: body.certification,
-            employeeSize: body.employeeSize,
-            about: body.about,
-            workingHours: body.workingHours,
-            keywords: body.keywords,
+            image:body.image, //we have to add image
+            companySize:body.companySize,
+            yearEstd:body.yearEstd,
+            address:body.address,
+            city:body.city,
+            zipCode:body.zipCode,
+            landline:body.landline,
+            mobile:body.mobile,
             admin: request.user._id,
-            hsCode:body.hsCode
+            industry:body.industry
+            // shortIntro: body.shortIntro,
+            // yearEst: body.yearEst,
+            // address: body.address,
+            // certification: body.certification,
+            // employeeSize: body.employeeSize,
+            // about: body.about,
+            // workingHours: body.workingHours,
+            // keywords: body.keywords,
+            // hsCode:body.hsCode
         });
         var result = await newCompany.save();
         var user = await userModel.findOneAndUpdate(
@@ -35,10 +47,10 @@ router.post('/',authenticate,async (request,response)=>{
                 }
         )
         response.status(200).send(result);
-        var profileScore = await newCompany.calculateScore(newCompany);
+        var companyProfileScore = await newCompany.calculateScore(newCompany);
         await companyModel.findByIdAndUpdate(result._id,{
                             $set:{
-                                matchScore:profileScore
+                                profileScore:companyProfileScore
                             }
         });
         var similiarHsCodeFollowers = await newCompany.getSimiliarSubscribedUsers(body);
@@ -58,7 +70,7 @@ router.get('/',authenticate, async (request,response)=>{
         if (!companies) {
             return response.status(400).send("Company not present in the database");
         }
-        response.status(200).send({ companies });
+        response.status(200).send(companies );
    }catch(e){
        response.status(400).send("Entered company is not present");
    }
@@ -82,7 +94,7 @@ router.delete('/delete/:id',authenticate,async (request,response)=>{
 //Router to update company values which is present into the database of company
 router.patch('/update/:id',authenticate,async (request,response)=>{
   try{
-        var body = await _.pick(request.body, ['category', 'companyName', 'location', 'website', 'companyType', 'shortIntro', 'yearEst', 'address', 'certification', 'employeSize', 'about', 'workingHours', 'keywords']); //Getting parameter 
+        const body = await _.pick(request.body, ['category', 'companyName', 'country', 'city','companyEmail','website', 'companyType','image', 'companySize','yearEstd', 'address','zipCode', 'landline', 'mobile']); //Getting parameter 
         var id = request.params.id;
         // console.log('Reuqest Body is ----->',request.body);
         // console.log('picked body is',body);
@@ -90,17 +102,19 @@ router.patch('/update/:id',authenticate,async (request,response)=>{
             $set: {
                 category: body.category,
                 companyName: body.companyName,
-                location: body.location,
+                country:body.country,
+                city: body.city,
+                companyEmail:body.companyEmail,
                 website: body.website,
                 companyType: body.companyType,
-                shortIntro: body.shortIntro,
-                yearEst: body.yearEst,
-                address: body.address,
-                certification: body.certification,
-                employeeSize: body.employeeSize,
-                about: body.about,
-                workingHours: body.workingHours,
-                keywords: body.keywords                                //updating value into the database into the company
+                image:body.image, //we have to add image
+                companySize:body.companySize,
+                yearEstd:body.yearEstd,
+                address:body.address,
+                city:body.city,
+                zipCode:body.zipCode,
+                landline:body.landline,
+                mobile:body.mobile,                                //updating value into the database into the company
             }
             // new:true
         })

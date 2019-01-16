@@ -45,24 +45,24 @@ app.use((req, res, next) => {
   });
 
 // Routes 
-app.use('/user',userpageRouter);            //new user route
-app.use('/product',productsRouter);        //new product route
-app.use('/auth',authenticationRouter);      //new signup and login route
-app.use('/post',postRouter);                //new post route
-app.use('/bookmark',bookmarkRouter);        //bookmark route for an user to bookmark a company
-app.use('/company',companyRouter);          //new comapany route    
-app.use('/userimageupload',imageuploadRouter);//new route to add user its image
-app.use('/verify',emailverifyrouter);          //email verification route
-app.use('/serviceType',serviceTypeRouter);
-app.use('/search',searchRouter);
-app.use('/feed',feedRouter);
-app.use('/searchfeed',searchfeedRouter);
-app.use('/tag',tagRouter);
-app.use('/hscode',hscodeRouter);
-app.use('/subscribe',subscribeRouter);
-app.use('/unsubscribe',unSubscribeRouter);
-app.use('/service',serviceRouter);
-app.use('/searchCompany',searchCompanyRouter);
+app.use('api/user',userpageRouter);            //new user route
+app.use('api/product',productsRouter);        //new product route
+app.use('api/auth',authenticationRouter);      //new signup and login route
+app.use('api/post',postRouter);                //new post route
+app.use('api/bookmark',bookmarkRouter);        //bookmark route for an user to bookmark a company
+app.use('api/company',companyRouter);          //new comapany route    
+app.use('api/userimageupload',imageuploadRouter);//new route to add user its image
+app.use('api/verify',emailverifyrouter);          //email verification route
+app.use('api/serviceType',serviceTypeRouter);
+app.use('api/search',searchRouter);
+app.use('api/feed',feedRouter);
+app.use('api/searchfeed',searchfeedRouter);
+app.use('api/tag',tagRouter);
+app.use('api/hscode',hscodeRouter);
+app.use('api/subscribe',subscribeRouter);
+app.use('api/unsubscribe',unSubscribeRouter);
+app.use('api/service',serviceRouter);
+app.use('api/searchCompany',searchCompanyRouter);
 
 //Server listing
 app.listen(process.env.PORT||8080,(status)=>{

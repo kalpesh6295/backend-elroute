@@ -14,15 +14,14 @@ router.post('/signup',async (request,response)=>{
    
     try{
         var Etoken = jwt.sign({}, 'abc123456').toString();
-        const user = await _.pick(request.body, ['UserName', 'Password', 'Email', 'Mobile', 'Address', 'Emailtoken', 'Service']);     //picking up the data of the new user
+        const user = await _.pick(request.body, ['UserName', 'Password', 'Email','Title','Location','Emailtoken']);     //picking up the data of the new user
         var newUser = await new userModel({
             UserName: user.UserName,
             Password: user.Password,
             Email: user.Email,
-            Mobile: user.Mobile,
-            Address: user.Address,
-            Emailtoken: Etoken,
-            Service: user.Service
+            Title: user.Title,
+            Location: user.Location,
+            Emailtoken: Etoken
         });
 
         newUser.save().then(() => {
@@ -57,7 +56,7 @@ router.post('/login', async (request, response) => {
             return response.status(400).send('No Such User Found');
         }
             var token=user.generateAuthToken();
-                response.header('x-auth', token).send(`you are succesfully logged in${user}`);
+                response.header('x-auth', token).send(user);
     } catch(e){
         response.status(400).send('Error Logging in!');
     }

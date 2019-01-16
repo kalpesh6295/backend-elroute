@@ -22,6 +22,7 @@ router.get('/:word/:page',async(request,response)=>{
        var suggested;
        var spaceCheck;
        var score;
+       var servicescore;
        dictionary(ondictionary)
        async function ondictionary(err, dict) {
            var splittedInput = term.split(' ');
@@ -55,12 +56,12 @@ router.get('/:word/:page',async(request,response)=>{
                if (productResult.length > 0) {
                    for (var i = 0; i < productResult.length; i++) {
                        score = 0;
-                       if (productResult[i].description.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
+                       if (productResult[i].shortDescription.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
                            score = 100 * 0.40;
                        }
                        else {
                            for (var j = 0; j < splittedInput.length; j++) {
-                               if (productResult[i].description.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
+                               if (productResult[i].shortDescription.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
                                    score++;
                                }
                            }
@@ -89,14 +90,22 @@ router.get('/:word/:page',async(request,response)=>{
                            score += (productResult[i].views * 0.06);
                        }
                        console.log('matchScore at hits/duration is', score);
-                        console.log('user id is====>',productResult[i].Creator);
-                       var user = await userModel.findById(productResult[i].Creator);
-                       var company=await companyModel.findById(user.Company_id);
-                       if (company) {
-                           var companyScore = company.matchScore;
-                           score += (companyScore * 0.19);
-                           console.log('CompanyScore is', companyScore);
+                       if(productResult[i].creator){
+                        console.log('user id is====>',productResult[i].creator);
+                        var user = await userModel.findById(productResult[i].creator);
+                        if (user.Company_id){
+                            var company=await companyModel.findById(user.Company_id[0]);
+                            var companyScore = company.matchScore;
+                            score += (companyScore * 0.19);
+                            console.log('CompanyScore is', companyScore);
+                        }else{
+                            score+=0;
+                        }
                        }
+                       else{
+                           score+=0;
+                       }
+                        
                        console.log('matchScore at companyProfile is', score);
 
                        productResult[i].matchScore = score;
@@ -111,52 +120,61 @@ router.get('/:word/:page',async(request,response)=>{
 
                if (serviceResult.length > 0) {
                    for (var i = 0; i < serviceResult.length; i++) {
-                       score = 0;
-                       if (serviceResult[i].description.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
-                           score = 100 * 0.40;
+                       servicescore = 0;
+                       if (serviceResult[i].shortDescription.toLowerCase().indexOf(newWord.toLowerCase()) > -1) {
+                        servicescore = 100 * 0.40;
                        }
                        else {
                            for (var j = 0; j < splittedInput.length; j++) {
-                               if (serviceResult[i].description.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
-                                   score++;
+                               if (serviceResult[i].shortDescription.toLowerCase().indexOf(splittedInput[j].toLowerCase()) > -1) {
+                                servicescore++;
                                }
                            }
-                           score = ((score / splittedInput.length) * 80) * 0.40;
+                           servicescore = ((servicescore / splittedInput.length) * 80) * 0.40;
                        }
 
                        if (serviceResult[i].bookmarks >= 50) {
-                           score += (100 * 0.17)
+                        servicescore += (100 * 0.17)
                        } else {
-                           score += ((serviceResult[i].bookmarks * 2) * 0.17);
+                        servicescore += ((serviceResult[i].bookmarks * 2) * 0.17);
                        }
-                       console.log('matchScore at bookmarkScore is', score);
+                       console.log('matchScore at bookmarkScore is', servicescore);
 
                        if (serviceResult[i].views >= 100) {
-                           score += 100 * 0.11;
+                        servicescore += 100 * 0.11;
                        } else {
-                           score += (serviceResult[i].views * 0.11);
+                        servicescore += (serviceResult[i].views * 0.11);
                        }
-                       console.log('matchScore at viewScore is', score);
+                       console.log('matchScore at viewScore is', servicescore);
 
                        var dateDifference = (new Date() - serviceResult[i].Time) / (1000 * 60 * 60 * 24);
                        var months = dateDifference / 30;
                        if ((serviceResult[i].views / months) > 100) {
-                           score += 100 * 0.06;
+                        servicescore += 100 * 0.06;
                        } else {
-                           score += (serviceResult[i].views * 0.06);
+                        servicescore += (serviceResult[i].views * 0.06);
                        }
-                       console.log('matchScore at hits/duration is', score);
-                       console.log('user id is====>', serviceResult[i].Creator);
-                       var user = await userModel.findById(serviceResult[i].Creator);
-                       var company = await companyModel.findById(user.Company_id);
-                       if (company) {
-                           var companyScore = company.matchScore;
-                           score += (companyScore * 0.19);
-                           console.log('CompanyScore is', companyScore);
+                       console.log('matchScore at hits/duration is', servicescore);
+                       if(serviceResult[i].Creator){
+                        console.log('user id is====>', serviceResult[i].Creator);
+                        var user = await userModel.findById(serviceResult[i].Creator);
+                        var company = await companyModel.findById(user.Company_id);
+                        if (user.Company_id){
+                            var company=await companyModel.findById(user.Company_id[0]);
+                            var companyScore = company.matchScore;
+                            score += (companyScore * 0.19);
+                            console.log('CompanyScore is', companyScore);
+                        }else{
+                            score+=0;
+                        }
                        }
-                       console.log('matchScore at companyProfile is', score);
+                       else{
+                        servicescore+=0;
+                       }
+                       
+                       console.log('matchScore at companyProfile is', servicescore);
 
-                       serviceResult[i].matchScore = score;
+                       serviceResult[i].matchScore = servicescore;
                        console.log('---------------------------------------------------------------------------------------');
                    }
                    tempresult2.push(serviceResult);
@@ -165,13 +183,13 @@ router.get('/:word/:page',async(request,response)=>{
                if(tempresult.length!=0){
                    for (var i = (pageNumber - 1) * 8; i < (pageNumber) * 8; i++) {
                        console.log(i);
-                       tempResult.push(tempresult[0][i]);
+                        tempResult.push(tempresult[0][i]);
                    }
                }
                  if(tempresult2.length!=0)
                  {
                      for (var i = (pageNumber - 1) * 2; i < (pageNumber) * 2; i++) {
-                         tempResult.push(tempresult2[0][i]);
+                            tempResult.push(tempresult2[0][i]);
                      }
                  }  
                    

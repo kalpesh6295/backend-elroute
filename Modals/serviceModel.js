@@ -2,51 +2,85 @@ const mongoose = require('mongoose');
 
 //service Model to add new product into the schema
 var serviceSchema = new mongoose.Schema({
-    Image: {
+    serviceName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    serviceImage: {
         type: String
     },
-    name: {
+    shortDescription: {
         type: String,
         required: true,
         trim: true
     },
-    companyName: {
-        type: String,
-        required: true,
-        trim: true
+    serviceInfo: [{
+        serviceSpecification:{
+            type:String
+        },
+        specificationContent:{
+            type:String
+        },
+        fields:[{
+            fieldName:{
+                type:String
+            },
+            fieldDes:{
+                type:String
+            }
+        }]
+    }],
+    price: {
+        type: String
     },
-    industry: {
-        type: String,
-        trim: true
+    minPrice:{
+        type:Number
     },
-    description: {
-        type: String,
-        trim: true
+    maxPrice:{
+        type:Number
     },
-    Creator: {
+    moq:{
+        type:Number
+    },
+    industry:{
+        type:String,
+        trim:true
+    },
+    category:{
+        type:String
+    },
+    tfCode:{
+        type:String
+    },
+    creator: {
         type: mongoose.Schema.Types.ObjectId,
         //required:true
     },
-    tags:[{
+    postId:{
         type:String
-    }],
-    views:{
-        type :Number
     },
-    price:{
-        type:Number
-    },
-    bookmarks:{
-        type:Number
-    },
+    // tags:[{
+    //     type:String
+    // }],
     matchScore:{
         type:Number,
         default:0
+    },
+    views:{
+        type :Number
     },
     Time: {
         type: Date,
         trim: true,
         default: new Date()
+    },
+    bookmarks:{
+        type:Number
+    },
+    type:{
+        type:Number,
+        default:2
     }
 });
 
