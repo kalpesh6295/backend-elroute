@@ -22,7 +22,7 @@ router.post('/',authenticate,imageupload,async (request,response)=>{
                 industry:body.industry,
                 category:body.category,
                 tfCode:body.tfCode,
-                creator:request.user._id
+                creator:request.user.Company_id
         });
         var result=await product.save();
             response.status(200).send(result);

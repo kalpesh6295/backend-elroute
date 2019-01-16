@@ -22,6 +22,7 @@ var serviceRouter=require('./../Routes/service.js');
 var searchCompanyRouter = require('./../Routes/searchCompany.js');
 var bookmarksaveRouter = require('./../Routes/Bookmarksave.js');
 var followRouter = require('./../Routes/follow.js');
+var unfollowRouter = require('./../Routes/unfollow.js');
 var followersRouter = require('./../Routes/followers.js');
 var app = express();
 
@@ -66,6 +67,7 @@ app.use('/service',serviceRouter);
 app.use('/searchCompany',searchCompanyRouter);
 app.use('/bookmarksave',bookmarksaveRouter);
 app.use('/follow',followRouter);
+app.use('/unfollow',unfollowRouter);
 app.use('/followers',followersRouter);
 //Server listing
 app.listen(3000,(status)=>{

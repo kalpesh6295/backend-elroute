@@ -95,7 +95,7 @@ var companySchema = new mongoose.Schema({
     },
     location:{
         type:String,
-       // required:true,
+       // required:true
     },
     industry:{
         type:String

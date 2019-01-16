@@ -43,7 +43,7 @@ router.post('/',authenticate,async (request,response)=>{
         var user = await userModel.findOneAndUpdate(
             { _id: request.user._id },                          //if User is present in the database add that company 
                 {
-                    $push: { Company_id: result._id }               //push company data to the user company coloumn 
+                    $set:{Company_id: result._id }               //push company data to the user company coloumn 
                 }
         )
         response.status(200).send(result);
@@ -53,10 +53,10 @@ router.post('/',authenticate,async (request,response)=>{
                                 profileScore:companyProfileScore
                             }
         });
-        var similiarHsCodeFollowers = await newCompany.getSimiliarSubscribedUsers(body);
-        for(var i = 0;i<similiarHsCodeFollowers.length;i++){
-            console.log(similiarHsCodeFollowers[i]['userName'],":",similiarHsCodeFollowers[i]['hsCode']);
-        }
+        // var similiarHsCodeFollowers = await newCompany.getSimiliarSubscribedUsers(body);
+        // for(var i = 0;i<similiarHsCodeFollowers.length;i++){
+        //     console.log(similiarHsCodeFollowers[i]['userName'],":",similiarHsCodeFollowers[i]['hsCode']);
+        // }
     }catch(e){
         console.log(e);
         response.status(400).send("Please enter valid Details");
